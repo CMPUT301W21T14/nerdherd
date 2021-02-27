@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "362415220512",
+    "project_id": "cmput301w21t14",
+    "storage_bucket": "cmput301w21t14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362415220512:android:6107344d19accc1def1945",
+        "android_client_info": {
+          "package_name": "com.example.nerdherd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362415220512-isni9apc4se3no094q4m8vuklvnarmsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTAwKPaRn3mlwRQDaLGUSDQOfly0ppYYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362415220512-isni9apc4se3no094q4m8vuklvnarmsn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
