@@ -8,9 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+
+import java.io.IOException;
 import java.util.Random;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView emailEdit;
     private ProfileController profileController;
     private Integer randInt;
-    private String randSequence = "1";
+    private String randSequence;
     private Random random;
     private String idSequence;
     private Integer index;
@@ -51,7 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
     private CollectionReference collectionReference;
     private Integer indicator;
     private String existedID;
-    private Boolean result;
+    private Intent gallery;
+    private Integer requestNum = 1;
+    private Uri imageUri;
+    private Bitmap profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,15 +93,42 @@ public class RegisterActivity extends AppCompatActivity {
                     avatarDrawable = (BitmapDrawable) avatarButton.getDrawable();
                     avatar = avatarDrawable.getBitmap();
                     profileController = new ProfileController(name, password, email, id, avatar);
-                    profileController.uploadProfile();
-                    searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
-                    startActivity(searchIntent);
+                    if (profileController.avatarChecker()) {
+                        profileController.uploadProfile();
+                        searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
+                        startActivity(searchIntent);
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "The image is too large, please choose another one. Thank you.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Please fill all of name, password and email. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        // Click avatar button
+        avatarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, requestNum);
+            }
+        });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == requestNum){
+            imageUri = data.getData();
+            try {
+                profileImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            avatarButton.setImageBitmap(profileImage);
+        }
     }
 
     private String idGenerator(){
@@ -106,12 +140,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private String generator(){
+        randSequence = "1";
         random = new Random();
-        index = 0;
-        while (index < 10) {
+        while (randSequence.length() < 10) {
             randInt = random.nextInt(10);
             randSequence = randSequence + randInt.toString();
-            index += 1;
         }
         return randSequence;
     }

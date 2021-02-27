@@ -4,6 +4,7 @@ package com.example.nerdherd;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +29,7 @@ public class ProfileController {
     private HashMap<String, Object> profileData;
     private CollectionReference collectionReference;
     private ByteArrayOutputStream byteArrayOutputStream;
+    private String compressString;
     private String stringAvatar;
 
     // Constructor
@@ -39,12 +41,18 @@ public class ProfileController {
         this.avatar = avatar;
     }
 
-    public void uploadProfile(){
+    public Boolean avatarChecker(){
         profile = new Profile(name, password, email, avatar);
-        // Compress avatar
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        profile.getAvatar().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        stringAvatar = byteArrayOutputStream.toString();
+        stringAvatar = compresser(profile);
+        if (stringAvatar.getBytes().length> 1000000){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public void uploadProfile(){
         // Access database
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Profile");
@@ -56,5 +64,13 @@ public class ProfileController {
         collectionReference
                 .document(id)
                 .set(profileData);
+    }
+
+    private String compresser(Profile profile){
+        // Compress avatar
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        profile.getAvatar().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        compressString = byteArrayOutputStream.toString();
+        return compressString;
     }
 }
