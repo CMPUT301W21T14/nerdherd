@@ -34,8 +34,8 @@
 
     <ImageView
         android:id="@+id/avatarEdit"
-        android:layout_width="210dp"
-        android:layout_height="272dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="20dp"
         android:src="@drawable/zelda"
         app:layout_constraintEnd_toEndOf="parent"
