@@ -1,6 +1,6 @@
 package com.example.nerdherd;
 
-import android.util.Log;
+// Modified form youtube
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
