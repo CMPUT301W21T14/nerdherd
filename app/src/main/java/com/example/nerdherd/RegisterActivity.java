@@ -57,8 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
     private String idSequence;
     private Integer index;
     private ProfileController emptyController;
-    private FirebaseFirestore firebaseFirestore;
-    private CollectionReference collectionReference;
     private Integer indicator;
     private String existedID;
     private Intent avatarPicker;
@@ -69,12 +67,15 @@ public class RegisterActivity extends AppCompatActivity {
     private ArrayList<String> emailData;
     private Boolean isNew;
     private ArrayList<String> idData;
+    private FireStoreController fireStoreController;
+    private Intent emailIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        fireStoreController = new FireStoreController();
         avatar = 0;
         getAvatar = getIntent();
         dataBundle = getAvatar.getBundleExtra("Data");
@@ -117,25 +118,38 @@ public class RegisterActivity extends AppCompatActivity {
                 textGetter();
                 if (!name.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
                     emailData = new ArrayList<String>();
-                    readData(emailData, "Email", new FireStoreCallback() {
+                    fireStoreController.readData(emailData, "Email", new FireStoreController.FireStoreReadCallback() {
                         @Override
                         public void onCallback(ArrayList<String> list) {
-                            for(String usedEmail : list){
-                                if (usedEmail.equals(email)){
+                            for (String usedEmail : list) {
+                                if (usedEmail.equals(email)) {
                                     isNew = false;
                                 }
                             }
-                            if (isNew){
+                            if (isNew) {
                                 profileController = new ProfileController(name, password, email, id, avatar);
                                 profileController.creator();
-                                profileController.uploadProfile();
-                                searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
-                                startActivity(searchIntent);
-                                finish();
-                            }
-                            else{
+                                fireStoreController.uploadData(profileController.getProfile(), id, new FireStoreController.FireStoreUploadCallback() {
+                                    @Override
+                                    public void onCallback() {
+                                        searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
+                                        startActivity(searchIntent);
+                                        finish();
+                                    }
+                                }, new FireStoreController.FireStoreUploadFailCallback() {
+                                    @Override
+                                    public void onCallback() {
+                                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please tray again later. Thank you.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
                                 Toast.makeText(getApplicationContext(), "The email address is already used. Thank you.", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    }, new FireStoreController.FireStoreReadFailCallback() {
+                        @Override
+                        public void onCallback() {
+                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please tray again later. Thank you.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -166,20 +180,24 @@ public class RegisterActivity extends AppCompatActivity {
         indicator = 1;
         idSequence = generator();
         idData = new ArrayList<String>();
-        readData(idData, "Id", new FireStoreCallback() {
+        fireStoreController.readData(idData, "Id", new FireStoreController.FireStoreReadCallback() {
             @Override
             public void onCallback(ArrayList<String> list) {
-                for(String usedId : idData){
-                    if (usedId.equals(idSequence)){
+                for (String usedId : idData) {
+                    if (usedId.equals(idSequence)) {
                         indicator = 0;
                     }
                 }
-                if (indicator == 0){
+                if (indicator == 0) {
                     idGenerator();
-                }
-                else{
+                } else {
                     id = idSequence;
                 }
+            }
+        }, new FireStoreController.FireStoreReadFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please tray again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -198,35 +216,5 @@ public class RegisterActivity extends AppCompatActivity {
         name = nameEdit.getText().toString();
         password = passwordEdit.getText().toString();
         email = emailEdit.getText().toString();
-    }
-
-    private void readData(ArrayList<String> itemList, String verifier, FireStoreCallback fireStoreCallback){
-        itemList.clear();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection("Profile");
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (DocumentSnapshot doc : task.getResult()){
-                        if (verifier.equals("Email")) {
-                            existed = doc.getString("Email");
-                        }
-                        if (verifier.equals("Id")){
-                            existed = doc.getId();
-                        }
-                        itemList.add(existed);
-                    }
-                    fireStoreCallback.onCallback(itemList);
-                }
-                else{
-                    Log.d("Error", task.getException().toString());
-                }
-            }
-        });
-    }
-
-    private interface FireStoreCallback{
-        void onCallback(ArrayList<String> list);
     }
 }

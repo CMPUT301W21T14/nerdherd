@@ -27,9 +27,6 @@ public class ProfileController {
     private String id;
     private Integer avatar;
     private Profile profile;
-    private FirebaseFirestore db;
-    private HashMap<String, Object> profileData;
-    private CollectionReference collectionReference;
     private Integer[] imageList= {R.drawable.zelda, R.drawable.f1, R.drawable.f2, R.drawable.f3, R.drawable.f4, R.drawable.f5, R.drawable.m1, R.drawable.m2, R.drawable.m3, R.drawable.m4, R.drawable.m5, R.drawable.h};
     private ArrayList<Integer> imageArray = new ArrayList(Arrays.asList(imageList));
 
@@ -58,17 +55,7 @@ public class ProfileController {
         profile = new Profile(name, password, email, avatar);
     }
 
-    public void uploadProfile(){
-        // Access database
-        db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("Profile");
-        profileData = new HashMap<>();
-        profileData.put("Name", profile.getName());
-        profileData.put("Password", profile.getPassword());
-        profileData.put("Email", profile.getEmail());
-        profileData.put("Avatar", profile.getAvatar());
-        collectionReference
-                .document(id)
-                .set(profileData);
+    public Profile getProfile() {
+        return profile;
     }
 }
