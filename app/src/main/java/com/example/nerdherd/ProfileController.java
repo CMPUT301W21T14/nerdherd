@@ -4,6 +4,7 @@ package com.example.nerdherd;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -23,17 +25,16 @@ public class ProfileController {
     private String password;
     private String email;
     private String id;
-    private Bitmap avatar;
+    private Integer avatar;
     private Profile profile;
     private FirebaseFirestore db;
     private HashMap<String, Object> profileData;
     private CollectionReference collectionReference;
-    private ByteArrayOutputStream byteArrayOutputStream;
-    private String compressString;
-    private String stringAvatar;
+    private Integer[] imageList= {R.drawable.zelda, R.drawable.f1, R.drawable.f2, R.drawable.f3, R.drawable.f4, R.drawable.f5, R.drawable.m1, R.drawable.m2, R.drawable.m3, R.drawable.m4, R.drawable.m5, R.drawable.h};
+    private ArrayList<Integer> imageArray = new ArrayList(Arrays.asList(imageList));
 
     // Constructor
-    public ProfileController(String name, String password, String email, String id, Bitmap avatar) {
+    public ProfileController(String name, String password, String email, String id, Integer avatar) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -41,15 +42,20 @@ public class ProfileController {
         this.avatar = avatar;
     }
 
-    public Boolean avatarChecker(){
+    public ProfileController() {
+        this.name = "name";
+        this.password = "password";
+        this.email = "email";
+        this.id = "id";
+        this.avatar = -1;
+    }
+
+    public ArrayList<Integer> getImageArray() {
+        return imageArray;
+    }
+
+    public void creator(){
         profile = new Profile(name, password, email, avatar);
-        stringAvatar = compresser(profile);
-        if (stringAvatar.getBytes().length> 1000000){
-            return false;
-        }
-        else{
-            return true;
-        }
     }
 
     public void uploadProfile(){
@@ -60,17 +66,9 @@ public class ProfileController {
         profileData.put("Name", profile.getName());
         profileData.put("Password", profile.getPassword());
         profileData.put("Email", profile.getEmail());
-        profileData.put("Avatar", stringAvatar);
+        profileData.put("Avatar", profile.getAvatar());
         collectionReference
                 .document(id)
                 .set(profileData);
-    }
-
-    private String compresser(Profile profile){
-        // Compress avatar
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        profile.getAvatar().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        compressString = byteArrayOutputStream.toString();
-        return compressString;
     }
 }

@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import android.provider.MediaStore;
@@ -40,8 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
     private String email;
     private String id;
-    private BitmapDrawable avatarDrawable;
-    private Bitmap avatar;
+    private Integer avatar;
     private TextView nameEdit;
     private TextView passwordEdit;
     private TextView emailEdit;
@@ -51,19 +51,31 @@ public class RegisterActivity extends AppCompatActivity {
     private Random random;
     private String idSequence;
     private Integer index;
+    private ProfileController emptyController;
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference collectionReference;
     private Integer indicator;
     private String existedID;
-    private Intent gallery;
+    private Intent avatarPicker;
+    private Intent getAvatar;
     private Integer requestNum = 1;
-    private Uri imageUri;
-    private Bitmap profileImage;
+    private Bundle dataBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        avatar = 0;
+        getAvatar = getIntent();
+        dataBundle = getAvatar.getBundleExtra("Data");
+        if (dataBundle != null) {
+            avatar = dataBundle.getInt("Index", 0);
+            name = dataBundle.getString("Name");
+            password = dataBundle.getString("Password");
+            email = dataBundle.getString("Email");
+        }
+        emptyController = new ProfileController();
 
         cancelButton = findViewById(R.id.cancelButton);
         registerButton = findViewById(R.id.registerButton);
@@ -71,6 +83,12 @@ public class RegisterActivity extends AppCompatActivity {
         nameEdit = findViewById(R.id.nameEdit);
         passwordEdit = findViewById(R.id.passwordEdit);
         emailEdit = findViewById(R.id.emailEdit);
+
+        nameEdit.setText(name);
+        passwordEdit.setText(password);
+        emailEdit.setText(email);
+
+        avatarButton.setImageResource(emptyController.getImageArray().get(avatar));
 
         // Click cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -85,22 +103,15 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name = nameEdit.getText().toString();
-                password = passwordEdit.getText().toString();
-                email = emailEdit.getText().toString();
                 id = idGenerator();
+                textGetter();
                 if (!name.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
-                    avatarDrawable = (BitmapDrawable) avatarButton.getDrawable();
-                    avatar = avatarDrawable.getBitmap();
                     profileController = new ProfileController(name, password, email, id, avatar);
-                    if (profileController.avatarChecker()) {
-                        profileController.uploadProfile();
-                        searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
-                        startActivity(searchIntent);
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "The image is too large, please choose another one. Thank you.", Toast.LENGTH_SHORT).show();
-                    }
+                    profileController.creator();
+                    profileController.uploadProfile();
+                    searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
+                    startActivity(searchIntent);
+                    finish();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Please fill all of name, password and email. Thank you.", Toast.LENGTH_SHORT).show();
@@ -112,23 +123,17 @@ public class RegisterActivity extends AppCompatActivity {
         avatarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, requestNum);
+                textGetter();
+                dataBundle = new Bundle();
+                dataBundle.putString("Name", name);
+                dataBundle.putString("Password", password);
+                dataBundle.putString("Email", email);
+                avatarPicker = new Intent(RegisterActivity.this, AvatarPicker.class);
+                avatarPicker.putExtra("Data", dataBundle);
+                startActivity(avatarPicker);
+                finish();
             }
         });
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == requestNum){
-            imageUri = data.getData();
-            try {
-                profileImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            avatarButton.setImageBitmap(profileImage);
-        }
     }
 
     private String idGenerator(){
@@ -171,6 +176,12 @@ public class RegisterActivity extends AppCompatActivity {
         else{
             return false;
         }
+    }
+
+    private void textGetter(){
+        name = nameEdit.getText().toString();
+        password = passwordEdit.getText().toString();
+        email = emailEdit.getText().toString();
     }
 
 }

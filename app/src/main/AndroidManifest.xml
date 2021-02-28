@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NerdHerd">
-        <activity android:name=".SearchExperimentActivity"></activity>
+        <activity android:name=".AvatarPicker"></activity>
+        <activity android:name=".SearchExperimentActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".SplashScreen">

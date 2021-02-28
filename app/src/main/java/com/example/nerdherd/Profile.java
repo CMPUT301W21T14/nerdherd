@@ -8,9 +8,9 @@ public class Profile {
     private String name;
     private String password;
     private String email;
-    private Bitmap avatar;
+    private Integer avatar;
 
-    public Profile(String name, String password, String email, Bitmap avatar) {
+    public Profile(String name, String password, String email, Integer avatar) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -41,11 +41,11 @@ public class Profile {
         this.email = email;
     }
 
-    public Bitmap getAvatar() {
+    public Integer getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Bitmap avatar) {
+    public void setAvatar(Integer avatar) {
         this.avatar = avatar;
     }
 }
