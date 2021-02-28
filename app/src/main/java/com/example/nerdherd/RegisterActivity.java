@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import java.io.IOException;
+import java.net.InterfaceAddress;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,7 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -60,6 +65,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Intent getAvatar;
     private Integer requestNum = 1;
     private Bundle dataBundle;
+    private String existed;
+    private ArrayList<String> emailData;
+    private Boolean isNew;
+    private ArrayList<String> idData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,15 +112,32 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                id = idGenerator();
+                isNew = true;
+                idGenerator();
                 textGetter();
                 if (!name.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
-                    profileController = new ProfileController(name, password, email, id, avatar);
-                    profileController.creator();
-                    profileController.uploadProfile();
-                    searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
-                    startActivity(searchIntent);
-                    finish();
+                    emailData = new ArrayList<String>();
+                    readData(emailData, "Email", new FireStoreCallback() {
+                        @Override
+                        public void onCallback(ArrayList<String> list) {
+                            for(String usedEmail : list){
+                                if (usedEmail.equals(email)){
+                                    isNew = false;
+                                }
+                            }
+                            if (isNew){
+                                profileController = new ProfileController(name, password, email, id, avatar);
+                                profileController.creator();
+                                profileController.uploadProfile();
+                                searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
+                                startActivity(searchIntent);
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "The email address is already used. Thank you.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Please fill all of name, password and email. Thank you.", Toast.LENGTH_SHORT).show();
@@ -136,12 +162,26 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private String idGenerator(){
+    private void idGenerator(){
+        indicator = 1;
         idSequence = generator();
-        while (!checker(idSequence)){
-            idSequence = generator();
-        }
-        return idSequence;
+        idData = new ArrayList<String>();
+        readData(idData, "Id", new FireStoreCallback() {
+            @Override
+            public void onCallback(ArrayList<String> list) {
+                for(String usedId : idData){
+                    if (usedId.equals(idSequence)){
+                        indicator = 0;
+                    }
+                }
+                if (indicator == 0){
+                    idGenerator();
+                }
+                else{
+                    id = idSequence;
+                }
+            }
+        });
     }
 
     private String generator(){
@@ -154,34 +194,39 @@ public class RegisterActivity extends AppCompatActivity {
         return randSequence;
     }
 
-    private Boolean checker(String sequence){
-        indicator = 1;
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection("Profile");
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                for (QueryDocumentSnapshot doc : value){
-                    existedID = doc.getId();
-                    if (existedID.equals(sequence)){
-                        indicator = 0;
-                    }
-                }
-            }
-        });
-
-        if (indicator == 1) {
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
     private void textGetter(){
         name = nameEdit.getText().toString();
         password = passwordEdit.getText().toString();
         email = emailEdit.getText().toString();
     }
 
+    private void readData(ArrayList<String> itemList, String verifier, FireStoreCallback fireStoreCallback){
+        itemList.clear();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        collectionReference = firebaseFirestore.collection("Profile");
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot doc : task.getResult()){
+                        if (verifier.equals("Email")) {
+                            existed = doc.getString("Email");
+                        }
+                        if (verifier.equals("Id")){
+                            existed = doc.getId();
+                        }
+                        itemList.add(existed);
+                    }
+                    fireStoreCallback.onCallback(itemList);
+                }
+                else{
+                    Log.d("Error", task.getException().toString());
+                }
+            }
+        });
+    }
+
+    private interface FireStoreCallback{
+        void onCallback(ArrayList<String> list);
+    }
 }
