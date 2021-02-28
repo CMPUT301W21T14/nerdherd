@@ -13,7 +13,7 @@ public class AvatarPicker extends AppCompatActivity {
 
     private Adapter.onClickListener listener;
     private ProfileController profileController;
-    private Intent priviousIntent;
+    private Intent previousIntent;
     private Intent register;
     private Bundle data;
 
@@ -22,8 +22,8 @@ public class AvatarPicker extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar_picker);
 
-        priviousIntent = getIntent();
-        data = priviousIntent.getBundleExtra("Data");
+        previousIntent = getIntent();
+        data = previousIntent.getBundleExtra("Data");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         listener = new Adapter.onClickListener() {

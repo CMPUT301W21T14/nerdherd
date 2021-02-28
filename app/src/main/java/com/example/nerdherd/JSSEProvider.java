@@ -25,7 +25,7 @@ package com.example.nerdherd;
 import java.security.AccessController;
 import java.security.Provider;
 
-public final class JSSEProvider extends Provider {
+public class JSSEProvider extends Provider {
 
     public JSSEProvider() {
         super("HarmonyJSSE", 1.0, "Harmony JSSE Provider");

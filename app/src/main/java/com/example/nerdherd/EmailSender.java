@@ -1,9 +1,20 @@
 package com.example.nerdherd;
 
-import android.se.omapi.Session;
-
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.Security;
 import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class EmailSender extends javax.mail.Authenticator{
     private String mailhost = "smtp.gmail.com";
@@ -12,7 +23,7 @@ public class EmailSender extends javax.mail.Authenticator{
     private Session session;
 
     static {
-        Security.addProvider(new com.provider.JSSEProvider());
+        Security.addProvider(new com.example.nerdherd.JSSEProvider());
     }
 
     public EmailSender(String user, String password) {
@@ -92,5 +103,4 @@ public class EmailSender extends javax.mail.Authenticator{
             throw new IOException("Not Supported");
         }
     }
-}
 }

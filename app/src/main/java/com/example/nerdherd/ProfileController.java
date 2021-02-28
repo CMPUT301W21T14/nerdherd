@@ -44,7 +44,7 @@ public class ProfileController {
         this.password = "password";
         this.email = "email";
         this.id = "id";
-        this.avatar = -1;
+        this.avatar = 0;
     }
 
     public ArrayList<Integer> getImageArray() {
