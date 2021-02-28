@@ -2,6 +2,8 @@ package com.example.nerdherd;
 
 // Modified form youtube
 
+import android.util.Pair;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,12 +23,19 @@ public class FireStoreController {
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference collectionReference;
     private String existed;
+    private String existedId;
+    private String existedPassword;
+    private Pair<String, String> infoPair;
     private HashMap<String, Object> profileData;
+
+    private void accessor(){
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        collectionReference = firebaseFirestore.collection("Profile");
+    }
 
     public void readData(ArrayList<String> itemList, String verifier, FireStoreReadCallback fireStoreReadCallback, FireStoreReadFailCallback fireStoreReadFailCallback){
         itemList.clear();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection("Profile");
+        accessor();
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -50,6 +59,7 @@ public class FireStoreController {
     }
 
     public void uploadData(Profile profile, String id, FireStoreUploadCallback fireStoreUploadCallback, FireStoreUploadFailCallback fireStoreUploadFailCallback){
+        accessor();
         profileData = new HashMap<>();
         profileData.put("Name", profile.getName());
         profileData.put("Password", profile.getPassword());
@@ -72,6 +82,27 @@ public class FireStoreController {
                 });
     }
 
+    public void logInCheck(ArrayList<Pair> pairList, FireStoreCheckCallback fireStoreCheckCallback, FireStoreCheckFailCallback fireStoreCheckFailCallback){
+        accessor();
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (DocumentSnapshot doc : task.getResult()){
+                        existedId = doc.getId();
+                        existedPassword = doc.getString("Password");
+                        infoPair = new Pair<String, String>(existedId, existedPassword);
+                        pairList.add(infoPair);
+                    }
+                    fireStoreCheckCallback.onCallback(pairList);
+                }
+                else{
+                    fireStoreCheckFailCallback.onCallback();
+                }
+            }
+        });
+    }
+
     public interface FireStoreReadCallback{
         void onCallback(ArrayList<String> list);
     }
@@ -85,6 +116,14 @@ public class FireStoreController {
     }
 
     public interface FireStoreUploadFailCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreCheckCallback{
+        void onCallback(ArrayList<Pair> list);
+    }
+
+    public interface FireStoreCheckFailCallback{
         void onCallback();
     }
 }

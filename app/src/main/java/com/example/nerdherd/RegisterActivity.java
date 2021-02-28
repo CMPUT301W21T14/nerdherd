@@ -131,7 +131,7 @@ public class RegisterActivity extends Activity {
                                 }, new FireStoreController.FireStoreUploadFailCallback() {
                                     @Override
                                     public void onCallback() {
-                                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please tray again later. Thank you.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } else {
@@ -141,7 +141,7 @@ public class RegisterActivity extends Activity {
                     }, new FireStoreController.FireStoreReadFailCallback() {
                         @Override
                         public void onCallback() {
-                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please tray again later. Thank you.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
