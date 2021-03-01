@@ -1,6 +1,7 @@
 package com.example.nerdherd;
 
 // Modified form youtube
+// Author: Zhipeng Z zhipeng4
 
 import android.util.Pair;
 

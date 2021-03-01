@@ -1,5 +1,7 @@
 package com.example.nerdherd;
 
+// Author: Zhipeng Z zhipeng4
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
