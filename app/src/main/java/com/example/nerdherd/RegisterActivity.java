@@ -36,15 +36,11 @@ public class RegisterActivity extends Activity {
     private String randSequence;
     private Random random;
     private String idSequence;
-    private Integer index;
     private ProfileController emptyController;
     private Integer indicator;
-    private String existedID;
     private Intent avatarPicker;
     private Intent getAvatar;
-    private Integer requestNum = 1;
     private Bundle dataBundle;
-    private String existed;
     private ArrayList<String> emailData;
     private Boolean isNew;
     private ArrayList<String> idData;
@@ -87,6 +83,7 @@ public class RegisterActivity extends Activity {
             public void onClick(View view) {
                 logInIntent = new Intent(RegisterActivity.this, LogInActivity.class);
                 startActivity(logInIntent);
+                finish();
             }
         });
 
@@ -118,7 +115,7 @@ public class RegisterActivity extends Activity {
                                             public void run() {
                                                 try {
                                                     GMailSender = new GMailSender("richard15765@gmail.com", "ZhiPeng4!");
-                                                    GMailSender.sendMail("Your User ID", "Your user ID is following: " + id + " Please do not forgot.", "richard15765@gmail.com", email);
+                                                    GMailSender.sendMail("Your User ID", "Your user ID is: " + id + "\nPlease do not forgot.", "richard15765@gmail.com", email);
                                                 }catch(Exception e){
                                                     Log.e("SendMail", e.getMessage(), e);
                                                 }

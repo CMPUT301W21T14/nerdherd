@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -41,11 +42,11 @@ public class FireStoreController {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (DocumentSnapshot doc : task.getResult()){
-                        if (verifier.equals("Email")) {
-                            existed = doc.getString("Email");
-                        }
                         if (verifier.equals("Id")){
                             existed = doc.getId();
+                        }
+                        else{
+                            existed = doc.getString(verifier);
                         }
                         itemList.add(existed);
                     }
@@ -103,6 +104,44 @@ public class FireStoreController {
         });
     }
 
+    public void getCertainData(ArrayList<String> itemList, String field, String value, String wanted, FireStoreCertainCallback fireStoreCertainCallback, FireStoreCertainFailCallback fireStoreCertainFailCallback){
+        accessor();
+        collectionReference.whereEqualTo(field, value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc : task.getResult()){
+                        if (wanted.equals("Id")){
+                            itemList.add(doc.getId());
+                        }
+                        else{
+                            itemList.add(doc.getString(wanted));
+                        }
+                    }
+                    fireStoreCertainCallback.onCallback(itemList);
+                }
+                else{
+                    fireStoreCertainFailCallback.onCallback();
+                }
+            }
+        });
+    }
+
+    public void updater(String id, String target, String newValue, FireStoreUpdateCallback fireStoreUpdateCallback, FireStoreUpdateFailCallback fireStoreUpdateFailCallback){
+        accessor();
+        collectionReference.document(id).update(target, newValue).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                fireStoreUpdateCallback.onCallback();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                fireStoreUpdateFailCallback.onCallback();
+            }
+        });
+    }
+
     public interface FireStoreReadCallback{
         void onCallback(ArrayList<String> list);
     }
@@ -124,6 +163,22 @@ public class FireStoreController {
     }
 
     public interface FireStoreCheckFailCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreCertainCallback{
+        void onCallback(ArrayList<String> list);
+    }
+
+    public interface FireStoreCertainFailCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreUpdateCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreUpdateFailCallback{
         void onCallback();
     }
 }

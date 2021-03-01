@@ -27,7 +27,12 @@ public class LogInActivity extends AppCompatActivity {
     private Integer indicator;
     private ArrayList<Pair> infoArray;
     private FireStoreController fireStoreController;
+    private TextView idFinder;
+    private TextView passwordFinder;
     private Intent search;
+    private String idFinding = "Id";
+    private String passwordFinding = "Password";
+    private Intent reset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,8 @@ public class LogInActivity extends AppCompatActivity {
 
         registerButton = findViewById(R.id.RegisterButton);
         logInButton = findViewById(R.id.logInButton);
+        idFinder = findViewById(R.id.resetID);
+        passwordFinder = findViewById(R.id.resetPassword);
         fireStoreController = new FireStoreController();
 
         // Click register button
@@ -84,5 +91,28 @@ public class LogInActivity extends AppCompatActivity {
                 });
             }
         });
+
+        // Find ID
+        idFinder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finding(idFinding);
+            }
+        });
+
+        // Find Password
+        passwordFinder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finding(passwordFinding);
+            }
+        });
+    }
+
+    private void finding(String verifier){
+        reset = new Intent(LogInActivity.this, Reseter.class);
+        reset.putExtra("Verifier", verifier);
+        startActivity(reset);
+        finish();
     }
 }
