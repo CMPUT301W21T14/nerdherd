@@ -4,44 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchExperimentActivity">
-
-    <com.google.android.material.tabs.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMode="scrollable"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/experimentsTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Experiments" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/userSearchTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="User Search" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/myProfileTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Profile" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/myExperimentsTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Experiments" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/subscribtionsTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My Subscribtions" />
-    </com.google.android.material.tabs.TabLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".SearchExperimentActivity"/>
