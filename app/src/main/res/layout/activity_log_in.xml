@@ -8,8 +8,9 @@
 
     <Button
         android:id="@+id/RegisterButton"
-        android:layout_width="139dp"
-        android:layout_height="79dp"
+        app:layout_constraintWidth_percent="0.3"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="50dp"
         android:layout_marginRight="50dp"
         android:text="Register"
@@ -19,7 +20,8 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
@@ -31,7 +33,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.35"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:fontFamily="sans-serif-medium"
@@ -45,7 +48,8 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
@@ -57,7 +61,8 @@
 
     <EditText
         android:id="@+id/userId"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:ems="10"
@@ -67,8 +72,9 @@
 
     <Button
         android:id="@+id/logInButton"
-        android:layout_width="139dp"
-        android:layout_height="79dp"
+        app:layout_constraintWidth_percent="0.3"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
         android:text="Log In"
@@ -78,7 +84,8 @@
 
     <EditText
         android:id="@+id/userPassword"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.4"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ems="10"
@@ -88,7 +95,8 @@
 
     <TextView
         android:id="@+id/resetPassword"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Forgot Password?"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -96,7 +104,8 @@
 
     <TextView
         android:id="@+id/resetID"
-        android:layout_width="wrap_content"
+        app:layout_constraintWidth_percent="0.3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Forgot User ID?"
         app:layout_constraintBottom_toBottomOf="parent"
