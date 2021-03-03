@@ -38,6 +38,8 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
