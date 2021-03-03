@@ -105,6 +105,12 @@ public class FireStoreController {
         });
     }
 
+    //private arrayList<String> return_val
+    //sps = new ArrayList<String>
+    //field: email
+    //value: osamuel@ualberta.ca - can make val public
+    //getCertainData(sps, email, 'osamuel@ualberta.ca', 'username',
+
     public void getCertainData(ArrayList<String> itemList, String field, String value, String wanted, FireStoreCertainCallback fireStoreCertainCallback, FireStoreCertainFailCallback fireStoreCertainFailCallback){
         accessor();
         collectionReference.whereEqualTo(field, value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

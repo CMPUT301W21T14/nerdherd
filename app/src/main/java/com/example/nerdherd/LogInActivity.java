@@ -76,6 +76,7 @@ public class LogInActivity extends AppCompatActivity {
                         }
                         if (indicator == 1){
                             search = new Intent(LogInActivity.this, SearchExperimentActivity.class);
+                            search.putExtra("id",id);
                             startActivity(search);
                             finish();
                         }

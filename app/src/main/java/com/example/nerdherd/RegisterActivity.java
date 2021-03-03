@@ -25,7 +25,7 @@ public class RegisterActivity extends Activity {
     private Intent searchIntent;
     private String name;
     private String password;
-    private String email;
+    public  String email;
     private String id;
     private Integer avatar;
     private TextView nameEdit;

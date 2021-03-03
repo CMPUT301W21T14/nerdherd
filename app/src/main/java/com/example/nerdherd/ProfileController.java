@@ -39,6 +39,7 @@ public class ProfileController {
         this.avatar = avatar;
     }
 
+
     public ProfileController() {
         this.name = "name";
         this.password = "password";
@@ -50,6 +51,7 @@ public class ProfileController {
     public ArrayList<Integer> getImageArray() {
         return imageArray;
     }
+
 
     public void creator(){
         profile = new Profile(name, password, email, avatar);
