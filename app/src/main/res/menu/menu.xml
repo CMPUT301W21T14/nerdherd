@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/experiments"
+        android:title="Experiments" />
+    <item
+        android:id="@+id/user_search"
+        android:title="User Search" />
+    <item
+        android:id="@+id/my_experiments"
+        android:title="My Experiments" />
+    <item
+        android:id="@+id/my_subscription"
+        android:title="My Subscription" />
+    <item
+        android:id="@+id/my_profile"
+        android:title="My Profile" />
+</menu>
