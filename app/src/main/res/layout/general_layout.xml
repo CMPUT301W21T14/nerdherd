@@ -17,7 +17,8 @@
         app:headerLayout="@layout/navigation_header"
         app:menu="@menu/menu"
         android:fitsSystemWindows="true"
-        android:layout_gravity = "start"/>
+        android:layout_gravity = "start"
+        app:itemTextAppearance="@style/NavigationViewStyle"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
