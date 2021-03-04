@@ -12,7 +12,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class FireStoreController {
 
@@ -178,24 +181,26 @@ public class FireStoreController {
             });
         }
         if (indicator.equals("All User")){
-            collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot doc : task.getResult()) {
-                            name = doc.getData().get("Name").toString();
-                            password = doc.getData().get("Password").toString();
-                            email = doc.getData().get("Email").toString();
-                            avatar = Integer.valueOf(doc.getData().get("Avatar").toString());
-                            profileController = new ProfileController(name, password, email, doc.getId(), avatar);
-                            profileController.creator();
-                            profileList.add(profileController.getProfile());
-                        }
-                        fireStoreProfileListCallback.onCallback(profileList);
-                    }
-                    else{
+                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                    if (error != null){
                         fireStoreProfileListFailCallback.onCallback();
+                        return;
                     }
+
+                    profileList.clear();
+                    for (QueryDocumentSnapshot doc : value) {
+                        name = doc.getData().get("Name").toString();
+                        password = doc.getData().get("Password").toString();
+                        email = doc.getData().get("Email").toString();
+                        avatar = Integer.valueOf(doc.getData().get("Avatar").toString());
+                        profileController = new ProfileController(name, password, email, doc.getId(), avatar);
+                        profileController.creator();
+                        profileList.add(profileController.getProfile());
+                    }
+                    fireStoreProfileListCallback.onCallback(profileList);
                 }
             });
         }
