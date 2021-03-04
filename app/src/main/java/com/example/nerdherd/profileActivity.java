@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ public class profileActivity extends AppCompatActivity implements NavigationView
     private TextView usersname;
     private TextView uname;
     private TextView usersemail;
+    private Button edtUserProfile;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -79,9 +81,16 @@ public class profileActivity extends AppCompatActivity implements NavigationView
         uname = findViewById(R.id.Name);
         uname.setText(name+"");
 
+        edtUserProfile = findViewById(R.id.edt_profile);
         avatar = GlobalVariable.profile.getAvatar();
         navigationView.setNavigationItemSelectedListener(this);
 
+        edtUserProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new EditProfileFragment().show(getSupportFragmentManager(), "EDIT_PROFILE");
+            }
+        });
 
 //        usersImg.setImageResource(R.drawable.zelda);
         usersAvatar.setImageResource(profController.getImageArray().get(avatar));
@@ -114,6 +123,10 @@ public class profileActivity extends AppCompatActivity implements NavigationView
             finish();
         }
         return true;
+    }
+
+    public void updateUserInfo(String Name, String Email){
+
     }
 }
 
