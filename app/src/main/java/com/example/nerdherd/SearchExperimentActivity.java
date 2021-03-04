@@ -73,6 +73,7 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
         if (item.getItemId() == R.id.user_search){
             searchUser = new Intent(SearchExperimentActivity.this, SearchUserActivity.class);
             startActivity(searchUser);
+            finish();
         }
         return true;
     }
