@@ -16,6 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,7 +36,7 @@ public class FireStoreController {
     private String name;
     private String password;
     private String email;
-    private String id;
+    private ProfileController profileController;
     private Integer avatar;
 
     private void accessor(){
@@ -156,24 +158,47 @@ public class FireStoreController {
         });
     }
 
-    public void readProfile(String id, FireStoreProfileCallback fireStoreProfileCallback, FireStoreProfileFailCallback fireStoreProfileFailCallback){
+    public void readProfile(ArrayList<Profile> profileList, String id, String indicator, FireStoreProfileCallback fireStoreProfileCallback, FireStoreProfileFailCallback fireStoreProfileFailCallback, FireStoreProfileListCallback fireStoreProfileListCallback, FireStoreProfileListFailCallback fireStoreProfileListFailCallback){
         accessor();
-        collectionReference.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    doc = task.getResult();
-                    name = doc.getData().get("Name").toString();
-                    password = doc.getData().get("Password").toString();
-                    email = doc.getData().get("Email").toString();
-                    avatar = Integer.valueOf(doc.getData().get("Avatar").toString());
-                    fireStoreProfileCallback.onCallback(name, password, email, avatar);
+        if (indicator.equals("Current User")) {
+            collectionReference.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        doc = task.getResult();
+                        name = doc.getData().get("Name").toString();
+                        password = doc.getData().get("Password").toString();
+                        email = doc.getData().get("Email").toString();
+                        avatar = Integer.valueOf(doc.getData().get("Avatar").toString());
+                        fireStoreProfileCallback.onCallback(name, password, email, avatar);
+                    } else {
+                        fireStoreProfileFailCallback.onCallback();
+                    }
                 }
-                else {
-                    fireStoreProfileFailCallback.onCallback();
+            });
+        }
+        if (indicator.equals("All User")){
+            collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            name = doc.getData().get("Name").toString();
+                            password = doc.getData().get("Password").toString();
+                            email = doc.getData().get("Email").toString();
+                            avatar = Integer.valueOf(doc.getData().get("Avatar").toString());
+                            profileController = new ProfileController(name, password, email, doc.getId(), avatar);
+                            profileController.creator();
+                            profileList.add(profileController.getProfile());
+                        }
+                        fireStoreProfileListCallback.onCallback(profileList);
+                    }
+                    else{
+                        fireStoreProfileListFailCallback.onCallback();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public interface FireStoreReadCallback{
@@ -221,6 +246,14 @@ public class FireStoreController {
     }
 
     public interface FireStoreProfileFailCallback {
+        void onCallback();
+    }
+
+    public interface FireStoreProfileListCallback{
+        void onCallback(ArrayList<Profile> profileList);
+    }
+
+    public interface FireStoreProfileListFailCallback {
         void onCallback();
     }
 }

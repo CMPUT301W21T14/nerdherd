@@ -1,5 +1,7 @@
 package com.example.nerdherd;
 
+// Author: Zhipeng Z zhipeng4
+
 public class Experiment {
     private String owner;
     private String status;

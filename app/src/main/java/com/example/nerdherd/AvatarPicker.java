@@ -18,6 +18,8 @@ public class AvatarPicker extends AppCompatActivity {
     private Intent previousIntent;
     private Intent register;
     private Bundle data;
+    private Adapter adapter;
+    private AdapterController adapterController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +41,8 @@ public class AvatarPicker extends AppCompatActivity {
             }
         };
         profileController = new ProfileController();
-        Adapter adapter = new Adapter(profileController.getImageArray(), listener);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        adapter = new Adapter(profileController.getImageArray(), listener);
+        adapterController = new AdapterController(AvatarPicker.this, recyclerView, adapter);
+        adapterController.useAdapter();
     }
 }

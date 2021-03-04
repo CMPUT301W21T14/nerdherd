@@ -77,7 +77,7 @@ public class LogInActivity extends AppCompatActivity {
                             }
                         }
                         if (indicator == 1){
-                            fireStoreController.readProfile(id, new FireStoreController.FireStoreProfileCallback() {
+                            fireStoreController.readProfile(null, id, "Current User", new FireStoreController.FireStoreProfileCallback() {
                                 @Override
                                 public void onCallback(String name, String password, String email, Integer avatar) {
                                     profileController = new ProfileController(name, password, email, id, avatar);
@@ -92,7 +92,7 @@ public class LogInActivity extends AppCompatActivity {
                                 public void onCallback() {
                                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                                 }
-                            });
+                            },null, null);
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "The log in information is not correct, please try again. Thank you.", Toast.LENGTH_SHORT).show();
