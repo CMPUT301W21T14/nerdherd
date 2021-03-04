@@ -34,6 +34,7 @@ public class LogInActivity extends AppCompatActivity {
     private String idFinding = "Id";
     private String passwordFinding = "Password";
     private Intent reset;
+    private ProfileController profileController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +77,22 @@ public class LogInActivity extends AppCompatActivity {
                             }
                         }
                         if (indicator == 1){
-                            search = new Intent(LogInActivity.this, SearchExperimentActivity.class);
-                            search.putExtra("id",id);
-                            startActivity(search);
-                            finish();
+                            fireStoreController.readProfile(id, new FireStoreController.FireStoreProfileCallback() {
+                                @Override
+                                public void onCallback(String name, String password, String email, Integer avatar) {
+                                    profileController = new ProfileController(name, password, email, id, avatar);
+                                    profileController.creator();
+                                    GlobalVariable.profile = profileController.getProfile();
+                                    search = new Intent(LogInActivity.this, SearchExperimentActivity.class);
+                                    startActivity(search);
+                                    finish();
+                                }
+                            }, new FireStoreController.FireStoreProfileFailCallback() {
+                                @Override
+                                public void onCallback() {
+                                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "The log in information is not correct, please try again. Thank you.", Toast.LENGTH_SHORT).show();

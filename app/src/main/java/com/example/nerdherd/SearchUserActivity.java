@@ -1,5 +1,7 @@
 package com.example.nerdherd;
 
+// Author: Zhipeng Z zhipeng4
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;

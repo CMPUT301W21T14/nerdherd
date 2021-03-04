@@ -1,35 +1,34 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-// The following class is modified form the tutorial
-// https://developer.android.com/
+public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.ViewHolder> {
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+    ArrayList<Experiment> experiments;
+    ExperimentAdapter.onClickListener listener;
 
-    ArrayList<Integer> images;
-    onClickListener listener;
-
-    public Adapter(ArrayList<Integer> images, onClickListener listener) {
-        this.images = images;
+    public ExperimentAdapter(ArrayList<Experiment> experiments, ExperimentAdapter.onClickListener listener){
+        this.experiments = experiments;
         this.listener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        ImageView imageView;
+        TextView title;
+        TextView owner;
+        TextView status;
         public ViewHolder(View view){
             super(view);
-            imageView = view.findViewById(R.id.imageView);
+            title = view.findViewById(R.id.experimentTitle);
+            owner = view.findViewById(R.id.experimentOwner);
+            status = view.findViewById(R.id.experimentStatus);
             view.setOnClickListener(this);
         }
 
@@ -38,23 +37,26 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             listener.onClick(view, getAdapterPosition());
         }
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_item_avatar, parent, false);
+                .inflate(R.layout.row_item_experiment, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageResource(images.get(position));
+        holder.title.setText(experiments.get(position).getTitle());
+        holder.owner.setText(experiments.get(position).getOwner());
+        holder.status.setText(experiments.get(position).getStatus());
     }
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return experiments.size();
     }
 
     public interface onClickListener{

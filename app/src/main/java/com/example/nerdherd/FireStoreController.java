@@ -3,6 +3,7 @@ package com.example.nerdherd;
 // Modified form youtube
 // Author: Zhipeng Z zhipeng4
 
+import android.util.Log;
 import android.util.Pair;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +30,12 @@ public class FireStoreController {
     private String existedPassword;
     private Pair<String, String> infoPair;
     private HashMap<String, Object> profileData;
+    private DocumentSnapshot doc;
+    private String name;
+    private String password;
+    private String email;
+    private String id;
+    private Integer avatar;
 
     private void accessor(){
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -149,6 +156,26 @@ public class FireStoreController {
         });
     }
 
+    public void readProfile(String id, FireStoreProfileCallback fireStoreProfileCallback, FireStoreProfileFailCallback fireStoreProfileFailCallback){
+        accessor();
+        collectionReference.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    doc = task.getResult();
+                    name = doc.getData().get("Name").toString();
+                    password = doc.getData().get("Password").toString();
+                    email = doc.getData().get("Email").toString();
+                    avatar = Integer.valueOf(doc.getData().get("Avatar").toString());
+                    fireStoreProfileCallback.onCallback(name, password, email, avatar);
+                }
+                else {
+                    fireStoreProfileFailCallback.onCallback();
+                }
+            }
+        });
+    }
+
     public interface FireStoreReadCallback{
         void onCallback(ArrayList<String> list);
     }
@@ -186,6 +213,14 @@ public class FireStoreController {
     }
 
     public interface FireStoreUpdateFailCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreProfileCallback{
+        void onCallback(String name, String password, String email, Integer avatar);
+    }
+
+    public interface FireStoreProfileFailCallback {
         void onCallback();
     }
 }
