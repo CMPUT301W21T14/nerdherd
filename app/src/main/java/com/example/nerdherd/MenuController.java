@@ -52,6 +52,11 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             context.startActivity(intent);
             ((Activity)context).finish();
         }
+        if (item.getItemId() == R.id.my_profile && !(context instanceof profileActivity)){
+            intent = new Intent(context, profileActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
         return true;
     }
 }

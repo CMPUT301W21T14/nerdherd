@@ -59,7 +59,6 @@ public class profileActivity extends AppCompatActivity implements NavigationView
 //        }
         profController= new ProfileController();
         Log.d("Test", GlobalVariable.profile.getName());
-
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout);
         navigationView = findViewById(R.id.navigator);
