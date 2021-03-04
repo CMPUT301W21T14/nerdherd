@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -29,6 +31,7 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
     private NavigationView navigationView;
     private Toolbar toolbar;
     private Intent searchUser;
+    private Intent UsersProfile;
     private ExperimentAdapter.onClickListener listener;
     private ArrayList<Experiment> experimentList;
 
@@ -75,6 +78,8 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+
     }
 
     @Override
@@ -82,6 +87,11 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
         if (item.getItemId() == R.id.user_search){
             searchUser = new Intent(SearchExperimentActivity.this, SearchUserActivity.class);
             startActivity(searchUser);
+            finish();
+        }
+        if (item.getItemId() == R.id.my_profile){
+            UsersProfile = new Intent(SearchExperimentActivity.this, profileActivity.class);
+            startActivity(UsersProfile);
             finish();
         }
         return true;
