@@ -1,5 +1,7 @@
 package com.example.nerdherd;
 
+// Author: Zhipeng Z zhipeng4
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

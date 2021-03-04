@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,15 +23,16 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
-public class SearchExperimentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class SearchExperimentActivity extends AppCompatActivity{
 
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private Intent searchUser;
     private ExperimentAdapter.onClickListener listener;
     private ArrayList<Experiment> experimentList;
+    private MenuController menuController;
+    private AdapterController adapterController;
+    private ExperimentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +45,8 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
 
         setSupportActionBar(toolbar);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-        actionBarDrawerToggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener(this);
+        menuController = new MenuController(SearchExperimentActivity.this, toolbar, navigationView, drawerLayout);
+        menuController.useMenu();
 
         RecyclerView recyclerView = findViewById(R.id.experiment_recyclerView);
         listener = new ExperimentAdapter.onClickListener() {
@@ -61,20 +59,8 @@ public class SearchExperimentActivity extends AppCompatActivity implements Navig
         experimentList = new ArrayList<Experiment>();
         experimentList.add(new Experiment("owner", "status", "title"));
 // Test above
-        ExperimentAdapter adapter = new ExperimentAdapter(experimentList, listener);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.user_search){
-            searchUser = new Intent(SearchExperimentActivity.this, SearchUserActivity.class);
-            startActivity(searchUser);
-            finish();
-        }
-        return true;
+        adapter = new ExperimentAdapter(experimentList, listener);
+        adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
+        adapterController.useAdapter();
     }
 }
