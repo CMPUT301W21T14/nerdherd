@@ -9,12 +9,15 @@ public class Profile {
     private String password;
     private String email;
     private Integer avatar;
+    private String id;
 
-    public Profile(String name, String password, String email, Integer avatar) {
+    public Profile(String name, String password, String email, String id, Integer avatar) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.avatar = avatar;
+        this.id = id;
+
     }
 
     public String getName() {
@@ -24,6 +27,8 @@ public class Profile {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getId(){return id;}
 
     public String getPassword() {
         return password;

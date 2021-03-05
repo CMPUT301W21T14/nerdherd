@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -125,7 +126,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     }
 
     public void updateUserInfo(String Name, String Email){
-
+        String id = GlobalVariable.profile.getId();
+        Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
     }
 }
 

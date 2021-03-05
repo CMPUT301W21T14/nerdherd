@@ -39,7 +39,7 @@ public class ProfileController {
 
 
     public void creator(){
-        profile = new Profile(name, password, email, avatar);
+        profile = new Profile(name, password, email, id, avatar);
     }
 
     public Profile getProfile() {
