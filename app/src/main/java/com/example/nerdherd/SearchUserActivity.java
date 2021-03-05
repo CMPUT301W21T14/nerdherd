@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class SearchUserActivity extends AppCompatActivity {
     private String keyword;
     private ArrayList<Profile> resultList;
     private Intent profileView;
+    private SearchController searchController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,28 +82,29 @@ public class SearchUserActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         resultList = new ArrayList<Profile>();
                         keyword = keywordEdit.getText().toString();
-                        if (!keyword.isEmpty()){
-                            for (Profile userProfile : profileList){
-                                if (userProfile.getName().toLowerCase().contains(keyword.toLowerCase()) || userProfile.getEmail().toLowerCase().contains(keyword.toLowerCase())){
-                                    resultList.add(userProfile);
-                                }
-                            }
-                            if (resultList.isEmpty()){
+                        searchController = new SearchController();
+                        searchController.searchUser(keyword, profileList, resultList, new SearchController.UserNoResultCallBack() {
+                            @Override
+                            public void onCallback(ArrayList<Profile> itemList) {
                                 new AlertDialog.Builder(SearchUserActivity.this).setTitle("No Result").setMessage("No result found. Please enter another keyword. Thank you.")
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                showProfiles(profileList);
+                                                showProfiles(itemList);
                                             }
                                         }).show();
                             }
-                            else{
-                                showProfiles(resultList);
+                        }, new SearchController.UserResultCallBack() {
+                            @Override
+                            public void onCallback(ArrayList<Profile> itemList) {
+                                showProfiles(itemList);
                             }
-                        }
-                        else{
-                            showProfiles(profileList);
-                        }
+                        }, new SearchController.UserNoKeywordCallBack() {
+                            @Override
+                            public void onCallback(ArrayList<Profile> itemList) {
+                                showProfiles(itemList);
+                            }
+                        });
                     }
                 });
             }
