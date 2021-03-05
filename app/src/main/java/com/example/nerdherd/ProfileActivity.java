@@ -37,21 +37,67 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     private String id;
     //profile controller
     private ProfileController profController;
+    private FireStoreController fireStoreController;
     //set the users name
     private TextView usersname;
     private TextView uname;
     private TextView usersemail;
     private Button edtUserProfile;
+    private Intent publicuser;
+    private int val;
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        edtUserProfile = findViewById(R.id.edt_profile);
+        name = GlobalVariable.profile.getName();
+        email = GlobalVariable.profile.getEmail();
+        publicuser = getIntent();
+        Bundle pUser = publicuser.getExtras();
+
+        //if pUser is null then it is a user(current logged in user or public user)
+        // that needs to be displayed
+        if (pUser != null)
+        {
+
+            Intent intent = getIntent();
+            val = intent.getIntExtra(SearchUserActivity.EXTRA_MESSAGE, -1);
+            name = GlobalVariable.profileArrayList.get(val).getName();
+            email = GlobalVariable.profileArrayList.get(val).getEmail();
+            //if the public name matches up with the private name
+            //or if the searched user == the logged in user
+            //then set the button to be visible (give functionality) to edit your profile
+            // else remove the button
+            if (name.equals(GlobalVariable.profile.getName()))
+            {
+                edtUserProfile.setVisibility(View.VISIBLE);
+            }
+            else{
+                edtUserProfile.setVisibility(View.GONE);
+            }
+//            Log.d("MYINT", "publicname: "+ sp);
+        }
+
+
+
+        //if no value is stored -> -1
+        //else: it returns the index
+//        GlobalVariable.profileArrayList.get(val).getName();
+//        if (pUser!= null)
+//        {
+//            publicName = pUser.getString("Index");
+//            Log.d("Userval", publicName);
+//        }
+//        String Name = GlobalVariable.profileArrayList.get(publicName).getName();
+
+
 //        avatar = 0;
 //        getAvatar = getIntent();
 //        dataBundle = getAvatar.getBundleExtra("Data");
         //get the users name
-        name = GlobalVariable.profile.getName();
-        email = GlobalVariable.profile.getEmail();
+
+        fireStoreController = new FireStoreController();
 //        if (dataBundle != null) {
 //            avatar = dataBundle.getInt("Index", 0);
 //            name = dataBundle.getString("Name");
@@ -81,7 +127,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         uname = findViewById(R.id.Name);
         uname.setText(name+"");
 
-        edtUserProfile = findViewById(R.id.edt_profile);
+
+        //TODO: needs to fix to implement controller as opposed to model(profile class)
         avatar = GlobalVariable.profile.getAvatar();
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -125,9 +172,23 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         return true;
     }
 
+    //This method responsible for interacting with controller which calls
+    //profile to get the users id, After changes made by the user (Edit their information)
+    //the firestoreController updates their information and returns 'success' or 'failure'
     public void updateUserInfo(String Name, String Email){
-        String id = GlobalVariable.profile.getId();
-        Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT).show();
+        String id = profController.getId();
+        fireStoreController.updater(id, "Name", Name, new FireStoreController.FireStoreUpdateCallback(){
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), " Successfully updated.", Toast.LENGTH_SHORT).show();
+                uname.setText(Name+"");
+            }
+        }, new FireStoreController.FireStoreUpdateFailCallback(){
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 

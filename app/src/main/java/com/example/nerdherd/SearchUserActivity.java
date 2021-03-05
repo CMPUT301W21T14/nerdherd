@@ -40,7 +40,7 @@ public class SearchUserActivity extends AppCompatActivity {
     private ArrayList<Profile> resultList;
     private Intent profileView;
     private SearchController searchController;
-
+    public static final String EXTRA_MESSAGE = "Index";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +65,7 @@ public class SearchUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int index) {
                 profileView = new Intent(SearchUserActivity.this, ProfileActivity.class);
-                profileView.putExtra("Index", index);
+                profileView.putExtra(EXTRA_MESSAGE, index);
                 startActivity(profileView);
                 finish();
             }

@@ -33,6 +33,8 @@ public class ProfileController {
         this.avatar = 0;
     }
 
+    public String getId(){return GlobalVariable.profile.getId();}
+
     public ArrayList<Integer> getImageArray() {
         return imageArray;
     }
