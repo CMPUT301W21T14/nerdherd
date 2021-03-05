@@ -2,23 +2,8 @@ package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-
-import androidx.annotation.NonNull;
 
 public class ProfileController {
     private String name;
@@ -27,7 +12,7 @@ public class ProfileController {
     private String id;
     private Integer avatar;
     private Profile profile;
-    private Integer[] imageList= {R.drawable.zelda, R.drawable.f1, R.drawable.f2, R.drawable.f3, R.drawable.f4, R.drawable.f5, R.drawable.m1, R.drawable.m2, R.drawable.m3, R.drawable.m4, R.drawable.m5, R.drawable.h};
+    private Integer[] imageList= {R.drawable.zelda, R.drawable.link, R.drawable.mipha, R.drawable.urbosa, R.drawable.riju, R.drawable.revali, R.drawable.daruk, R.drawable.impa, R.drawable.purah, R.drawable.purah_6_years_old, R.drawable.yunobo, R.drawable.king_rhoam, R.drawable.sidon};
     private ArrayList<Integer> imageArray = new ArrayList(Arrays.asList(imageList));
 
     // Constructor

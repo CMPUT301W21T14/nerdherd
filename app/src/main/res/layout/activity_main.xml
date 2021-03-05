@@ -4,5 +4,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ca8230a090bced0761aead4f6a58530e"
+    android:background="@drawable/splash"
     tools:context=".SplashScreen"/>
