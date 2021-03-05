@@ -40,7 +40,7 @@ public class EditProfileFragment extends DialogFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ((profileActivity) getActivity()).updateUserInfo(Name.getText().toString(), Email.getText().toString());
+                        ((ProfileActivity) getActivity()).updateUserInfo(Name.getText().toString(), Email.getText().toString());
                     }
                 })
                 .setNegativeButton("Cancel", null)

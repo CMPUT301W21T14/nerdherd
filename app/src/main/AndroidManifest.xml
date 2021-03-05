@@ -15,7 +15,7 @@
         <activity android:name=".SearchExperimentActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LogInActivity" />
-        <activity android:name=".profileActivity"/>
+        <activity android:name=".ProfileActivity"/>
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

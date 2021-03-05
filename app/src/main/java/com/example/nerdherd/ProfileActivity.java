@@ -17,7 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class profileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
@@ -112,12 +112,12 @@ public class profileActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.user_search){
-            searchUser = new Intent(profileActivity.this, SearchUserActivity.class);
+            searchUser = new Intent(ProfileActivity.this, SearchUserActivity.class);
             startActivity(searchUser);
             finish();
         }
         if (item.getItemId() == R.id.my_profile){
-            UsersProfile = new Intent(profileActivity.this, profileActivity.class);
+            UsersProfile = new Intent(ProfileActivity.this, ProfileActivity.class);
             startActivity(UsersProfile);
             finish();
         }
