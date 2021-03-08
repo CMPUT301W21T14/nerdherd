@@ -70,12 +70,13 @@ public class SearchExperimentActivity extends AppCompatActivity{
         super.onActivityResult(reqCode, resCode, intent);
 
         // Get the created Experiment from CreateExperimentActivity
-        if(intent.getStringExtra("Action").compareTo("create") == 0) {
+        if(intent.getStringExtra("Action").compareTo("create") == 0) { //Use this to differ between different returning Activities
             Experiment newExperiment = (Experiment) intent.getSerializableExtra("newExperiment");
             // TODO Save the experiment to the database and update the list
         }
     }
 
+    // Start the CreateExperiment Activity on button press
     public void createExperimentButton(View view) {
         Intent createExpIntent = new Intent(SearchExperimentActivity.this, CreateExperimentActivity.class);
         startActivity(createExpIntent);
