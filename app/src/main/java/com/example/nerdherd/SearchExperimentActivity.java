@@ -63,4 +63,9 @@ public class SearchExperimentActivity extends AppCompatActivity{
         adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
         adapterController.useAdapter();
     }
+
+    public void createExperimentButton(View view) {
+        Intent createExpIntent = new Intent(SearchExperimentActivity.this, CreateExperimentActivity.class);
+        startActivity(createExpIntent);
+    }
 }
