@@ -2,8 +2,12 @@ package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
 
-public class Experiment {
-    private String owner;
+import java.io.Serializable;
+
+public class Experiment implements Serializable {
+    private String owner; //TODO This shouldn't be used, name should be taken from the profile object
+
+    private Profile ownerProfile;
     private String status;
     private String title;
     private String type;
@@ -18,8 +22,8 @@ public class Experiment {
         this.title = title;
     }
 
-    public Experiment(String owner, String status, String title, String type, int minTrials, boolean requireLocation, boolean published) {
-        this.owner = owner;
+    public Experiment(Profile ownerProfile, String status, String title, String type, int minTrials, boolean requireLocation, boolean published) {
+        this.ownerProfile = ownerProfile;
         this.status = status;
         this.title = title;
         this.type = type;
@@ -30,10 +34,14 @@ public class Experiment {
 
     public String getOwner() {
         return owner;
-    }
+    } //Do not use
     public void setOwner(String owner) {
         this.owner = owner;
-    }
+    } //Do not use
+
+
+    public Profile getOwnerProfile() { return ownerProfile; }
+    public void setOwnerProfile(Profile ownerProfile) { this.ownerProfile = ownerProfile; }
 
     public String getStatus() {
         return status;
