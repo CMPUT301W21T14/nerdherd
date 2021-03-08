@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class CreateExperimentActivity extends AppCompatActivity {
 
@@ -35,7 +38,46 @@ public class CreateExperimentActivity extends AppCompatActivity {
         });
     }
 
+    public boolean validateInteger(String input) {
+        try {
+            int intInput = Integer.parseInt(input);
+            if(intInput > 0) {
+                return true;
+            }
+            return false;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
     public void createExperiment(View view) {
+        EditText editDescriptionView = (EditText) findViewById(R.id.experiment_description_editText);
+        EditText minTrialsView = (EditText) findViewById(R.id.trial_number_editText);
+        CheckBox requireLocationCheck = (CheckBox) findViewById(R.id.require_location_box);
+        CheckBox publishExperimentCheck = (CheckBox) findViewById(R.id.publish_box);
+
+        String experimentDescription = editDescriptionView.getText().toString();
+        String minTrialsString = minTrialsView.getText().toString();
+        int minTrials;
+
+        if(experimentDescription.length() == 0) {
+            Toast.makeText(this, "Please enter a description for your experiment.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(minTrialsString.length() == 0) {
+            Toast.makeText(this, "Please enter an Integer for the minimum number of trials.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(validateInteger(minTrialsString)) {
+            minTrials = Integer.parseInt(minTrialsString);
+        }
+        else {
+            Toast.makeText(this, "The value entered for the minimum number of trials was invalid. Please enter an integer greater than 0.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Experiment createdExperiment = new Experiment(GlobalVariable.profile, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
 
     }
 

@@ -64,6 +64,17 @@ public class SearchExperimentActivity extends AppCompatActivity{
         adapterController.useAdapter();
     }
 
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent intent) {
+        super.onActivityResult(reqCode, resCode, intent);
+
+        // Get the created Experiment from CreateExperimentActivity
+        if(intent.getStringExtra("Action").compareTo("create") == 0) {
+            Experiment newExperiment = (Experiment) intent.getSerializableExtra("newExperiment");
+            // TODO Save the experiment to the database and update the list
+        }
+    }
+
     public void createExperimentButton(View view) {
         Intent createExpIntent = new Intent(SearchExperimentActivity.this, CreateExperimentActivity.class);
         startActivity(createExpIntent);
