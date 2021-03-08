@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -77,11 +78,17 @@ public class CreateExperimentActivity extends AppCompatActivity {
             return;
         }
 
-        Experiment createdExperiment = new Experiment(GlobalVariable.profile, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+        //TODO Location Dialog will be implemented here later...
 
+        Experiment createdExperiment = new Experiment(GlobalVariable.profile, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("Action", "create");
+        returnIntent.putExtra("newExperiment", createdExperiment);
+        setResult(1, returnIntent);
+        finish();
     }
 
     public void cancelCreation(View view) {
-
+        finish();
     }
 }
