@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -62,5 +63,22 @@ public class SearchExperimentActivity extends AppCompatActivity{
         adapter = new ExperimentAdapter(experimentList, listener);
         adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
         adapterController.useAdapter();
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent intent) {
+        super.onActivityResult(reqCode, resCode, intent);
+
+        // Get the created Experiment from CreateExperimentActivity
+        if(intent.getStringExtra("Action").compareTo("create") == 0) { //Use this to differ between different returning Activities
+            Experiment newExperiment = (Experiment) intent.getSerializableExtra("newExperiment");
+            // TODO Save the experiment to the database and update the list
+        }
+    }
+
+    // Start the CreateExperiment Activity on button press
+    public void createExperimentButton(View view) {
+        Intent createExpIntent = new Intent(SearchExperimentActivity.this, CreateExperimentActivity.class);
+        startActivity(createExpIntent);
     }
 }

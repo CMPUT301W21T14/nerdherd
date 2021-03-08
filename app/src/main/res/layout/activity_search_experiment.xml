@@ -49,6 +49,7 @@ android:id="@+id/draw_layout">
             android:id="@+id/create_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="createExperimentButton"
             android:text="Create Experiment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
