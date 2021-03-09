@@ -39,6 +39,15 @@ public class ProfileController {
         return imageArray;
     }
 
+    public Integer getAvatar(){return GlobalVariable.profile.getAvatar();}
+
+    public String getEmail(){return GlobalVariable.profile.getEmail();}
+
+    public ArrayList<Profile> profileArrayList(){return GlobalVariable.profileArrayList;};
+
+    public String getName(){return GlobalVariable.profile.getName();}
+
+    public String getPassword(){return GlobalVariable.profile.getPassword();}
 
     public void creator(){
         profile = new Profile(name, password, email, id, avatar);
