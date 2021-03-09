@@ -220,6 +220,7 @@ public class FireStoreController {
         experimentData = new HashMap<>();
         experimentData.put("Owner ID", newExperiment.getOwnerProfile().getId());
         experimentData.put("Status", newExperiment.getStatus());
+        experimentData.put("Published", newExperiment.isPublished());
         experimentData.put("Description", newExperiment.getDescription());
         experimentData.put("Type of Experiment", newExperiment.getType());
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
