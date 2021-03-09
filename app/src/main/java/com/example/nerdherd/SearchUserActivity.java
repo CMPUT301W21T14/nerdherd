@@ -91,6 +91,7 @@ public class SearchUserActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 showProfiles(itemList);
+                                                GlobalVariable.profileArrayList = itemList;
                                             }
                                         }).show();
                             }
@@ -98,11 +99,13 @@ public class SearchUserActivity extends AppCompatActivity {
                             @Override
                             public void onCallback(ArrayList<Profile> itemList) {
                                 showProfiles(itemList);
+                                GlobalVariable.profileArrayList = itemList;
                             }
                         }, new SearchController.UserNoKeywordCallBack() {
                             @Override
                             public void onCallback(ArrayList<Profile> itemList) {
                                 showProfiles(itemList);
+                                GlobalVariable.profileArrayList = itemList;
                             }
                         });
                     }

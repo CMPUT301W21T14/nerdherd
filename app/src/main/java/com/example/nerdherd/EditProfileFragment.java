@@ -20,14 +20,14 @@ import androidx.fragment.app.DialogFragment;
 
 public class EditProfileFragment extends DialogFragment {
 
-//    private ImageView usersAvatar;
+    //    private ImageView usersAvatar;
 //    private ProfileController profsController;
 //    private Intent avatarPick;
 //    private Integer avatar;
     private EditText Name;
     private EditText Email;
     private EditText Password;
-//    private Bundle dataBundle;
+    //    private Bundle dataBundle;
     private String name;
     private String password;
     private String email;
@@ -35,9 +35,11 @@ public class EditProfileFragment extends DialogFragment {
     private ImageView usersAvatar;
     private Integer avatar;
     private ProfileController profController;
-    public EditProfileFragment(int avatar){
+
+    public EditProfileFragment(int avatar) {
         this.avatar = avatar;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class EditProfileFragment extends DialogFragment {
         Password = view.findViewById(R.id.edtuserPassword);
         usersAvatar = view.findViewById(R.id.useravatar);
         Log.d("avatar: ", String.valueOf(avatar));
-        profController= new ProfileController();
+        profController = new ProfileController();
         usersAvatar.setImageResource(profController.getImageArray().get(avatar));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
@@ -62,4 +64,5 @@ public class EditProfileFragment extends DialogFragment {
                 .setNegativeButton("Cancel", null)
                 .create();
     }
+}
 
