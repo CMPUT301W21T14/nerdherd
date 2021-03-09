@@ -10,6 +10,7 @@ public class Experiment implements Serializable {
     private Profile ownerProfile;
     private String status;
     private String title;
+    private String description;
     private String type;
     private int minTrials;
     private boolean requireLocation = false;
@@ -22,10 +23,11 @@ public class Experiment implements Serializable {
         this.title = title;
     }
 
-    public Experiment(Profile ownerProfile, String status, String title, String type, int minTrials, boolean requireLocation, boolean published) {
+    public Experiment(Profile ownerProfile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
         this.ownerProfile = ownerProfile;
-        this.status = status;
         this.title = title;
+        this.status = status;
+        this.description = description;
         this.type = type;
         this.minTrials = minTrials;
         this.requireLocation = requireLocation;
@@ -35,10 +37,10 @@ public class Experiment implements Serializable {
     public String getOwner() {
         return owner;
     } //Do not use
+
     public void setOwner(String owner) {
         this.owner = owner;
     } //Do not use
-
 
     public Profile getOwnerProfile() { return ownerProfile; }
     public void setOwnerProfile(Profile ownerProfile) { this.ownerProfile = ownerProfile; }
@@ -56,6 +58,9 @@ public class Experiment implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }

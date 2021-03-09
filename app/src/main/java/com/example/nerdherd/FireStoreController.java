@@ -11,12 +11,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1.WriteResult;
 
 import org.w3c.dom.Document;
 
@@ -28,6 +30,7 @@ import androidx.annotation.Nullable;
 
 public class FireStoreController {
 
+    private static final String TAG = "FireStoreController";
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference collectionReference;
     private String existed;
@@ -35,6 +38,7 @@ public class FireStoreController {
     private String existedPassword;
     private Pair<String, String> infoPair;
     private HashMap<String, Object> profileData;
+    private HashMap<String, Object> experimentData;
     private DocumentSnapshot doc;
     private String name;
     private String password;
@@ -204,6 +208,44 @@ public class FireStoreController {
                 }
             });
         }
+    }
+
+    public void addNewExperiment(Experiment newExperiment) {
+        // References:
+        //      https://firebase.google.com/docs/firestore/quickstart#java_1
+        //      https://firebase.google.com/docs/firestore/manage-data/add-data
+
+        // Load information into database
+        String title = newExperiment.getTitle();
+        experimentData = new HashMap<>();
+        experimentData.put("Owner ID", newExperiment.getOwnerProfile().getId());
+        experimentData.put("Status", newExperiment.getStatus());
+        experimentData.put("Description", newExperiment.getDescription());
+        experimentData.put("Type of Experiment", newExperiment.getType());
+        experimentData.put("Number of Trials", newExperiment.getMinTrials());
+        experimentData.put("Location Requirement", newExperiment.isRequireLocation());
+
+        // Get user ID
+        String userID = newExperiment.getOwnerProfile().getId();
+
+        // Find user information and load data
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = firebaseFirestore.collection("Profile").document(userID).collection("Experiments");
+        collectionReference
+                .document(title)
+                .set(experimentData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data has been added successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Data addition failed" + e.toString());
+                    }
+                });
     }
 
     public interface FireStoreReadCallback{
