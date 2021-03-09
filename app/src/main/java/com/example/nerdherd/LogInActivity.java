@@ -5,6 +5,7 @@ package com.example.nerdherd;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -35,6 +36,12 @@ public class LogInActivity extends AppCompatActivity {
     private String passwordFinding = "Password";
     private Intent reset;
     private ProfileController profileController;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private String preferencesName = "SharedPreferences";
+    private Boolean loggedIn;
+    private String loggedInName = "Logged In";
+    private String loggedInId = "User Id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,21 @@ public class LogInActivity extends AppCompatActivity {
         logInButton = findViewById(R.id.logInButton);
         idFinder = findViewById(R.id.resetID);
         passwordFinder = findViewById(R.id.resetPassword);
+        idEdit = findViewById(R.id.userId);
+        passwordEdit = findViewById(R.id.userPassword);
         fireStoreController = new FireStoreController();
+
+        sharedPreferences = getSharedPreferences(preferencesName, 0);
+        loggedIn = sharedPreferences.getBoolean(loggedInName, false);
+
+        if (loggedIn){
+            search = new Intent(LogInActivity.this, SearchExperimentActivity.class);
+            startActivity(search);
+            finish();
+        }
+        else{
+            idEdit.setText(sharedPreferences.getString(loggedInId, ""));
+        }
 
         // Click register button
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -63,10 +84,9 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 indicator = 0;
                 infoArray = new ArrayList<Pair>();
-                idEdit = findViewById(R.id.userId);
-                passwordEdit = findViewById(R.id.userPassword);
                 id = idEdit.getText().toString();
                 password = passwordEdit.getText().toString();
+
                 logInPair = new Pair<String, String>(id, password);
                 fireStoreController.logInCheck(infoArray, new FireStoreController.FireStoreCheckCallback() {
                     @Override
@@ -83,6 +103,13 @@ public class LogInActivity extends AppCompatActivity {
                                     profileController = new ProfileController(name, password, email, id, avatar);
                                     profileController.creator();
                                     GlobalVariable.profile = profileController.getProfile();
+
+                                    sharedPreferences = LogInActivity.this.getSharedPreferences(preferencesName, 0);
+                                    editor = sharedPreferences.edit();
+                                    editor.putString(loggedInId, id);
+                                    editor.putBoolean(loggedInName, true);
+                                    editor.apply();
+
                                     search = new Intent(LogInActivity.this, SearchExperimentActivity.class);
                                     startActivity(search);
                                     finish();

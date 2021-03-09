@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/experiments"
-        android:title="Experiments" />
+        android:title="Experiment Search" />
     <item
         android:id="@+id/user_search"
         android:title="User Search" />
@@ -16,4 +16,7 @@
     <item
         android:id="@+id/my_profile"
         android:title="My Profile" />
+    <item
+        android:id="@+id/log_out"
+        android:title="Log Out" />
 </menu>

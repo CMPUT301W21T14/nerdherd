@@ -5,6 +5,7 @@ package com.example.nerdherd;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
@@ -22,6 +23,8 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     public MenuController(Context context, Toolbar toolbar, NavigationView navigationView, DrawerLayout drawerLayout) {
         this.context = context;
@@ -54,6 +57,16 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
         if (item.getItemId() == R.id.my_profile && !(context instanceof ProfileActivity)){
             intent = new Intent(context, ProfileActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.log_out){
+            sharedPreferences = context.getSharedPreferences("SharedPreferences", 0);
+            editor = sharedPreferences.edit();
+            editor.putBoolean("Logged In", false);
+            editor.apply();
+            intent = new Intent(context, LogInActivity.class);
             context.startActivity(intent);
             ((Activity)context).finish();
         }
