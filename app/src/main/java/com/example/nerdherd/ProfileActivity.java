@@ -57,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
     private int val;
     private String useridval;
 
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -83,15 +84,13 @@ public class ProfileActivity extends AppCompatActivity {
         if (pUser != null)
         {
 
-            avatar = profController.getAvatar();
-            usersAvatar.setImageResource(profController.getImageArray().get(avatar));
-
-
             Intent intent = getIntent();
             val = intent.getIntExtra(SearchUserActivity.EXTRA_MESSAGE, -1);
             name = GlobalVariable.profileArrayList.get(val).getName();
             email = GlobalVariable.profileArrayList.get(val).getEmail();
             avatar = GlobalVariable.profileArrayList.get(val).getAvatar();
+            Log.d("public avatar", String.valueOf(avatar));
+            Log.d("Private avatar", String.valueOf(GlobalVariable.profile.getAvatar()));
             id = GlobalVariable.profileArrayList.get(val).getId();
             //if the public name matches up with the private name
             //or if the searched user == the logged in user
@@ -100,13 +99,16 @@ public class ProfileActivity extends AppCompatActivity {
             if (id.equals(GlobalVariable.profile.getId()))
             {
                 edtUserProfile.setVisibility(View.VISIBLE);
-
             }
             else{
-                edtUserProfile.setVisibility(View.GONE);
                 usersAvatar.setImageResource(profController.getImageArray().get(avatar));
+                edtUserProfile.setVisibility(View.GONE);
+
             }
-//            Log.d("MYINT", "publicname: "+ sp);
+        }
+        else{
+            avatar = profController.getAvatar();
+            usersAvatar.setImageResource(profController.getImageArray().get(GlobalVariable.profile.getAvatar()));
         }
 
         fireStoreController = new FireStoreController();
@@ -133,8 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
         uname.setText(name+"");
 
 
-        avatar = profController.getAvatar();
-        usersAvatar.setImageResource(profController.getImageArray().get(GlobalVariable.profile.getAvatar()));
+
         
         edtUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
