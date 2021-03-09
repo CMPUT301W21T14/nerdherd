@@ -65,7 +65,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
         adapterController.useAdapter();
     }
 
-
+/*
     @Override
     protected void onActivityResult(int reqCode, int resCode, Intent intent) {
         super.onActivityResult(reqCode, resCode, intent);
@@ -78,7 +78,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
             firestoreController.addNewExperiment(newExperiment); // add experiment to database
         }
     }
-
+ */
 
     // Start the CreateExperiment Activity on button press
     public void createExperimentButton(View view) {

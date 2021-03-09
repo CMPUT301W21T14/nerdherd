@@ -93,13 +93,17 @@ public class CreateExperimentActivity extends AppCompatActivity {
         //TODO Location Dialog will be implemented here later...
 
         Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle,"Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+        FireStoreController firestoreController = new FireStoreController();
+        firestoreController.addNewExperiment(createdExperiment);
 
+        /*
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Action", "create"); //This tells the parent activity that it is receiving a created experiment allows the parent to tell the difference between different children when they return
         returnIntent.putExtra("newExperiment", createdExperiment);
         setResult(1, returnIntent);
-
+         */
         finish();
+
     }
 
     public void cancelCreation(View view) {
