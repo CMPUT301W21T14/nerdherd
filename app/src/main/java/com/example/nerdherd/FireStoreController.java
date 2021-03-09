@@ -1,6 +1,6 @@
 package com.example.nerdherd;
 
-// Modified form youtube
+// Modified from youtube
 // Author: Zhipeng Z zhipeng4
 
 import android.util.Log;
