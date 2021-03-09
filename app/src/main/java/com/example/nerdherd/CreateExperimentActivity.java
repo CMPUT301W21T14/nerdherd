@@ -1,9 +1,11 @@
 package com.example.nerdherd;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,6 +13,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class CreateExperimentActivity extends AppCompatActivity {
 
@@ -57,9 +66,12 @@ public class CreateExperimentActivity extends AppCompatActivity {
         EditText minTrialsView = (EditText) findViewById(R.id.trial_number_editText);
         CheckBox requireLocationCheck = (CheckBox) findViewById(R.id.require_location_box);
         CheckBox publishExperimentCheck = (CheckBox) findViewById(R.id.publish_box);
+        EditText editTitle = (EditText) findViewById(R.id.exp_title);
 
         String experimentDescription = editDescriptionView.getText().toString();
         String minTrialsString = minTrialsView.getText().toString();
+        String experimentTitle = editTitle.getText().toString();
+
         int minTrials;
 
         if(experimentDescription.length() == 0) { //Blank Descriptions are invalid
@@ -80,11 +92,13 @@ public class CreateExperimentActivity extends AppCompatActivity {
 
         //TODO Location Dialog will be implemented here later...
 
-        Experiment createdExperiment = new Experiment(GlobalVariable.profile, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+        Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle,"Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Action", "create"); //This tells the parent activity that it is receiving a created experiment allows the parent to tell the difference between different children when they return
         returnIntent.putExtra("newExperiment", createdExperiment);
         setResult(1, returnIntent);
+
         finish();
     }
 

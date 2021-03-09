@@ -115,7 +115,7 @@ public class RegisterActivity extends Activity {
                                             public void run() {
                                                 try {
                                                     GMailSender = new GMailSender("richard15765@gmail.com", "ZhiPeng4!");
-                                                    GMailSender.sendMail("Your User ID", "Your user ID is: " + id + "\nPlease do not forgot.", "richard15765@gmail.com", email);
+                                                    GMailSender.sendMail("Your User ID", "Your user ID is: " + id + "\nPlease do not forget.", "richard15765@gmail.com", email);
                                                 }catch(Exception e){
                                                     Log.e("SendMail", e.getMessage(), e);
                                                 }
