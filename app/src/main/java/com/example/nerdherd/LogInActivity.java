@@ -42,6 +42,14 @@ public class LogInActivity extends AppCompatActivity {
     private Boolean loggedIn;
     private String loggedInName = "Logged In";
     private String loggedInId = "User Id";
+    private String userName = "User Name";
+    private String userEmail = "User Email";
+    private String userPassword = "User Password";
+    private String userAvatar = "User Avatar";
+    private String name;
+    private String email;
+    private Integer avatar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +66,22 @@ public class LogInActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(preferencesName, 0);
         loggedIn = sharedPreferences.getBoolean(loggedInName, false);
+        id = sharedPreferences.getString(loggedInId, "");
 
         if (loggedIn){
+            name = sharedPreferences.getString(userName, "");
+            password = sharedPreferences.getString(userPassword, "");
+            email = sharedPreferences.getString(userEmail, "");
+            avatar = sharedPreferences.getInt(userAvatar, -1);
+            profileController = new ProfileController(name, password, email, id, avatar);
+            profileController.creator();
+            GlobalVariable.profile = profileController.getProfile();
             search = new Intent(LogInActivity.this, SearchExperimentActivity.class);
             startActivity(search);
             finish();
         }
         else{
-            idEdit.setText(sharedPreferences.getString(loggedInId, ""));
+            idEdit.setText(id);
         }
 
         // Click register button
@@ -107,6 +123,10 @@ public class LogInActivity extends AppCompatActivity {
                                     sharedPreferences = LogInActivity.this.getSharedPreferences(preferencesName, 0);
                                     editor = sharedPreferences.edit();
                                     editor.putString(loggedInId, id);
+                                    editor.putString(userName, name);
+                                    editor.putString(userEmail, email);
+                                    editor.putString(userPassword, password);
+                                    editor.putInt(userAvatar, avatar);
                                     editor.putBoolean(loggedInName, true);
                                     editor.apply();
 

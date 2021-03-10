@@ -25,6 +25,12 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private DrawerLayout drawerLayout;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private String loggedInName = "Logged In";
+    private String loggedInId = "User Id";
+    private String userName = "User Name";
+    private String userEmail = "User Email";
+    private String userPassword = "User Password";
+    private String userAvatar = "User Avatar";
 
     public MenuController(Context context, Toolbar toolbar, NavigationView navigationView, DrawerLayout drawerLayout) {
         this.context = context;
@@ -64,7 +70,11 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         if (item.getItemId() == R.id.log_out){
             sharedPreferences = context.getSharedPreferences("SharedPreferences", 0);
             editor = sharedPreferences.edit();
-            editor.putBoolean("Logged In", false);
+            editor.putBoolean(loggedInName, false);
+            editor.putString(userName, "");
+            editor.putString(userEmail, "");
+            editor.putString(userPassword, "");
+            editor.putInt(userAvatar, -1);
             editor.apply();
             intent = new Intent(context, LogInActivity.class);
             context.startActivity(intent);
