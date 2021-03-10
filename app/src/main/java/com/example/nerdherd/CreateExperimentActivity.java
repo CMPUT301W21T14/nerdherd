@@ -94,7 +94,17 @@ public class CreateExperimentActivity extends AppCompatActivity {
 
         Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle,"Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
         FireStoreController firestoreController = new FireStoreController();
-        firestoreController.addNewExperiment(createdExperiment);
+        firestoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
+            @Override
+            public void onCallback() {
+                finish();
+            }
+        }, new FireStoreController.FireStoreExperimentFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         /*
         Intent returnIntent = new Intent();
@@ -102,8 +112,6 @@ public class CreateExperimentActivity extends AppCompatActivity {
         returnIntent.putExtra("newExperiment", createdExperiment);
         setResult(1, returnIntent);
          */
-        finish();
-
     }
 
     public void cancelCreation(View view) {
