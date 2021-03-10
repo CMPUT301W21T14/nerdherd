@@ -22,35 +22,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.4" />
 
-        <TextView
-            android:id="@+id/currentName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="15dp"
-            android:text=""
-            android:textStyle="bold"
-            android:textSize="15sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/useravatar" />
-
-        <TextView
-            android:id="@+id/currentEmail"
-            android:layout_width="0dp"
-            android:scrollHorizontally="false"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:text=""
-            android:textStyle="bold"
-            android:textSize="15sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/currentName" />
-
         <EditText
             android:id="@+id/edtusername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="72dp"
             android:hint="Name"
             android:inputType="textPersonName"
             android:maxLength="26"
@@ -58,7 +34,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currentEmail"/>
+            app:layout_constraintTop_toBottomOf="@+id/useravatar" />
 
         <EditText
             android:id="@+id/edtuserEmail"
