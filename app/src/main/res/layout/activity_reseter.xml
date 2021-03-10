@@ -36,6 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/RESET"
         android:inputType="textPersonName"
         android:hint="@string/email"
+        android:textColor="@color/white"
         android:layout_marginLeft="20dp"
         android:backgroundTint="@color/greyish"
         android:textColorHint="@color/greyish"
