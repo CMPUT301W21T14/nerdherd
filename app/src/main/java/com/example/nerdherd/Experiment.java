@@ -16,18 +16,6 @@ public class Experiment implements Serializable {
     private boolean requireLocation = false;
     private boolean published = true;
 
-
-    public Experiment(String ownerId, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
-        this.ownerId = ownerId;
-        this.title = title;
-        this.status = status;
-        this.description = description;
-        this.type = type;
-        this.minTrials = minTrials;
-        this.requireLocation = requireLocation;
-        this.published = published;
-    }
-
     public Experiment(Profile ownerProfile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
         this.ownerProfile = ownerProfile;
         this.title = title;

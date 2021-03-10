@@ -22,8 +22,10 @@ import com.google.firestore.v1.WriteResult;
 
 import org.w3c.dom.Document;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,15 +52,19 @@ public class FireStoreController {
     private String experimentTitle;
     private String experimentStatus;
     private String experimentOwner;
-    private ArrayList<Profile> ownerProfile;
-    private String ownerId;
+    private Profile ownerProfile;
     private Experiment experiment;
     private Boolean experimentPublish;
     private String experimentDescription;
     private String experimentType;
     private Integer experimentTrials;
     private Boolean locationRequirement;
-    private Profile profile;
+    private HashMap<String, String> hashMapProfile;
+    private String ownerName;
+    private String ownerPassword;
+    private String ownerEmail;
+    private String ownerId;
+    private Integer ownerAvatar;
 
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -232,13 +238,13 @@ public class FireStoreController {
         // Load information into database
         String title = newExperiment.getTitle();
         experimentData = new HashMap<>();
-        experimentData.put("Owner ID", newExperiment.getOwnerProfile().getId());
         experimentData.put("Status", newExperiment.getStatus());
         experimentData.put("Published", newExperiment.isPublished());
         experimentData.put("Description", newExperiment.getDescription());
         experimentData.put("Type of Experiment", newExperiment.getType());
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
+        experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
 
         // Get user ID
         String userID = newExperiment.getOwnerProfile().getId();
@@ -276,49 +282,20 @@ public class FireStoreController {
                 for(QueryDocumentSnapshot doc : value){
                     experimentTitle = doc.getId();
                     experimentStatus = doc.getData().get("Status").toString();
-                    ownerId = doc.getData().get("Owner ID").toString();
                     experimentPublish = Boolean.parseBoolean(doc.getData().get("Published").toString());
                     experimentDescription = doc.getData().get("Description").toString();
                     experimentType = doc.getData().get("Type of Experiment").toString();
                     experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
+                    hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
 
-                    experiment = new Experiment(ownerId, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
+                    ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
+
+                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
                     experimentList.add(experiment);
                 }
                 
                 fireStoreExperimentReadCallback.onCallback(experimentList);
-            }
-        });
-    }
-
-    public void formalExperimentReader(ArrayList<Experiment> expList, ArrayList<Experiment> saved, FireStoreFormalReadCallback fireStoreFormalReadCallback, FireStoreFormalReadFailCallback fireStoreFormalReadFailCallback){
-        experimentReader(expList, new FireStoreExperimentReadCallback() {
-            @Override
-            public void onCallback(ArrayList<Experiment> experiments) {
-                saved.clear();
-                for (Experiment exp : experiments){
-                    ownerId = exp.getOwnerId();
-                    readProfile(ownerProfile, ownerId, "Current User", new FireStoreProfileCallback() {
-                        @Override
-                        public void onCallback(String name, String password, String email, Integer avatar) {
-                            profile = new Profile(name, password, email, ownerId, avatar);
-                            experiment = new Experiment(profile, exp.getTitle(), exp.getStatus(), exp.getDescription(), exp.getType(), exp.getMinTrials(), exp.isRequireLocation(), exp.isPublished());
-                            saved.add(experiment);
-                            fireStoreFormalReadCallback.onCallback(saved);
-                        }
-                    }, new FireStoreProfileFailCallback() {
-                        @Override
-                        public void onCallback() {
-                            fireStoreFormalReadFailCallback.onCallback();
-                        }
-                    }, null, null);
-                }
-            }
-        }, new FireStoreExperimentReadFailCallback() {
-            @Override
-            public void onCallback() {
-                fireStoreFormalReadFailCallback.onCallback();
             }
         });
     }
@@ -392,14 +369,6 @@ public class FireStoreController {
     }
 
     public interface FireStoreExperimentReadFailCallback {
-        void onCallback();
-    }
-
-    public interface FireStoreFormalReadCallback{
-        void onCallback(ArrayList<Experiment> experiments);
-    }
-
-    public interface FireStoreFormalReadFailCallback {
         void onCallback();
     }
 }

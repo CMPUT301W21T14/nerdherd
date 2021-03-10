@@ -34,8 +34,8 @@ public class SearchExperimentActivity extends AppCompatActivity{
     private AdapterController adapterController;
     private ExperimentAdapter adapter;
     private FireStoreController fireStoreController;
-    private ArrayList<Experiment> temporaryList;
     private ArrayList<Experiment> savedList;
+    private ArrayList<Experiment> showList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +59,27 @@ public class SearchExperimentActivity extends AppCompatActivity{
             }
         };
 
-        temporaryList = new ArrayList<Experiment>();
         savedList = new ArrayList<Experiment>();
+        showList = new ArrayList<Experiment>();
         fireStoreController = new FireStoreController();
 
-        fireStoreController.formalExperimentReader(temporaryList, savedList, new FireStoreController.FireStoreFormalReadCallback() {
+        fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentReadCallback() {
             @Override
             public void onCallback(ArrayList<Experiment> experiments) {
-                adapter = new ExperimentAdapter(experiments, listener);
+
+                showList.clear();
+
+                for (Experiment allExperiment : experiments){
+                    if (allExperiment.isPublished()){
+                        showList.add(allExperiment);
+                    }
+                }
+
+                adapter = new ExperimentAdapter(showList, listener);
                 adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
                 adapterController.useAdapter();
             }
-        }, new FireStoreController.FireStoreFormalReadFailCallback() {
+        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
             @Override
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
