@@ -45,15 +45,17 @@ public class FireStoreController {
     private String email;
     private ProfileController profileController;
     private Integer avatar;
+    private String profileIndicator = "Profile";
+    private String experimentIndicator = "Experiment";
 
-    private void accessor(){
+    private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection("Profile");
+        collectionReference = firebaseFirestore.collection(indicator);
     }
 
     public void readData(ArrayList<String> itemList, String verifier, FireStoreReadCallback fireStoreReadCallback, FireStoreReadFailCallback fireStoreReadFailCallback){
         itemList.clear();
-        accessor();
+        accessor(profileIndicator);
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -77,7 +79,7 @@ public class FireStoreController {
     }
 
     public void uploadData(Profile profile, String id, FireStoreUploadCallback fireStoreUploadCallback, FireStoreUploadFailCallback fireStoreUploadFailCallback){
-        accessor();
+        accessor(profileIndicator);
         profileData = new HashMap<>();
         profileData.put("Name", profile.getName());
         profileData.put("Password", profile.getPassword());
@@ -101,7 +103,7 @@ public class FireStoreController {
     }
 
     public void logInCheck(ArrayList<Pair> pairList, FireStoreCheckCallback fireStoreCheckCallback, FireStoreCheckFailCallback fireStoreCheckFailCallback){
-        accessor();
+        accessor(profileIndicator);
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -128,7 +130,7 @@ public class FireStoreController {
     //getCertainData(sps, email, 'osamuel@ualberta.ca', 'username',
 
     public void getCertainData(ArrayList<String> itemList, String field, String value, String wanted, FireStoreCertainCallback fireStoreCertainCallback, FireStoreCertainFailCallback fireStoreCertainFailCallback){
-        accessor();
+        accessor(profileIndicator);
         collectionReference.whereEqualTo(field, value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -151,7 +153,7 @@ public class FireStoreController {
     }
 
     public void updater(String id, String target, String newValue, FireStoreUpdateCallback fireStoreUpdateCallback, FireStoreUpdateFailCallback fireStoreUpdateFailCallback){
-        accessor();
+        accessor(profileIndicator);
         collectionReference.document(id).update(target, newValue).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -166,7 +168,7 @@ public class FireStoreController {
     }
 
     public void readProfile(ArrayList<Profile> profileList, String id, String indicator, FireStoreProfileCallback fireStoreProfileCallback, FireStoreProfileFailCallback fireStoreProfileFailCallback, FireStoreProfileListCallback fireStoreProfileListCallback, FireStoreProfileListFailCallback fireStoreProfileListFailCallback){
-        accessor();
+        accessor(profileIndicator);
         if (indicator.equals("Current User")) {
             collectionReference.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -210,7 +212,7 @@ public class FireStoreController {
         }
     }
 
-    public void addNewExperiment(Experiment newExperiment) {
+    public void addNewExperiment(Experiment newExperiment, FireStoreExperimentCallback fireStoreExperimentCallback, FireStoreExperimentFailCallback fireStoreExperimentFailCallback) {
         // References:
         //      https://firebase.google.com/docs/firestore/quickstart#java_1
         //      https://firebase.google.com/docs/firestore/manage-data/add-data
@@ -230,21 +232,20 @@ public class FireStoreController {
         String userID = newExperiment.getOwnerProfile().getId();
 
         // Find user information and load data
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = firebaseFirestore.collection("Profile").document(userID).collection("Experiments");
+        accessor(experimentIndicator);
         collectionReference
                 .document(title)
                 .set(experimentData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully");
+                        fireStoreExperimentCallback.onCallback();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data addition failed" + e.toString());
+                        fireStoreExperimentFailCallback.onCallback();
                     }
                 });
     }
@@ -302,6 +303,14 @@ public class FireStoreController {
     }
 
     public interface FireStoreProfileListFailCallback {
+        void onCallback();
+    }
+
+    public interface FireStoreExperimentCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreExperimentFailCallback {
         void onCallback();
     }
 }
