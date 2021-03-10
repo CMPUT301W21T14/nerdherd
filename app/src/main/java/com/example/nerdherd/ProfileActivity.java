@@ -22,6 +22,11 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+/**Bug Note:
+    1. avatar disappears if we updated user name and search for logged in user
+    2. if u go to my profile and update your profile name and then go to
+             experiment search - it goes back to a prior name
+ */
 public class ProfileActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
