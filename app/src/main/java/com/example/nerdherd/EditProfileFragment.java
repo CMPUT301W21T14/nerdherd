@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +37,9 @@ public class EditProfileFragment extends DialogFragment {
     private ImageView usersAvatar;
     private Integer avatar;
     private ProfileController profController;
+    private FireStoreController fireStoreController;
+    private TextView currentname;
+    private TextView currentemail;
 
     public EditProfileFragment(int avatar) {
         this.avatar = avatar;
@@ -49,7 +54,11 @@ public class EditProfileFragment extends DialogFragment {
         Email = view.findViewById(R.id.edtuserEmail);
         Password = view.findViewById(R.id.edtuserPassword);
         usersAvatar = view.findViewById(R.id.useravatar);
-        Log.d("avatar: ", String.valueOf(avatar));
+
+        currentname = view.findViewById(R.id.currentName);
+        currentemail = view.findViewById(R.id.currentEmail);
+
+        ProfileUpdater();
         profController = new ProfileController();
         usersAvatar.setImageResource(profController.getImageArray().get(avatar));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -63,6 +72,22 @@ public class EditProfileFragment extends DialogFragment {
                 })
                 .setNegativeButton("Cancel", null)
                 .create();
+    }
+
+    public void ProfileUpdater(){
+        fireStoreController = new FireStoreController();
+        fireStoreController.readProfile(null, GlobalVariable.profile.getId(), "Current User", new FireStoreController.FireStoreProfileCallback() {
+            @Override
+            public void onCallback(String name, String password, String email, Integer avatar) {
+                currentname.setText(name+"");
+                currentemail.setText(email+"");
+            }
+        }, new FireStoreController.FireStoreProfileFailCallback() {
+            @Override
+            public void onCallback() {
+//                Toast.makeText(EditProfileFragment.this, "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        },null, null);
     }
 }
 
