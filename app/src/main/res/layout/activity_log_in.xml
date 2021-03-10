@@ -7,6 +7,7 @@
     tools:context=".LogInActivity"
     android:background="@color/LoginBackground">
 
+
     <ImageView
         android:id="@+id/LoginSvgWaves"
         android:scaleType="centerCrop"
