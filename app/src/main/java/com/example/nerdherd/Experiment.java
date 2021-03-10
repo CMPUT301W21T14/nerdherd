@@ -5,7 +5,7 @@ package com.example.nerdherd;
 import java.io.Serializable;
 
 public class Experiment implements Serializable {
-    private String owner; //TODO This shouldn't be used, name should be taken from the profile object
+    private String ownerId; //TODO This shouldn't be used, name should be taken from the profile object
 
     private Profile ownerProfile;
     private String status;
@@ -17,10 +17,15 @@ public class Experiment implements Serializable {
     private boolean published = true;
 
 
-    public Experiment(String owner, String status, String title) {
-        this.owner = owner;
-        this.status = status;
+    public Experiment(String ownerId, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
+        this.ownerId = ownerId;
         this.title = title;
+        this.status = status;
+        this.description = description;
+        this.type = type;
+        this.minTrials = minTrials;
+        this.requireLocation = requireLocation;
+        this.published = published;
     }
 
     public Experiment(Profile ownerProfile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
@@ -34,12 +39,12 @@ public class Experiment implements Serializable {
         this.published = published;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     } //Do not use
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     } //Do not use
 
     public Profile getOwnerProfile() { return ownerProfile; }

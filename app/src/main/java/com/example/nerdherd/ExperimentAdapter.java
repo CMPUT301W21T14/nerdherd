@@ -52,7 +52,7 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.title.setText(experiments.get(position).getTitle());
-        holder.owner.setText(experiments.get(position).getOwner());
+        holder.owner.setText(experiments.get(position).getOwnerProfile().getName());
         holder.status.setText(experiments.get(position).getStatus());
     }
 

@@ -30,10 +30,12 @@ public class SearchExperimentActivity extends AppCompatActivity{
     private NavigationView navigationView;
     private Toolbar toolbar;
     private ExperimentAdapter.onClickListener listener;
-    private ArrayList<Experiment> experimentList;
     private MenuController menuController;
     private AdapterController adapterController;
     private ExperimentAdapter adapter;
+    private FireStoreController fireStoreController;
+    private ArrayList<Experiment> temporaryList;
+    private ArrayList<Experiment> savedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +58,24 @@ public class SearchExperimentActivity extends AppCompatActivity{
                 Log.d("HaHaHa","Still in test");
             }
         };
-// Test below
-        experimentList = new ArrayList<Experiment>();
-        experimentList.add(new Experiment("owner", "status", "title"));
-// Test above
-        adapter = new ExperimentAdapter(experimentList, listener);
-        adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
-        adapterController.useAdapter();
+
+        temporaryList = new ArrayList<Experiment>();
+        savedList = new ArrayList<Experiment>();
+        fireStoreController = new FireStoreController();
+
+        fireStoreController.formalExperimentReader(temporaryList, savedList, new FireStoreController.FireStoreFormalReadCallback() {
+            @Override
+            public void onCallback(ArrayList<Experiment> experiments) {
+                adapter = new ExperimentAdapter(experiments, listener);
+                adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
+                adapterController.useAdapter();
+            }
+        }, new FireStoreController.FireStoreFormalReadFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 /*
