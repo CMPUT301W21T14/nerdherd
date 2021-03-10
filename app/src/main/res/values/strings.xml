@@ -6,4 +6,8 @@
     <string name="forgot_Password">Forgot Password</string>
     <string name="sign_in">SIGN IN</string>
     <string name="forgot_user_id">Forgot User ID?</string>
+    <string name="x">X</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="email">EMAIL</string>
+    <string name="reset">RESET</string>
 </resources>
