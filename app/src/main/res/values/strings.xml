@@ -2,4 +2,8 @@
     <string name="app_name">NerdHerd</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="Register">Register</string>
+    <string name="forgot_Password">Forgot Password</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="forgot_user_id">Forgot User ID?</string>
 </resources>
