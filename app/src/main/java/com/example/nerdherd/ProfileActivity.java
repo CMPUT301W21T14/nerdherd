@@ -88,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity {
         usersname = findViewById(R.id.UsersName);
         usersemail = findViewById(R.id.usersEmail);
         uname = findViewById(R.id.Name);
+        avatar = GlobalVariable.profile.getAvatar();
         //if pUser is not null then this was instantiated by the searchUserActivity
         if (pUser != null)
         {
@@ -141,17 +142,12 @@ public class ProfileActivity extends AppCompatActivity {
         usersemail.setText(email+"");
         uname.setText(name+"");
 
-
-
-        
         edtUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new EditProfileFragment(avatar).show(getSupportFragmentManager(), "EDIT_TEXT2");
             }
         });
-
-
 
     }
 
@@ -164,7 +160,6 @@ public class ProfileActivity extends AppCompatActivity {
                 usersemail.setText(email+"");
                 uname.setText(name+"");
                 usersAvatar.setImageResource(profController.getImageArray().get(avatar));
-
             }
         }, new FireStoreController.FireStoreProfileFailCallback() {
             @Override
