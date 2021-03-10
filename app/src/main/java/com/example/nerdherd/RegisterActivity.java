@@ -4,6 +4,7 @@ package com.example.nerdherd;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import java.util.ArrayList;
@@ -46,6 +47,15 @@ public class RegisterActivity extends Activity {
     private ArrayList<String> idData;
     private FireStoreController fireStoreController;
     private GMailSender GMailSender;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private String preferencesName = "SharedPreferences";
+    private String loggedInName = "Logged In";
+    private String loggedInId = "User Id";
+    private String userName = "User Name";
+    private String userEmail = "User Email";
+    private String userPassword = "User Password";
+    private String userAvatar = "User Avatar";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +117,7 @@ public class RegisterActivity extends Activity {
                             if (isNew) {
                                 profileController = new ProfileController(name, password, email, id, avatar);
                                 profileController.creator();
+                                GlobalVariable.profile = profileController.getProfile();
                                 fireStoreController.uploadData(profileController.getProfile(), id, new FireStoreController.FireStoreUploadCallback() {
                                     @Override
                                     public void onCallback() {
@@ -121,6 +132,17 @@ public class RegisterActivity extends Activity {
                                                 }
                                             }
                                         }).start();
+
+                                        sharedPreferences = RegisterActivity.this.getSharedPreferences(preferencesName, 0);
+                                        editor = sharedPreferences.edit();
+                                        editor.putString(loggedInId, id);
+                                        editor.putString(userName, name);
+                                        editor.putString(userEmail, email);
+                                        editor.putString(userPassword, password);
+                                        editor.putInt(userAvatar, avatar);
+                                        editor.putBoolean(loggedInName, true);
+                                        editor.apply();
+
                                         searchIntent = new Intent(RegisterActivity.this, SearchExperimentActivity.class);
                                         startActivity(searchIntent);
                                         finish();
