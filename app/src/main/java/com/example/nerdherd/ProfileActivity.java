@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -61,8 +62,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Intent publicuser;
     private int val;
     private String useridval;
-
-
+    private ArrayList<String> updateditem;
+    private String CurrentName;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -84,8 +85,10 @@ public class ProfileActivity extends AppCompatActivity {
         publicuser = getIntent();
         Bundle pUser = publicuser.getExtras();
         profController= new ProfileController();
-        //if pUser is null then it is a user(current logged in user or public user)
-        // that needs to be displayed
+        usersname = findViewById(R.id.UsersName);
+        usersemail = findViewById(R.id.usersEmail);
+        uname = findViewById(R.id.Name);
+        //if pUser is not null then this was instantiated by the searchUserActivity
         if (pUser != null)
         {
 
@@ -104,6 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (id.equals(GlobalVariable.profile.getId()))
             {
                 edtUserProfile.setVisibility(View.VISIBLE);
+                ProfileUpdate();
             }
             else{
                 usersAvatar.setImageResource(profController.getImageArray().get(avatar));
@@ -111,12 +115,15 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         }
+        //if pUser is null -that would mean this activity was not instantiated by
+        //searchUserActivity class
         else{
-            avatar = profController.getAvatar();
-            usersAvatar.setImageResource(profController.getImageArray().get(GlobalVariable.profile.getAvatar()));
+            ProfileUpdate();
+
         }
 
-        fireStoreController = new FireStoreController();
+
+
         Log.d("Test", GlobalVariable.profile.getName());
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout);
@@ -129,14 +136,9 @@ public class ProfileActivity extends AppCompatActivity {
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
 
-        usersname = findViewById(R.id.UsersName);
+        Log.d("Current Name", name);
         usersname.setText(name+"");
-
-
-        usersemail = findViewById(R.id.usersEmail);
         usersemail.setText(email+"");
-
-        uname = findViewById(R.id.Name);
         uname.setText(name+"");
 
 
@@ -153,6 +155,24 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public void ProfileUpdate(){
+        fireStoreController = new FireStoreController();
+        fireStoreController.readProfile(null, profController.getId(), "Current User", new FireStoreController.FireStoreProfileCallback() {
+            @Override
+            public void onCallback(String name, String password, String email, Integer avatar) {
+                usersname.setText(name+"");
+                usersemail.setText(email+"");
+                uname.setText(name+"");
+                usersAvatar.setImageResource(profController.getImageArray().get(avatar));
+
+            }
+        }, new FireStoreController.FireStoreProfileFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        },null, null);
+    }
     public void updateEmail(String Email){
         isNew = true;
         useridval = profController.getId();
