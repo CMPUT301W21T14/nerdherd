@@ -54,10 +54,6 @@ public class EditProfileFragment extends DialogFragment {
         Email = view.findViewById(R.id.edtuserEmail);
         Password = view.findViewById(R.id.edtuserPassword);
         usersAvatar = view.findViewById(R.id.useravatar);
-
-        currentname = view.findViewById(R.id.currentName);
-        currentemail = view.findViewById(R.id.currentEmail);
-
         ProfileUpdater();
         profController = new ProfileController();
         usersAvatar.setImageResource(profController.getImageArray().get(avatar));
@@ -79,8 +75,8 @@ public class EditProfileFragment extends DialogFragment {
         fireStoreController.readProfile(null, GlobalVariable.profile.getId(), "Current User", new FireStoreController.FireStoreProfileCallback() {
             @Override
             public void onCallback(String name, String password, String email, Integer avatar) {
-                currentname.setText(name+"");
-                currentemail.setText(email+"");
+                Name.setText(name+"");
+                Email.setText(email+"");
             }
         }, new FireStoreController.FireStoreProfileFailCallback() {
             @Override
