@@ -10,4 +10,6 @@
     <string name="confirm">CONFIRM</string>
     <string name="email">EMAIL</string>
     <string name="reset">RESET</string>
+    <string name="register">REGISTER</string>
+    <string name="name">Name</string>
 </resources>
