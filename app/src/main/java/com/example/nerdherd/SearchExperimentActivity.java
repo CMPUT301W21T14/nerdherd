@@ -67,8 +67,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
         showList = new ArrayList<Experiment>();
         fireStoreController = new FireStoreController();
 
-        /*
-        fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentListCallback() {
+        fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentReadCallback() {
             @Override
             public void onCallback(ArrayList<Experiment> experiments) {
 
@@ -84,14 +83,12 @@ public class SearchExperimentActivity extends AppCompatActivity{
                 adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
                 adapterController.useAdapter();
             }
-        }, new FireStoreController.FireStoreExperimentListFailCallback() {
+        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
             @Override
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
         });
-        
-         */
     }
 
     // Start the CreateExperiment Activity on button press
