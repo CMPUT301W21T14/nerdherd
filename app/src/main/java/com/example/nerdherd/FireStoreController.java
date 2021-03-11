@@ -244,7 +244,7 @@ public class FireStoreController {
         experimentData.put("Type of Experiment", newExperiment.getType());
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
-        experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
+        experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
 
         // Get user ID
         String userID = newExperiment.getOwnerProfile().getId();
@@ -287,9 +287,9 @@ public class FireStoreController {
                     experimentType = doc.getData().get("Type of Experiment").toString();
                     experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
-                    hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
+                    ownerId = doc.getData().get("Owner Id").toString();
 
-                    ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
+                    ownerProfile = GlobalVariable.profile;
 
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
                     experimentList.add(experiment);
