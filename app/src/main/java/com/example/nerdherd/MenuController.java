@@ -67,6 +67,12 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             ((Activity)context).finish();
         }
 
+        if (item.getItemId() == R.id.my_experiments && !(context instanceof MyExperimentsActivity)){
+            intent = new Intent(context, MyExperimentsActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
         if (item.getItemId() == R.id.log_out){
             sharedPreferences = context.getSharedPreferences("SharedPreferences", 0);
             editor = sharedPreferences.edit();
