@@ -201,14 +201,13 @@ public class FireStoreController {
         }
     }
 
-    public void addNewExperiment(Experiment newExperiment) {
+    public void addNewExperiment(Experiment newExperiment, FireStoreExperimentCallback fireStoreExperimentCallback, FireStoreExperimentFailCallback fireStoreExperimentFailCallback) {
         // References:
         //      https://firebase.google.com/docs/firestore/quickstart#java_1
         //      https://firebase.google.com/docs/firestore/manage-data/add-data
         // Load information into database
         String title = newExperiment.getTitle();
         experimentData = new HashMap<>();
-        experimentData.put("Owner ID", newExperiment.getOwnerProfile().getId());
         experimentData.put("Status", newExperiment.getStatus());
         experimentData.put("Published", newExperiment.isPublished());
         experimentData.put("Description", newExperiment.getDescription());
@@ -226,16 +225,35 @@ public class FireStoreController {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data has been added successfully");
+                        fireStoreExperimentCallback.onCallback();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Data addition failed" + e.toString());
+                        fireStoreExperimentFailCallback.onCallback();
                     }
                 });
     }
+
+    public void experimentReader(ArrayList<Experiment> experiments, FireStoreExperimentListCallback fireStoreExperimentListCallback, FireStoreExperimentListFailCallback fireStoreExperimentListFailCallback){
+        accessor();
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null){
+                    fireStoreExperimentListFailCallback.onCallback();
+                    return;
+                }
+
+                experiments.clear();
+                for (QueryDocumentSnapshot doc : value){
+
+                }
+            }
+        });
+    }
+
     public interface FireStoreReadCallback{
         void onCallback(ArrayList<String> list);
     }
@@ -276,6 +294,21 @@ public class FireStoreController {
         void onCallback(ArrayList<Profile> profileList);
     }
     public interface FireStoreProfileListFailCallback {
+        void onCallback();
+    }
+    public interface FireStoreExperimentCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreExperimentFailCallback{
+        void onCallback();
+    }
+
+    public interface FireStoreExperimentListCallback{
+        void onCallback(ArrayList<Experiment> experiments);
+    }
+
+    public interface FireStoreExperimentListFailCallback{
         void onCallback();
     }
 }
