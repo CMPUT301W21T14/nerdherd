@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -60,11 +61,6 @@ public class FireStoreController {
     private Integer experimentTrials;
     private Boolean locationRequirement;
     private HashMap<String, String> hashMapProfile;
-    private String ownerName;
-    private String ownerPassword;
-    private String ownerEmail;
-    private String ownerId;
-    private Integer ownerAvatar;
 
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -244,7 +240,7 @@ public class FireStoreController {
         experimentData.put("Type of Experiment", newExperiment.getType());
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
-        experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
+        experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
 
         // Get user ID
         String userID = newExperiment.getOwnerProfile().getId();
@@ -277,7 +273,6 @@ public class FireStoreController {
                     fireStoreExperimentReadFailCallback.onCallback();
                     return;
                 }
-
                 experimentList.clear();
                 for(QueryDocumentSnapshot doc : value){
                     experimentTitle = doc.getId();
@@ -287,14 +282,14 @@ public class FireStoreController {
                     experimentType = doc.getData().get("Type of Experiment").toString();
                     experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
-                    ownerId = doc.getData().get("Owner Id").toString();
+                    hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
 
-                    ownerProfile = GlobalVariable.profile;
+                    ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
 
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
                     experimentList.add(experiment);
                 }
-                
+
                 fireStoreExperimentReadCallback.onCallback(experimentList);
             }
         });
