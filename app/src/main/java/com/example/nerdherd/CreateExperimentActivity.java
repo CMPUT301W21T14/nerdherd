@@ -78,6 +78,10 @@ public class CreateExperimentActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter a description for your experiment.", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(experimentDescription.length() > 20) { //description must be between 1 and 20 characters
+            Toast.makeText(this, "The experiment description must be between 1 and 20 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(minTrialsString.length() == 0) { //Blank minTrials is invalid
             Toast.makeText(this, "Please enter an Integer for the minimum number of trials.", Toast.LENGTH_SHORT).show();
             return;
