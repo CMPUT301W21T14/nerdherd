@@ -1,16 +1,12 @@
 package com.example.nerdherd;
-
-// Modified from youtube
+// Modified form youtube
 // Author: Zhipeng Z zhipeng4
-
 import android.util.Log;
 import android.util.Pair;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -20,19 +16,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.WriteResult;
-
 import org.w3c.dom.Document;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class FireStoreController {
-
     private static final String TAG = "FireStoreController";
     private FirebaseFirestore firebaseFirestore;
     private CollectionReference collectionReference;
@@ -48,28 +38,15 @@ public class FireStoreController {
     private String email;
     private ProfileController profileController;
     private Integer avatar;
-    private String profileIndicator = "Profile";
-    private String experimentIndicator = "Experiment";
-    private String experimentTitle;
-    private String experimentStatus;
-    private String experimentOwner;
-    private Profile ownerProfile;
-    private Experiment experiment;
-    private Boolean experimentPublish;
-    private String experimentDescription;
-    private String experimentType;
-    private Integer experimentTrials;
-    private Boolean locationRequirement;
-    private HashMap<String, String> hashMapProfile;
 
-    private void accessor(String indicator){
+    private void accessor(){
         firebaseFirestore = FirebaseFirestore.getInstance();
-        collectionReference = firebaseFirestore.collection(indicator);
+        collectionReference = firebaseFirestore.collection("Profile");
     }
 
     public void readData(ArrayList<String> itemList, String verifier, FireStoreReadCallback fireStoreReadCallback, FireStoreReadFailCallback fireStoreReadFailCallback){
         itemList.clear();
-        accessor(profileIndicator);
+        accessor();
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -93,7 +70,7 @@ public class FireStoreController {
     }
 
     public void uploadData(Profile profile, String id, FireStoreUploadCallback fireStoreUploadCallback, FireStoreUploadFailCallback fireStoreUploadFailCallback){
-        accessor(profileIndicator);
+        accessor();
         profileData = new HashMap<>();
         profileData.put("Name", profile.getName());
         profileData.put("Password", profile.getPassword());
@@ -117,7 +94,7 @@ public class FireStoreController {
     }
 
     public void logInCheck(ArrayList<Pair> pairList, FireStoreCheckCallback fireStoreCheckCallback, FireStoreCheckFailCallback fireStoreCheckFailCallback){
-        accessor(profileIndicator);
+        accessor();
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -144,7 +121,7 @@ public class FireStoreController {
     //getCertainData(sps, email, 'osamuel@ualberta.ca', 'username',
 
     public void getCertainData(ArrayList<String> itemList, String field, String value, String wanted, FireStoreCertainCallback fireStoreCertainCallback, FireStoreCertainFailCallback fireStoreCertainFailCallback){
-        accessor(profileIndicator);
+        accessor();
         collectionReference.whereEqualTo(field, value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -167,7 +144,7 @@ public class FireStoreController {
     }
 
     public void updater(String id, String target, String newValue, FireStoreUpdateCallback fireStoreUpdateCallback, FireStoreUpdateFailCallback fireStoreUpdateFailCallback){
-        accessor(profileIndicator);
+        accessor();
         collectionReference.document(id).update(target, newValue).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -182,7 +159,7 @@ public class FireStoreController {
     }
 
     public void readProfile(ArrayList<Profile> profileList, String id, String indicator, FireStoreProfileCallback fireStoreProfileCallback, FireStoreProfileFailCallback fireStoreProfileFailCallback, FireStoreProfileListCallback fireStoreProfileListCallback, FireStoreProfileListFailCallback fireStoreProfileListFailCallback){
-        accessor(profileIndicator);
+        accessor();
         if (indicator.equals("Current User")) {
             collectionReference.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -204,12 +181,10 @@ public class FireStoreController {
             collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
                     if (error != null){
                         fireStoreProfileListFailCallback.onCallback();
                         return;
                     }
-
                     profileList.clear();
                     for (QueryDocumentSnapshot doc : value) {
                         name = doc.getData().get("Name").toString();
@@ -226,144 +201,81 @@ public class FireStoreController {
         }
     }
 
-    public void addNewExperiment(Experiment newExperiment, FireStoreExperimentCallback fireStoreExperimentCallback, FireStoreExperimentFailCallback fireStoreExperimentFailCallback) {
+    public void addNewExperiment(Experiment newExperiment) {
         // References:
         //      https://firebase.google.com/docs/firestore/quickstart#java_1
         //      https://firebase.google.com/docs/firestore/manage-data/add-data
-
         // Load information into database
         String title = newExperiment.getTitle();
         experimentData = new HashMap<>();
+        experimentData.put("Owner ID", newExperiment.getOwnerProfile().getId());
         experimentData.put("Status", newExperiment.getStatus());
         experimentData.put("Published", newExperiment.isPublished());
         experimentData.put("Description", newExperiment.getDescription());
         experimentData.put("Type of Experiment", newExperiment.getType());
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
-        experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
-
         // Get user ID
         String userID = newExperiment.getOwnerProfile().getId();
-
         // Find user information and load data
-        accessor(experimentIndicator);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = firebaseFirestore.collection("Profile").document(userID).collection("Experiments");
         collectionReference
                 .document(title)
                 .set(experimentData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        fireStoreExperimentCallback.onCallback();
+                        Log.d(TAG, "Data has been added successfully");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        fireStoreExperimentFailCallback.onCallback();
+                        Log.d(TAG, "Data addition failed" + e.toString());
                     }
                 });
     }
-
-    public void experimentReader(ArrayList<Experiment> experimentList, FireStoreExperimentReadCallback fireStoreExperimentReadCallback, FireStoreExperimentReadFailCallback fireStoreExperimentReadFailCallback){
-        accessor(experimentIndicator);
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null){
-                    fireStoreExperimentReadFailCallback.onCallback();
-                    return;
-                }
-                experimentList.clear();
-                for(QueryDocumentSnapshot doc : value){
-                    experimentTitle = doc.getId();
-                    experimentStatus = doc.getData().get("Status").toString();
-                    experimentPublish = Boolean.parseBoolean(doc.getData().get("Published").toString());
-                    experimentDescription = doc.getData().get("Description").toString();
-                    experimentType = doc.getData().get("Type of Experiment").toString();
-                    experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
-                    locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
-                    hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
-
-                    ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-
-                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
-                    experimentList.add(experiment);
-                }
-
-                fireStoreExperimentReadCallback.onCallback(experimentList);
-            }
-        });
-    }
-
     public interface FireStoreReadCallback{
         void onCallback(ArrayList<String> list);
     }
-
     public interface FireStoreUploadCallback{
         void onCallback();
     }
-
     public interface FireStoreReadFailCallback{
         void onCallback();
     }
-
     public interface FireStoreUploadFailCallback{
         void onCallback();
     }
-
     public interface FireStoreCheckCallback{
         void onCallback(ArrayList<Pair> list);
     }
-
     public interface FireStoreCheckFailCallback{
         void onCallback();
     }
-
     public interface FireStoreCertainCallback{
         void onCallback(ArrayList<String> list);
     }
-
     public interface FireStoreCertainFailCallback{
         void onCallback();
     }
-
     public interface FireStoreUpdateCallback{
         void onCallback();
     }
-
     public interface FireStoreUpdateFailCallback{
         void onCallback();
     }
-
     public interface FireStoreProfileCallback{
         void onCallback(String name, String password, String email, Integer avatar);
     }
-
     public interface FireStoreProfileFailCallback {
         void onCallback();
     }
-
     public interface FireStoreProfileListCallback{
         void onCallback(ArrayList<Profile> profileList);
     }
-
     public interface FireStoreProfileListFailCallback {
-        void onCallback();
-    }
-
-    public interface FireStoreExperimentCallback{
-        void onCallback();
-    }
-
-    public interface FireStoreExperimentFailCallback {
-        void onCallback();
-    }
-
-    public interface FireStoreExperimentReadCallback{
-        void onCallback(ArrayList<Experiment> experiments);
-    }
-
-    public interface FireStoreExperimentReadFailCallback {
         void onCallback();
     }
 }
