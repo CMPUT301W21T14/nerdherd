@@ -94,6 +94,7 @@ public class EditProfileFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         GlobalVariable.indexForEdit = -1;
+
                     }
                 })
                 .create();
@@ -106,6 +107,7 @@ public class EditProfileFragment extends DialogFragment {
             public void onCallback(String name, String password, String email, Integer avatar) {
                 Name.setText(name+"");
                 Email.setText(email+"");
+
             }
         }, new FireStoreController.FireStoreProfileFailCallback() {
             @Override

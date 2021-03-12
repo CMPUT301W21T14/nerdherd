@@ -144,6 +144,7 @@ public class ProfileActivity extends AppCompatActivity {
         usersname.setText(name+"");
         usersemail.setText(email+"");
         uname.setText(name+"");
+        usersAvatar.setImageResource(profController.getImageArray().get(avatar));
 
 
         edtUserProfile.setOnClickListener(new View.OnClickListener() {
