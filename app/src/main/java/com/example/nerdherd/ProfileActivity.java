@@ -95,32 +95,35 @@ public class ProfileActivity extends AppCompatActivity {
 
             Intent intent = getIntent();
             val = intent.getIntExtra(SearchUserActivity.EXTRA_MESSAGE, -1);
-            name = GlobalVariable.profileArrayList.get(val).getName();
-            email = GlobalVariable.profileArrayList.get(val).getEmail();
-            avatar = GlobalVariable.profileArrayList.get(val).getAvatar();
-            Log.d("public avatar", String.valueOf(avatar));
-            Log.d("Private avatar", String.valueOf(GlobalVariable.profile.getAvatar()));
-            id = GlobalVariable.profileArrayList.get(val).getId();
-            //if the public name matches up with the private name
-            //or if the searched user == the logged in user
-            //then set the button to be visible (give functionality) to edit your profile
-            // else remove the button
-            if (id.equals(GlobalVariable.profile.getId()))
-            {
-                edtUserProfile.setVisibility(View.VISIBLE);
-                ProfileUpdate();
+
+            if (val != -1) {
+                name = GlobalVariable.profileArrayList.get(val).getName();
+                email = GlobalVariable.profileArrayList.get(val).getEmail();
+                avatar = GlobalVariable.profileArrayList.get(val).getAvatar();
+                Log.d("public avatar", String.valueOf(avatar));
+                Log.d("Private avatar", String.valueOf(GlobalVariable.profile.getAvatar()));
+                id = GlobalVariable.profileArrayList.get(val).getId();
+                //if the public name matches up with the private name
+                //or if the searched user == the logged in user
+                //then set the button to be visible (give functionality) to edit your profile
+                // else remove the button
+                if (id.equals(GlobalVariable.profile.getId())) {
+                    edtUserProfile.setVisibility(View.VISIBLE);
+                    ProfileUpdate();
+                } else {
+                    usersAvatar.setImageResource(profController.getImageArray().get(avatar));
+                    edtUserProfile.setVisibility(View.GONE);
+
+                }
             }
             else{
-                usersAvatar.setImageResource(profController.getImageArray().get(avatar));
-                edtUserProfile.setVisibility(View.GONE);
-
+                new EditProfileFragment(avatar).show(getSupportFragmentManager(), "EDIT_TEXT2");
             }
         }
         //if pUser is null -that would mean this activity was not instantiated by
         //searchUserActivity class
         else{
             ProfileUpdate();
-
         }
 
 
@@ -141,6 +144,7 @@ public class ProfileActivity extends AppCompatActivity {
         usersname.setText(name+"");
         usersemail.setText(email+"");
         uname.setText(name+"");
+
 
         edtUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,7 +211,8 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-    public void updateUserProfile(String Name, String Email, String Password) {
+    public void updateUserProfile(String Name, String Email, String Password, Integer avatar) {
+        fireStoreController = new FireStoreController();
         useridval = profController.getId();
         if (!Email.isEmpty()){
             updateEmail(Email);
@@ -240,7 +245,21 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
         }
-        if (!Password.isEmpty() | !Name.isEmpty() | !Email.isEmpty()){
+
+        if (avatar != -1){
+            fireStoreController.updater(useridval, "Avatar", avatar.toString(), new FireStoreController.FireStoreUpdateCallback() {
+                @Override
+                public void onCallback() {
+
+                }
+            }, new FireStoreController.FireStoreUpdateFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if (!Password.isEmpty() | !Name.isEmpty() | !Email.isEmpty() | avatar != -1){
             Toast.makeText(getApplicationContext(), "User Profile Updated", Toast.LENGTH_SHORT).show();
         }
     }

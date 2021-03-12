@@ -19,12 +19,18 @@ public class AvatarPicker extends AppCompatActivity {
     private Intent register;
     private Bundle data;
     private Adapter adapter;
+    private Intent intent;
     private AdapterController adapterController;
+    private Boolean isEdit;
+    private Intent editIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar_picker);
+
+        intent = getIntent();
+        isEdit = intent.getBooleanExtra("Profile Edit", false);
 
         previousIntent = getIntent();
         data = previousIntent.getBundleExtra("Data");
@@ -33,10 +39,18 @@ public class AvatarPicker extends AppCompatActivity {
         listener = new Adapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
-                register = new Intent(getApplicationContext(), RegisterActivity.class);
-                data.putInt("Index", index);
-                register.putExtra("Data", data);
-                startActivity(register);
+                if (isEdit){
+                    editIntent = new Intent(AvatarPicker.this, GlobalVariable.editProfile.getClass());
+                    editIntent.putExtra("Index for Edit", index);
+                    GlobalVariable.indexForEdit = index;
+                    startActivity(editIntent);
+                }
+                else{
+                    register = new Intent(getApplicationContext(), RegisterActivity.class);
+                    data.putInt("Index", index);
+                    register.putExtra("Data", data);
+                    startActivity(register);
+                }
                 finish();
             }
         };

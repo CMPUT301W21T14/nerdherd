@@ -1,8 +1,10 @@
 package com.example.nerdherd;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +45,9 @@ public class EditProfileFragment extends DialogFragment {
     private TextView currentname;
     private TextView currentemail;
 
+    private ArrayList<Integer> images;
+    private Intent intent;
+
     public EditProfileFragment(int avatar) {
         this.avatar = avatar;
     }
@@ -57,13 +64,30 @@ public class EditProfileFragment extends DialogFragment {
         ProfileUpdater();
         profController = new ProfileController();
         usersAvatar.setImageResource(profController.getImageArray().get(avatar));
+
+        images = new ProfileController().getImageArray();
+        if (GlobalVariable.indexForEdit != -1) {
+            usersAvatar.setImageResource(images.get(GlobalVariable.indexForEdit));
+        }
+
+        usersAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(getContext(), AvatarPicker.class);
+                intent.putExtra("Profile Edit", true);
+                startActivity(intent);
+                GlobalVariable.editProfile = (Activity)getContext();
+                (GlobalVariable.editProfile).finish();
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
                 .setView(view)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ((ProfileActivity) getActivity()).updateUserProfile(Name.getText().toString(), Email.getText().toString(), Password.getText().toString());
+                        ((ProfileActivity) getActivity()).updateUserProfile(Name.getText().toString(), Email.getText().toString(), Password.getText().toString(), GlobalVariable.indexForEdit);
                     }
                 })
                 .setNegativeButton("Cancel", null)
