@@ -90,7 +90,12 @@ public class EditProfileFragment extends DialogFragment {
                         ((ProfileActivity) getActivity()).updateUserProfile(Name.getText().toString(), Email.getText().toString(), Password.getText().toString(), GlobalVariable.indexForEdit);
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        GlobalVariable.indexForEdit = -1;
+                    }
+                })
                 .create();
     }
 

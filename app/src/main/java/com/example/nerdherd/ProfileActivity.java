@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -64,6 +65,10 @@ public class ProfileActivity extends AppCompatActivity {
     private String useridval;
     private ArrayList<String> updateditem;
     private String CurrentName;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -250,7 +255,11 @@ public class ProfileActivity extends AppCompatActivity {
             fireStoreController.updater(useridval, "Avatar", avatar.toString(), new FireStoreController.FireStoreUpdateCallback() {
                 @Override
                 public void onCallback() {
-
+                    GlobalVariable.profile.setAvatar(avatar);
+                    sharedPreferences = getSharedPreferences("SharedPreferences",0);
+                    editor = sharedPreferences.edit();
+                    editor.putInt("User Avatar", avatar);
+                    editor.apply();
                 }
             }, new FireStoreController.FireStoreUpdateFailCallback() {
                 @Override
