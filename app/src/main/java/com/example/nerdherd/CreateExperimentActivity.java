@@ -101,7 +101,7 @@ public class CreateExperimentActivity extends AppCompatActivity {
 
         //TODO Location Dialog will be implemented here later...
 
-        Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle,"Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+        Experiment createdExperiment = new Experiment(GlobalVariable.profile.getId(), experimentTitle,"Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
         FireStoreController firestoreController = new FireStoreController();
         firestoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
             @Override

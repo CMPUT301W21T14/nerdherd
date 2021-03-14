@@ -5,9 +5,8 @@ package com.example.nerdherd;
 import java.io.Serializable;
 
 public class Experiment implements Serializable {
-    private String ownerId; //TODO This shouldn't be used, name should be taken from the profile object
 
-    private Profile ownerProfile;
+    private String ownerID;
     private String status;
     private String title;
     private String description;
@@ -16,8 +15,11 @@ public class Experiment implements Serializable {
     private boolean requireLocation = false;
     private boolean published = true;
 
-    public Experiment(Profile ownerProfile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
-        this.ownerProfile = ownerProfile;
+    public Experiment(String ownerID, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
+        // Let's allow to create Experiment using owner ID only
+        // Search classes can search for owner
+
+        this.ownerID = ownerID;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -27,16 +29,21 @@ public class Experiment implements Serializable {
         this.published = published;
     }
 
-    public String getOwnerId() {
-        return ownerId;
-    } //Do not use
 
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    } //Do not use
 
+    // Let's use IDs for Experiment class
+    /*
     public Profile getOwnerProfile() { return ownerProfile; }
     public void setOwnerProfile(Profile ownerProfile) { this.ownerProfile = ownerProfile; }
+     */
+
+    public String getOwnerID() {
+        return ownerID;
+    }
+
+    public void setOwnerID(String ID) {
+        this.ownerID = ID;
+    }
 
     public String getStatus() {
         return status;
