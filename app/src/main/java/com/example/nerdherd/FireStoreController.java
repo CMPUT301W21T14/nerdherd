@@ -228,11 +228,8 @@ public class FireStoreController {
         experimentData.put("Type of Experiment", newExperiment.getType());
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
-        experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
+        experimentData.put("Owner ID", newExperiment.getOwnerID());
 
-        // Get user ID
-        String userID = newExperiment.getOwnerProfile().getId();
-        // Find user information and load data
         accessor(experimentIndicator);
         collectionReference
                 .document(title)
@@ -249,7 +246,12 @@ public class FireStoreController {
                         fireStoreExperimentFailCallback.onCallback();
                     }
                 });
+
+        // Create a collection to contain experimenters and their trials
+        // Reference this collection whenever you need trials
+        collectionReference.document(title).collection("Users Signed Up");
     }
+
     public void experimentReader(ArrayList<Experiment> experimentList, FireStoreExperimentReadCallback fireStoreExperimentReadCallback, FireStoreExperimentReadFailCallback fireStoreExperimentReadFailCallback){
         accessor(experimentIndicator);
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -268,11 +270,10 @@ public class FireStoreController {
                     experimentType = doc.getData().get("Type of Experiment").toString();
                     experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
-                    hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
+                    // No more need for a whole profile...
+                    experimentOwner = doc.getData().get("Owner ID").toString();
 
-                    ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-
-                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
+                    experiment = new Experiment(experimentOwner, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
                     experimentList.add(experiment);
                 }
 
