@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/experiments"
@@ -19,4 +20,22 @@
     <item
         android:id="@+id/log_out"
         android:title="Log Out" />
+    <item
+        android:id="@+id/experiment_view"
+        android:title="Experiment View">
+        <menu>
+            <item
+                android:id="@+id/experiment_details"
+                android:title="Details" />
+            <item
+                android:id="@+id/experiment_stats"
+                android:title="Stats" />
+            <item
+                android:id="@+id/experiment_questions"
+                android:title="Questions" />
+            <item
+                android:id="@+id/experiment_trails"
+                android:title="Trials" />
+        </menu>
+    </item>
 </menu>

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
@@ -25,6 +26,8 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private DrawerLayout drawerLayout;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private Menu menu;
+    private MenuItem viewExperiments;
     private String loggedInName = "Logged In";
     private String loggedInId = "User Id";
     private String userName = "User Name";
@@ -44,6 +47,16 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
+
+        menu = navigationView.getMenu();
+        viewExperiments =menu.findItem(R.id.experiment_view);
+
+        if (context instanceof  ExperimentViewActivity){
+            viewExperiments.setVisible(true);
+        }
+        else{
+            viewExperiments.setVisible(false);
+        }
 
         navigationView.setNavigationItemSelectedListener(this);
     }
