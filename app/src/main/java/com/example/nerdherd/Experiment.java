@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Experiment implements Serializable {
 
-    private String ownerID;
+    private Profile ownerProfile;
     private String status;
     private String title;
     private String description;
@@ -15,11 +15,11 @@ public class Experiment implements Serializable {
     private boolean requireLocation = false;
     private boolean published = true;
 
-    public Experiment(String ownerID, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
+    public Experiment(Profile profile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published) {
         // Let's allow to create Experiment using owner ID only
         // Search classes can search for owner
 
-        this.ownerID = ownerID;
+        this.ownerProfile = profile;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -37,12 +37,12 @@ public class Experiment implements Serializable {
     public void setOwnerProfile(Profile ownerProfile) { this.ownerProfile = ownerProfile; }
      */
 
-    public String getOwnerID() {
-        return ownerID;
+    public Profile getOwnerProfile() {
+        return ownerProfile;
     }
 
-    public void setOwnerID(String ID) {
-        this.ownerID = ID;
+    public void setOwnerProfile(Profile profile) {
+        this.ownerProfile = profile;
     }
 
     public String getStatus() {
