@@ -97,42 +97,33 @@ public class SearchExperimentActivity extends AppCompatActivity{
                     public void onClick(View view) {
                         keyword = keywordView.getText().toString();
                         resultList = new ArrayList<>();
-                        searchController.searchExperiment(keyword, experiments, resultList, new SearchController.ExperimentNoResultCallBack() {
+                        searchController.searchExperiment(keyword, showList, resultList, new SearchController.ExperimentNoResultCallBack() {
                             @Override
                             public void onCallback(ArrayList<Experiment> itemList) {
                                 new AlertDialog.Builder(SearchExperimentActivity.this).setTitle("No Result").setMessage("No result found. Please enter another keyword. Thank you.")
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                // toDo change later
-                                                GlobalVariable.experimentArrayList = showList;
-                                                adapter = new ExperimentAdapter(showList, listener);
-                                                adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
-                                                adapterController.useAdapter();
+                                                showExperiments(recyclerView, itemList);
                                             }
                                         }).show();
                             }
                         }, new SearchController.ExperimentResultCallBack() {
                             @Override
                             public void onCallback(ArrayList<Experiment> itemList) {
-                                GlobalVariable.experimentArrayList = resultList;
-                                adapter = new ExperimentAdapter(resultList, listener);
-                                adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
-                                adapterController.useAdapter();
+                                showExperiments(recyclerView, itemList);
                             }
                         }, new SearchController.ExperimentNoKeywordCallBack() {
                             @Override
                             public void onCallback(ArrayList<Experiment> itemList) {
-                                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Please enter a keyword. Thank you.", Toast.LENGTH_SHORT).show();
+                                showExperiments(recyclerView, itemList);
                             }
                         });
                     }
                 });
 
-                GlobalVariable.experimentArrayList = showList;
-                adapter = new ExperimentAdapter(showList, listener);
-                adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
-                adapterController.useAdapter();
+                showExperiments(recyclerView, showList);
             }
         }, new FireStoreController.FireStoreExperimentReadFailCallback() {
             @Override
@@ -148,5 +139,11 @@ public class SearchExperimentActivity extends AppCompatActivity{
         startActivity(createExpIntent);
     }
 
+    private void showExperiments(RecyclerView recyclerView, ArrayList<Experiment> experiments){
+        GlobalVariable.experimentArrayList = experiments;
+        adapter = new ExperimentAdapter(experiments, listener);
+        adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
+        adapterController.useAdapter();
+    }
 
 }
