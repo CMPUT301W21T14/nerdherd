@@ -30,7 +30,7 @@ public class SearchController {
     public void searchExperiment (String keyword, ArrayList<Experiment> experimentList, ArrayList<Experiment> resultList,  ExperimentNoResultCallBack experimentNoResultCallBack, ExperimentResultCallBack experimentResultCallBack, ExperimentNoKeywordCallBack experimentNoKeywordCallBack) {
         if (!keyword.isEmpty()) {
             for (Experiment experimentProfile : experimentList) {
-                if (experimentProfile.getDescription().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getStatus().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getTitle().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getType().toLowerCase().contains(keyword.toLowerCase())) {
+                if (experimentProfile.getDescription().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getStatus().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getTitle().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getType().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getOwnerProfile().getName().toLowerCase().contains(keyword.toLowerCase()) ) {
                     resultList.add(experimentProfile);
                 }
             }
