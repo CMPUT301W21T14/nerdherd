@@ -59,7 +59,7 @@
             android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/experiment_type"
-            app:layout_constraintWidth_percent="0.8" />
+            app:layout_constraintWidth_percent="0.75" />
 
         <TextView
             android:id="@+id/textView7"
@@ -70,7 +70,7 @@
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6"
-            app:layout_constraintWidth_percent="0.2" />
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/textView6"
@@ -81,7 +81,7 @@
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintWidth_percent="0.2" />
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/experiment_type"
@@ -91,7 +91,7 @@
             android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/experiment_status"
-            app:layout_constraintWidth_percent="0.8" />
+            app:layout_constraintWidth_percent="0.75" />
 
         <TextView
             android:id="@+id/experiment_status"
@@ -101,7 +101,7 @@
             android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/experiment_owner"
-            app:layout_constraintWidth_percent="0.8" />
+            app:layout_constraintWidth_percent="0.75" />
 
         <TextView
             android:id="@+id/textView5"
@@ -112,11 +112,11 @@
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
-            app:layout_constraintWidth_percent="0.2" />
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/experiment_owner"
-            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintWidth_percent="0.75"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="24sp"
@@ -140,13 +140,13 @@
 
         <TextView
             android:id="@+id/textView3"
-            app:layout_constraintWidth_percent="0.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Owner:"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/experiment_title" />
+            app:layout_constraintTop_toBottomOf="@+id/experiment_title"
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/experiment_description"

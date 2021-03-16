@@ -57,7 +57,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
             @Override
             public void onClick(View view, int index) {
                 experimentView = new Intent(SearchExperimentActivity.this, ExperimentViewActivity.class);
-                experimentView.putExtra("Index", index);
+                GlobalVariable.indexForExperimentView = index;
                 startActivity(experimentView);
                 finish();
             }

@@ -12,4 +12,5 @@ public class GlobalVariable {
     public static ArrayList<Experiment> experimentArrayList;
     public static Activity editProfile;
     public static Integer indexForEdit = -1;
+    public static Integer indexForExperimentView = -1;
 }

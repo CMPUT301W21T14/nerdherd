@@ -41,8 +41,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentContact = findViewById(R.id.experiment_contact);
         experimentDescription = findViewById(R.id.experiment_description);
 
-        previousIntent = getIntent();
-        index = previousIntent.getIntExtra("Index", -1);
+        index = GlobalVariable.indexForExperimentView;
 
         if (index != -1){
             experiment = GlobalVariable.experimentArrayList.get(index);
