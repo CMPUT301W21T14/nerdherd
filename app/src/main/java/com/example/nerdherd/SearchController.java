@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class SearchController {
     public void searchExperiment (String keyword, ArrayList<Experiment> experimentList, ArrayList<Experiment> resultList,  ExperimentNoResultCallBack experimentNoResultCallBack, ExperimentResultCallBack experimentResultCallBack, ExperimentNoKeywordCallBack experimentNoKeywordCallBack) {
         if (!keyword.isEmpty()) {
             for (Experiment experimentProfile : experimentList) {
-                if (experimentProfile.getDescription().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getStatus().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getTitle().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getType().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getOwnerProfile().getName().toLowerCase().contains(keyword.toLowerCase()) ) {
+                if (experimentProfile.getDescription().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getStatus().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getTitle().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getType().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getOwnerProfile().getName().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getOwnerProfile().getEmail().toLowerCase().contains(keyword.toLowerCase())) {
                     resultList.add(experimentProfile);
                 }
             }
@@ -38,7 +39,7 @@ public class SearchController {
                 experimentNoResultCallBack.onCallback(experimentList);
             }
             else {
-                experimentResultCallBack.onCallback(experimentList);
+                experimentResultCallBack.onCallback(resultList);
             }
         }
         else {
