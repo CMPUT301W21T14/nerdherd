@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class GlobalVariable {
     public static Profile profile;
     public static ArrayList<Profile> profileArrayList;
+    public static ArrayList<Experiment> experimentArrayList;
     public static Activity editProfile;
     public static Integer indexForEdit = -1;
 }

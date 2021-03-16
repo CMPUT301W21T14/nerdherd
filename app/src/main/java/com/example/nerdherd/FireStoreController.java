@@ -269,7 +269,6 @@ public class FireStoreController {
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
 
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
                     experimentList.add(experiment);
                 }

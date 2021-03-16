@@ -57,7 +57,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
             @Override
             public void onClick(View view, int index) {
                 experimentView = new Intent(SearchExperimentActivity.this, ExperimentViewActivity.class);
-                experimentView.putExtra("index", index);
+                experimentView.putExtra("Index", index);
                 startActivity(experimentView);
                 finish();
             }
@@ -79,6 +79,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
                     }
                 }
 
+                GlobalVariable.experimentArrayList = showList;
                 adapter = new ExperimentAdapter(showList, listener);
                 adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
                 adapterController.useAdapter();
