@@ -186,7 +186,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
                 if (isNew) {
-                    fireStoreController.updater(useridval, "Email", Email, new FireStoreController.FireStoreUpdateCallback() {
+                    fireStoreController.updater("Profile", useridval, "Email", Email, new FireStoreController.FireStoreUpdateCallback() {
                         @Override
                         public void onCallback() {
                             usersemail.setText(Email+"");
@@ -219,7 +219,7 @@ public class ProfileActivity extends AppCompatActivity {
             updateEmail(Email);
         }
         if (!Name.isEmpty()){
-            fireStoreController.updater(useridval, "Name", Name, new FireStoreController.FireStoreUpdateCallback() {
+            fireStoreController.updater("Profile", useridval, "Name", Name, new FireStoreController.FireStoreUpdateCallback() {
                 @Override
                 public void onCallback() {
                     uname.setText(Name+"");
@@ -234,7 +234,7 @@ public class ProfileActivity extends AppCompatActivity {
             });
         }
         if (!Password.isEmpty()){
-            fireStoreController.updater(useridval, "Password", Password, new FireStoreController.FireStoreUpdateCallback() {
+            fireStoreController.updater("Profile", useridval, "Password", Password, new FireStoreController.FireStoreUpdateCallback() {
                 @Override
                 public void onCallback() {
 
@@ -248,7 +248,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (avatar != -1){
-            fireStoreController.updater(useridval, "Avatar", avatar.toString(), new FireStoreController.FireStoreUpdateCallback() {
+            fireStoreController.updater("Profile", useridval, "Avatar", avatar.toString(), new FireStoreController.FireStoreUpdateCallback() {
                 @Override
                 public void onCallback() {
                     GlobalVariable.profile.setAvatar(avatar);

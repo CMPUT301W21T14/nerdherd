@@ -95,7 +95,7 @@ public class Reseter extends AppCompatActivity {
                                         }
                                         if (verifier.equals("Password")){
                                             randPassword = generator();
-                                            fireStoreController.updater(docId, "Password", randPassword, new FireStoreController.FireStoreUpdateCallback() {
+                                            fireStoreController.updater("Profile", docId, "Password", randPassword, new FireStoreController.FireStoreUpdateCallback() {
                                                 @Override
                                                 public void onCallback() {
                                                     title = "Your new password";
