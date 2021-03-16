@@ -39,41 +39,41 @@ public class MyExperimentsActivity extends AppCompatActivity {
         menuController = new MenuController(MyExperimentsActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu();
 
-        getDescription();
+//        getDescription();
         //i own experiements given that iam the owner
         //can use firestore to get all the experiments and return experiment where the users id
         //equals the userid in firestore
 
     }
 
-    public void getDescription() {
-        savedList = new ArrayList<Experiment>();
-        fireStoreController = new FireStoreController();
-        returneditems = new ArrayList<Experiment>();
-
-        fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentReadCallback() {
-            @Override
-            public void onCallback(ArrayList<Experiment> experiments) {
-
-
-                for (Experiment allExperiment:experiments) {
-                    if (allExperiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())) {
-                        Log.d("exp description",allExperiment.getDescription());
-                        savedList.add(allExperiment);
-                        returneditems.add(allExperiment);
-                    }
-                }
-            }
-        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
-            @Override
-            public void onCallback() {
-                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-//        Log.d("my experiment", returneditems.get(1).getDescription());
-//        return returneditems.get(1).getDescription();
-    }
+//    public void getDescription() {
+//        savedList = new ArrayList<Experiment>();
+//        fireStoreController = new FireStoreController();
+//        returneditems = new ArrayList<Experiment>();
+//
+//        fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentReadCallback() {
+//            @Override
+//            public void onCallback(ArrayList<Experiment> experiments) {
+//
+//
+//                for (Experiment allExperiment:experiments) {
+//                    if (allExperiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())) {
+//                        Log.d("exp description",allExperiment.getDescription());
+//                        savedList.add(allExperiment);
+//                        returneditems.add(allExperiment);
+//                    }
+//                }
+//            }
+//        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
+//            @Override
+//            public void onCallback() {
+//                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+////        Log.d("my experiment", returneditems.get(1).getDescription());
+////        return returneditems.get(1).getDescription();
+//    }
 
 
 

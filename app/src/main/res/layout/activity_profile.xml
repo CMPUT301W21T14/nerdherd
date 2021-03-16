@@ -24,7 +24,7 @@
             android:id="@+id/avatarEdit2"
             android:layout_width="120dp"
             android:layout_height="112dp"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="85dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.003"
             app:layout_constraintStart_toStartOf="parent"
@@ -166,16 +166,59 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardviewContactInfo">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="Experiments"
-                android:textColor="@color/Gradient"
-                android:textSize="20sp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/expCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-            </TextView>
+                <TextView
+                    android:id="@+id/UserExperiments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Experiments"
+                    android:textColor="@color/Gradient"
+                    android:textSize="20sp"
+                    app:layout_constraintLeft_toLeftOf="@id/expCard"
+                    app:layout_constraintRight_toRightOf="@id/expCard"
+                    app:layout_constraintTop_toTopOf="@id/expCard">
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/expOwned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text=" "
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="@id/expCard"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/UserExperiments">
+
+                </TextView>
+
+                <Button
+                    android:id="@+id/more_info"
+                    android:layout_width="129dp"
+                    android:layout_height="49dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="View More"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/expCard"
+                    app:layout_constraintRight_toRightOf="@+id/expCard" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
