@@ -12,12 +12,16 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -37,6 +41,11 @@ public class SearchExperimentActivity extends AppCompatActivity{
     private ArrayList<Experiment> savedList;
     private ArrayList<Experiment> showList;
     private Intent experimentView;
+    private SearchController searchController;
+    private TextView keywordView;
+    private Button searchButton;
+    private String keyword;
+    private ArrayList<Experiment> resultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,9 @@ public class SearchExperimentActivity extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout);
         navigationView = findViewById(R.id.navigator);
+        keywordView = findViewById(R.id.keyword_edit);
+        searchButton = findViewById(R.id.search_button);
+
 
         setSupportActionBar(toolbar);
 
@@ -78,6 +90,44 @@ public class SearchExperimentActivity extends AppCompatActivity{
                         showList.add(allExperiment);
                     }
                 }
+
+                searchController = new SearchController();
+                searchButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        keyword = keywordView.getText().toString();
+                        resultList = new ArrayList<>();
+                        searchController.searchExperiment(keyword, experiments, resultList, new SearchController.ExperimentNoResultCallBack() {
+                            @Override
+                            public void onCallback(ArrayList<Experiment> itemList) {
+                                new AlertDialog.Builder(SearchExperimentActivity.this).setTitle("No Result").setMessage("No result found. Please enter another keyword. Thank you.")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                // toDo change later
+                                                GlobalVariable.experimentArrayList = showList;
+                                                adapter = new ExperimentAdapter(showList, listener);
+                                                adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
+                                                adapterController.useAdapter();
+                                            }
+                                        }).show();
+                            }
+                        }, new SearchController.ExperimentResultCallBack() {
+                            @Override
+                            public void onCallback(ArrayList<Experiment> itemList) {
+                                GlobalVariable.experimentArrayList = resultList;
+                                adapter = new ExperimentAdapter(resultList, listener);
+                                adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
+                                adapterController.useAdapter();
+                            }
+                        }, new SearchController.ExperimentNoKeywordCallBack() {
+                            @Override
+                            public void onCallback(ArrayList<Experiment> itemList) {
+                                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
 
                 GlobalVariable.experimentArrayList = showList;
                 adapter = new ExperimentAdapter(showList, listener);

@@ -99,6 +99,13 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             context.startActivity(intent);
             ((Activity)context).finish();
         }
+
+        if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){
+            intent = new Intent(context, ExperimentViewActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
         return true;
     }
 }
