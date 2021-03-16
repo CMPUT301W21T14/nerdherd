@@ -159,7 +159,7 @@ public class FireStoreController {
             }
         });
     }
-    public void updater(String indicator, String id, String target, String newValue, FireStoreUpdateCallback fireStoreUpdateCallback, FireStoreUpdateFailCallback fireStoreUpdateFailCallback){
+    public void updater(String indicator, String id, String target, Object newValue, FireStoreUpdateCallback fireStoreUpdateCallback, FireStoreUpdateFailCallback fireStoreUpdateFailCallback){
         accessor(indicator);
         collectionReference.document(id).update(target, newValue).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
