@@ -3,6 +3,7 @@ package com.example.nerdherd;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SearchController {
@@ -26,6 +27,25 @@ public class SearchController {
         }
     }
 
+    public void searchExperiment (String keyword, ArrayList<Experiment> experimentList, ArrayList<Experiment> resultList,  ExperimentNoResultCallBack experimentNoResultCallBack, ExperimentResultCallBack experimentResultCallBack, ExperimentNoKeywordCallBack experimentNoKeywordCallBack) {
+        if (!keyword.isEmpty()) {
+            for (Experiment experimentProfile : experimentList) {
+                if (experimentProfile.getDescription().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getStatus().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getTitle().toLowerCase().contains(keyword.toLowerCase()) || experimentProfile.getType().toLowerCase().contains(keyword.toLowerCase())) {
+                    resultList.add(experimentProfile);
+                }
+            }
+            if (resultList.isEmpty()) {
+                experimentNoResultCallBack.onCallback(experimentList);
+            }
+            else {
+                experimentResultCallBack.onCallback(experimentList);
+            }
+        }
+        else {
+            experimentNoKeywordCallBack.onCallback(experimentList);
+        }
+    }
+
     public interface UserNoResultCallBack{
         void onCallback(ArrayList<Profile> itemList);
     }
@@ -36,5 +56,17 @@ public class SearchController {
 
     public interface UserNoKeywordCallBack{
         void onCallback(ArrayList<Profile> itemList);
+    }
+
+    public interface ExperimentNoResultCallBack{
+        void onCallback(ArrayList<Experiment> itemList);
+    }
+
+    public interface ExperimentResultCallBack{
+        void onCallback(ArrayList<Experiment> itemList);
+    }
+
+    public interface ExperimentNoKeywordCallBack{
+        void onCallback(ArrayList<Experiment> itemList);
     }
 }
