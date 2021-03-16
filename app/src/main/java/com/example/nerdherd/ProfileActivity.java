@@ -66,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
 
 
+    private Button usersExpDetailed;
     private ArrayList<Experiment> savedList;
     private ArrayList<Experiment> returneditems;
 
@@ -83,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
         menuController = new MenuController(ProfileActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu();
 
-
+        usersExpDetailed = findViewById(R.id.more_info);
         userExperiments = findViewById(R.id.expOwned);
         edtUserProfile = findViewById(R.id.edt_profile);
         name = GlobalVariable.profile.getName();
@@ -121,6 +122,7 @@ public class ProfileActivity extends AppCompatActivity {
                 } else {
                     usersAvatar.setImageResource(profController.getImageArray().get(avatar));
                     edtUserProfile.setVisibility(View.GONE);
+                    usersExpDetailed.setVisibility(View.GONE);
 
                 }
             }
@@ -162,6 +164,16 @@ public class ProfileActivity extends AppCompatActivity {
                 new EditProfileFragment(avatar).show(getSupportFragmentManager(), "EDIT_TEXT2");
             }
         });
+
+        usersExpDetailed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, MyExperimentsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
 
 
