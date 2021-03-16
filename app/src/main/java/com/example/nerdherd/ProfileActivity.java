@@ -121,6 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                     getDescription();
                 } else {
                     usersAvatar.setImageResource(profController.getImageArray().get(avatar));
+                    getDescription();
                     edtUserProfile.setVisibility(View.GONE);
                     usersExpDetailed.setVisibility(View.GONE);
 

@@ -90,7 +90,7 @@ public class MyExperimentsActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         keyword = keywordView.getText().toString();
                         resultList = new ArrayList<>();
-                        searchController.searchExperiment(keyword, experiments, resultList, new SearchController.ExperimentNoResultCallBack() {
+                        searchController.searchExperiment(keyword, revealList, resultList, new SearchController.ExperimentNoResultCallBack() {
                             @Override
                             public void onCallback(ArrayList<Experiment> itemList) {
                                 new AlertDialog.Builder(MyExperimentsActivity.this).setTitle("No Result").setMessage("No result found. Please enter another keyword. Thank you.")
