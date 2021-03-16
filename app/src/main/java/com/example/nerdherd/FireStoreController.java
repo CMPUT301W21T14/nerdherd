@@ -229,7 +229,7 @@ public class FireStoreController {
         experimentData.put("Number of Trials", newExperiment.getMinTrials());
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
         experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
-
+        experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
         // Find user information and load data
         accessor(experimentIndicator);
         collectionReference
