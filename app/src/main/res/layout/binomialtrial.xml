@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/txt_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Trials"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="@id/vg90"
+            app:layout_constraintLeft_toRightOf="@id/vg10"
+            app:layout_constraintTop_toBottomOf="@id/hg10" />
+
+
+        <Button
+            android:id="@+id/btn_success"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:background="#64B5F6"
+            android:text="ADD SUCCESS"
+            android:textColor="#FFF"
+            app:layout_constraintLeft_toRightOf="@id/vg10"
+            app:layout_constraintTop_toBottomOf="@id/txt_label" />
+
+        <TextView
+            android:id="@+id/success_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="56dp"
+            android:text="0"
+            android:textSize="20sp"
+            android:maxLength="4"
+            app:layout_constraintLeft_toRightOf="@id/vg10"
+            app:layout_constraintTop_toBottomOf="@id/btn_success"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/failure_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="56dp"
+            android:text="0"
+            android:textSize="20sp"
+            android:maxLength="4"
+            app:layout_constraintRight_toLeftOf="@id/vg90"
+            app:layout_constraintTop_toBottomOf="@id/btn_success" />
+
+        <Button
+            android:id="@+id/btn_failure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:background="#64B5F6"
+            android:text="ADD FAILURE"
+            android:textColor="#FFF"
+            app:layout_constraintRight_toRightOf="@id/vg90"
+            app:layout_constraintTop_toBottomOf="@id/txt_label" />
+
+        <Button
+            android:id="@+id/CanceltrialCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:backgroundTint="@color/Gradient"
+            android:text="@string/x"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="@id/vg10"
+            app:layout_constraintBottom_toBottomOf="@id/hg90"
+             />
+
+        <Button
+            android:id="@+id/confirmtrials"
+            android:layout_width="wrap_content"
+            android:layout_height="49dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginRight="16dp"
+            android:backgroundTint="@color/Gradient"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:radius="80dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/hg90"/>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/hg10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/hg90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vg90"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vg10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.07" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

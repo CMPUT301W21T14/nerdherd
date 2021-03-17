@@ -83,7 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         menuController = new MenuController(ProfileActivity.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu(false);
+        menuController.useMenu();
 
         usersExpDetailed = findViewById(R.id.more_info);
         userExperiments = findViewById(R.id.expOwned);

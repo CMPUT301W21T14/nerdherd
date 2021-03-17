@@ -55,7 +55,11 @@ public class FireStoreController {
     private Integer experimentTrials;
     private Boolean locationRequirement;
     private HashMap<String, String> hashMapProfile;
-    private ArrayList<String> idList;
+    private String ownerName;
+    private String ownerPassword;
+    private String ownerEmail;
+    private String ownerId;
+    private Integer ownerAvatar;
 
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -226,7 +230,6 @@ public class FireStoreController {
         experimentData.put("Location Requirement", newExperiment.isRequireLocation());
         experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
         experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
-        experimentData.put("Subscriber Id", newExperiment.getSubscriberId());
         // Find user information and load data
         accessor(experimentIndicator);
         collectionReference
@@ -264,10 +267,9 @@ public class FireStoreController {
                     experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
-                    idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
 
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList);
+                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish);
                     experimentList.add(experiment);
                 }
 
@@ -275,38 +277,6 @@ public class FireStoreController {
             }
         });
     }
-
-    public void createExperimentReader(ArrayList<Experiment> experimentList, FireStoreCreateExperimentReadCallback fireStoreCreateExperimentReadCallback, FireStoreCreateExperimentReadFailCallback fireStoreCreateExperimentReadFailCallback){
-        accessor(experimentIndicator);
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    experimentList.clear();
-                    for(QueryDocumentSnapshot doc : task.getResult()) {
-                        experimentTitle = doc.getId();
-                        experimentStatus = doc.getData().get("Status").toString();
-                        experimentPublish = Boolean.parseBoolean(doc.getData().get("Published").toString());
-                        experimentDescription = doc.getData().get("Description").toString();
-                        experimentType = doc.getData().get("Type of Experiment").toString();
-                        experimentTrials = Integer.valueOf(doc.getData().get("Number of Trials").toString());
-                        locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
-                        hashMapProfile = (HashMap<String, String>) doc.getData().get("Owner Profile");
-                        idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
-
-                        ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-                        experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList);
-                        experimentList.add(experiment);
-                    }
-                    fireStoreCreateExperimentReadCallback.onCallback(experimentList);
-                }
-                else{
-                    fireStoreCreateExperimentReadFailCallback.onCallback();
-                }
-            }
-        });
-    }
-
     public interface FireStoreReadCallback{
         void onCallback(ArrayList<String> list);
     }
@@ -359,12 +329,6 @@ public class FireStoreController {
         void onCallback(ArrayList<Experiment> experiments);
     }
     public interface FireStoreExperimentReadFailCallback {
-        void onCallback();
-    }
-    public interface FireStoreCreateExperimentReadCallback{
-        void onCallback(ArrayList<Experiment> experiments);
-    }
-    public interface FireStoreCreateExperimentReadFailCallback {
         void onCallback();
     }
 }
