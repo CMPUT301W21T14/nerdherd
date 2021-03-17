@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
+
 public class ExperimentViewActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -36,6 +38,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private Intent myExperimentIntent;
     private String experimentIndicator = "Experiment";
     private String publishIndicator = "Published";
+    private ArrayList<String> idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,14 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentEnd = findViewById(R.id.experiment_end);
         unpublishedSubscribe = findViewById(R.id.unpublish_subscribe_button);
 
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.draw_layout_experiment_view);
+        navigationView = findViewById(R.id.navigator);
+
+        setSupportActionBar(toolbar);
+
+        menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
+
         index = GlobalVariable.indexForExperimentView;
 
         if (index != -1){
@@ -63,6 +74,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
             experimentRegion.setText("N/A");
             experimentContact.setText(experiment.getOwnerProfile().getEmail());
             experimentDescription.setText(experiment.getDescription());
+            menuController.useMenu(false);
         }
 
         if (experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
@@ -88,16 +100,45 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
                 publishButtonHandler(publishIndicator, true);
             }
+
+            menuController.useMenu(false);
+        }
+        else{
+            idList = GlobalVariable.experimentArrayList.get(index).getSubscriberId();
+            menuController.useMenu(false);
+
+            if (idList.contains(GlobalVariable.profile.getId())){
+                unpublishedSubscribe.setVisibility(View.INVISIBLE);
+                menuController.useMenu(true);
+            }
+            else {
+                unpublishedSubscribe.setText("Subscribe");
+                unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        idList.add(GlobalVariable.profile.getId());
+                        GlobalVariable.experimentArrayList.get(index).setSubscriberId(idList);
+                        fireStoreController = new FireStoreController();
+                        fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Subscriber Id", idList, new FireStoreController.FireStoreUpdateCallback() {
+                            @Override
+                            public void onCallback() {
+                                Toast.makeText(getApplicationContext(), "You are successfully subscribed. Thank you.", Toast.LENGTH_SHORT).show();
+                            }
+                        }, new FireStoreController.FireStoreUpdateFailCallback() {
+                            @Override
+                            public void onCallback() {
+                                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        unpublishedSubscribe.setVisibility(View.INVISIBLE);
+                        menuController.useMenu(true);
+
+                    }
+                });
+            }
         }
 
-        toolbar = findViewById(R.id.toolbar);
-        drawerLayout = findViewById(R.id.draw_layout_experiment_view);
-        navigationView = findViewById(R.id.navigator);
-
-        setSupportActionBar(toolbar);
-
-        menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu();
     }
 
 

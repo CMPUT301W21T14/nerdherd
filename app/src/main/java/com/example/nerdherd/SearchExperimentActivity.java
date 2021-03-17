@@ -62,7 +62,7 @@ public class SearchExperimentActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         menuController = new MenuController(SearchExperimentActivity.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu();
+        menuController.useMenu(false);
 
         RecyclerView recyclerView = findViewById(R.id.experiment_recyclerView);
         listener = new ExperimentAdapter.onClickListener() {
