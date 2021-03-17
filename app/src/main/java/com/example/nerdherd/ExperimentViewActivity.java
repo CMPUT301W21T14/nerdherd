@@ -35,6 +35,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private FireStoreController fireStoreController;
     private Intent myExperimentIntent;
     private String experimentIndicator = "Experiment";
+    private String publishIndicator = "Published";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,54 +67,27 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
         if (experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
             if (experiment.getStatus().equals("Ended")) {
-                unpublishedSubscribe.setVisibility(View.INVISIBLE);
+                experimentEnd.setText("Reopen");
+                experimentEnd.setVisibility(View.VISIBLE);
+                endButtonHandler("Ongoing");
             }
             else{
+                experimentEnd.setText("End");
                 experimentEnd.setVisibility(View.VISIBLE);
-                unpublishedSubscribe.setText("Unpublished");
+                endButtonHandler("Ended");
             }
 
-            experimentEnd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    GlobalVariable.experimentArrayList.get(index).setStatus("Ended");
-                    fireStoreController = new FireStoreController();
-                    fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Status", "Ended", new FireStoreController.FireStoreUpdateCallback() {
-                        @Override
-                        public void onCallback() {
-                            myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
-                            startActivity(myExperimentIntent);
-                            finish();
-                        }
-                    }, new FireStoreController.FireStoreUpdateFailCallback() {
-                        @Override
-                        public void onCallback() {
-                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
+            if (experiment.isPublished()) {
 
-            unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    GlobalVariable.experimentArrayList.get(index).setPublished(false);
-                    fireStoreController = new FireStoreController();
-                    fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Published", false, new FireStoreController.FireStoreUpdateCallback() {
-                        @Override
-                        public void onCallback() {
-                            myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
-                            startActivity(myExperimentIntent);
-                            finish();
-                        }
-                    }, new FireStoreController.FireStoreUpdateFailCallback() {
-                        @Override
-                        public void onCallback() {
-                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
+                unpublishedSubscribe.setText("Unpublished");
+
+                publishButtonHandler(publishIndicator, false);
+            }
+            else{
+                unpublishedSubscribe.setText("Publish");
+
+                publishButtonHandler(publishIndicator, true);
+            }
         }
 
         toolbar = findViewById(R.id.toolbar);
@@ -124,5 +98,54 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
         menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu();
+    }
+
+
+    private void publishButtonHandler(String indicator, Boolean isWhat){
+        unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalVariable.experimentArrayList.get(index).setPublished(isWhat);
+                fireStoreController = new FireStoreController();
+                fireStoreController.updater(experimentIndicator, experiment.getTitle(), indicator, isWhat, new FireStoreController.FireStoreUpdateCallback() {
+                    @Override
+                    public void onCallback() {
+                        switcher();
+                    }
+                }, new FireStoreController.FireStoreUpdateFailCallback() {
+                    @Override
+                    public void onCallback() {
+                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void endButtonHandler(String status){
+        experimentEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GlobalVariable.experimentArrayList.get(index).setStatus(status);
+                fireStoreController = new FireStoreController();
+                fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Status", status, new FireStoreController.FireStoreUpdateCallback() {
+                    @Override
+                    public void onCallback() {
+                        switcher();
+                    }
+                }, new FireStoreController.FireStoreUpdateFailCallback() {
+                    @Override
+                    public void onCallback() {
+                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void switcher(){
+        myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
+        startActivity(myExperimentIntent);
+        finish();
     }
 }
