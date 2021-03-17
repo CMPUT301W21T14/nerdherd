@@ -133,10 +133,9 @@ public class ProfileActivity extends AppCompatActivity {
                                 Log.d("current user id: ", id);
                                 if (id.equals(experiments.get(counter).getOwnerProfile().getId())) {
                                     publicUSer_exp+=1;
-                                    Log.d("exp description", experiments.get(counter).getDescription());
                                 }
                             }
-                            userExperiments.setText(current_exp+""+" Experiments Currently Owned");
+                            userExperiments.setText(publicUSer_exp+""+" Experiments Currently Owned");
                         }
                     }, new FireStoreController.FireStoreExperimentReadFailCallback() {
                         @Override
@@ -213,7 +212,6 @@ public class ProfileActivity extends AppCompatActivity {
 //                for (Experiment allExperiment:experiments) {
                     if (experiments.get(counter).getOwnerProfile().getId().equals(GlobalVariable.profile.getId())) {
                         current_exp+=1;
-                        Log.d("exp description", experiments.get(counter).getDescription());
 //                    savedList.add(allExperiment);
 //                    returneditems.add(allExperiment);
                     }
