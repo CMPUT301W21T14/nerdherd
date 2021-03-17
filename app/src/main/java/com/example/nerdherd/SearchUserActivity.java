@@ -56,7 +56,7 @@ public class SearchUserActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         menuController = new MenuController(SearchUserActivity.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu();
+        menuController.useMenu(false);
 
         profiles = new ArrayList<Profile>();
         fireStoreController = new FireStoreController();

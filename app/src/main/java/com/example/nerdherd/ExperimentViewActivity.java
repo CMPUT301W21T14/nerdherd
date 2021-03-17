@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
+
 public class ExperimentViewActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -31,12 +33,12 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private TextView experimentContact;
     private TextView experimentDescription;
     private Button experimentEnd;
-    private Button experimentOngoing;
     private Button unpublishedSubscribe;
     private FireStoreController fireStoreController;
     private Intent myExperimentIntent;
     private String experimentIndicator = "Experiment";
     private String publishIndicator = "Published";
+    private ArrayList<String> idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,14 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentDescription = findViewById(R.id.experiment_description);
         experimentEnd = findViewById(R.id.experiment_end);
         unpublishedSubscribe = findViewById(R.id.unpublish_subscribe_button);
-        experimentOngoing = findViewById(R.id.executeTrials);
+
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.draw_layout_experiment_view);
+        navigationView = findViewById(R.id.navigator);
+
+        setSupportActionBar(toolbar);
+
+        menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
 
         index = GlobalVariable.indexForExperimentView;
 
@@ -65,6 +74,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
             experimentRegion.setText("N/A");
             experimentContact.setText(experiment.getOwnerProfile().getEmail());
             experimentDescription.setText(experiment.getDescription());
+            menuController.useMenu(false);
         }
 
         if (experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
@@ -78,18 +88,6 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 experimentEnd.setVisibility(View.VISIBLE);
                 endButtonHandler("Ended");
             }
-            if (experiment.getStatus().equals("Ongoing")){
-                experimentOngoing.setVisibility(View.VISIBLE);
-                experimentOngoing.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        executeTrials(experiment.getType(), experiment.getMinTrials());
-                    }
-                });
-            }
-            else{
-                experimentOngoing.setVisibility(View.GONE);
-            }
 
             if (experiment.isPublished()) {
 
@@ -102,36 +100,48 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
                 publishButtonHandler(publishIndicator, true);
             }
+
+            menuController.useMenu(false);
         }
-        else if (experiment.getStatus().equals("Ongoing")){
-            experimentOngoing.setVisibility(View.VISIBLE);
-            experimentOngoing.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    executeTrials(experiment.getType(), experiment.getMinTrials());
-                }
-            });
+        else{
+            idList = GlobalVariable.experimentArrayList.get(index).getSubscriberId();
+            menuController.useMenu(false);
+
+            if (idList.contains(GlobalVariable.profile.getId())){
+                unpublishedSubscribe.setVisibility(View.INVISIBLE);
+                menuController.useMenu(true);
+            }
+            else {
+                unpublishedSubscribe.setText("Subscribe");
+                unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        idList.add(GlobalVariable.profile.getId());
+                        GlobalVariable.experimentArrayList.get(index).setSubscriberId(idList);
+                        fireStoreController = new FireStoreController();
+                        fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Subscriber Id", idList, new FireStoreController.FireStoreUpdateCallback() {
+                            @Override
+                            public void onCallback() {
+                                Toast.makeText(getApplicationContext(), "You are successfully subscribed. Thank you.", Toast.LENGTH_SHORT).show();
+                            }
+                        }, new FireStoreController.FireStoreUpdateFailCallback() {
+                            @Override
+                            public void onCallback() {
+                                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        unpublishedSubscribe.setVisibility(View.INVISIBLE);
+                        menuController.useMenu(true);
+
+                    }
+                });
+            }
         }
 
-        toolbar = findViewById(R.id.toolbar);
-        drawerLayout = findViewById(R.id.draw_layout_experiment_view);
-        navigationView = findViewById(R.id.navigator);
-
-        setSupportActionBar(toolbar);
-
-        menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu();
     }
 
-    private void executeTrials(String type, int minTrials){
-        Intent intent = new Intent(ExperimentViewActivity.this,Trial.class);
-        intent.putExtra("Trialtype", type);
 
-        intent.putExtra("MinTrials", minTrials);
-
-        startActivity(intent);
-
-    }
     private void publishButtonHandler(String indicator, Boolean isWhat){
         unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override

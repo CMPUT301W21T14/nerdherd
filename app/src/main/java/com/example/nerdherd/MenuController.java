@@ -28,6 +28,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private SharedPreferences.Editor editor;
     private Menu menu;
     private MenuItem viewExperiments;
+    private MenuItem trails;
     private String loggedInName = "Logged In";
     private String loggedInId = "User Id";
     private String userName = "User Name";
@@ -42,7 +43,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         this.drawerLayout = drawerLayout;
     }
 
-    public void useMenu(){
+    public void useMenu(Boolean show){
         actionBarDrawerToggle = new ActionBarDrawerToggle((Activity)context, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -50,6 +51,14 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
 
         menu = navigationView.getMenu();
         viewExperiments =menu.findItem(R.id.experiment_view);
+        trails = menu.findItem(R.id.experiment_trails);
+
+        if (show) {
+            trails.setVisible(true);
+        }
+        else{
+            trails.setVisible(false);
+        }
 
         if (context instanceof  ExperimentViewActivity){
             viewExperiments.setVisible(true);
@@ -82,6 +91,12 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
 
         if (item.getItemId() == R.id.my_experiments && !(context instanceof MyExperimentsActivity)){
             intent = new Intent(context, MyExperimentsActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.my_subscription && !(context instanceof MySubscriptionActivity)){
+            intent = new Intent(context, MySubscriptionActivity.class);
             context.startActivity(intent);
             ((Activity)context).finish();
         }

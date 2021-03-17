@@ -54,7 +54,7 @@ public class MyExperimentsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         menuController = new MenuController(MyExperimentsActivity.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu();
+        menuController.useMenu(false);
 
         RecyclerView recyclerView = findViewById(R.id.experimentprofile_recyclerView);
         listener = new MyExperimentAdapter.onClickListener() {

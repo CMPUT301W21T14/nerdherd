@@ -30,6 +30,7 @@ public class CreateExperimentActivity extends AppCompatActivity {
     private FireStoreController fireStoreController;
     private ArrayList<Experiment> experimentList;
     private Boolean valid;
+    private ArrayList<String> idList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class CreateExperimentActivity extends AppCompatActivity {
         String minTrialsString = minTrialsView.getText().toString();
         String experimentTitle = editTitle.getText().toString();
 
+        idList = new ArrayList<String>();
+
         int minTrials;
 
         if (experimentTitle.length() == 0 || experimentTitle.length() > 15){
@@ -107,7 +110,7 @@ public class CreateExperimentActivity extends AppCompatActivity {
 
         fireStoreController = new FireStoreController();
         experimentList = new ArrayList<Experiment>();
-        fireStoreController.experimentReader(experimentList, new FireStoreController.FireStoreExperimentReadCallback() {
+        fireStoreController.createExperimentReader(experimentList, new FireStoreController.FireStoreCreateExperimentReadCallback() {
             @Override
             public void onCallback(ArrayList<Experiment> experiments) {
 
@@ -119,8 +122,8 @@ public class CreateExperimentActivity extends AppCompatActivity {
                     }
                 }
 
-                if (valid){
-                    Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+                if (valid) {
+                    Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked(), idList);
                     fireStoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
                         @Override
                         public void onCallback() {
@@ -132,12 +135,11 @@ public class CreateExperimentActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "The title is already used, please try another one. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
+        }, new FireStoreController.FireStoreCreateExperimentReadFailCallback(){
             @Override
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
