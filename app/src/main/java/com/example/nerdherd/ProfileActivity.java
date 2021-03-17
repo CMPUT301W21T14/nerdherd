@@ -71,6 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ArrayList<Experiment> returneditems;
 
     private int current_exp;
+    private int publicUSer_exp;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -124,7 +125,25 @@ public class ProfileActivity extends AppCompatActivity {
                     getDescription();
                     edtUserProfile.setVisibility(View.GONE);
                     usersExpDetailed.setVisibility(View.GONE);
-
+                    fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentReadCallback() {
+                        @Override
+                        public void onCallback(ArrayList<Experiment> experiments) {
+                            publicUSer_exp = 0;
+                            for (int counter = 0; counter < experiments.size(); counter++) {
+                                Log.d("current user id: ", id);
+                                if (id.equals(experiments.get(counter).getOwnerProfile().getId())) {
+                                    publicUSer_exp+=1;
+                                    Log.d("exp description", experiments.get(counter).getDescription());
+                                }
+                            }
+                            userExperiments.setText(current_exp+""+" Experiments Currently Owned");
+                        }
+                    }, new FireStoreController.FireStoreExperimentReadFailCallback() {
+                        @Override
+                        public void onCallback() {
+                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
             else{
@@ -180,6 +199,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+
     public void getDescription() {
         current_exp = 0;
         savedList = new ArrayList<Experiment>();
@@ -189,8 +209,6 @@ public class ProfileActivity extends AppCompatActivity {
         fireStoreController.experimentReader(savedList, new FireStoreController.FireStoreExperimentReadCallback() {
             @Override
             public void onCallback(ArrayList<Experiment> experiments) {
-
-
                 for (int counter = 0; counter < experiments.size(); counter++) {
 //                for (Experiment allExperiment:experiments) {
                     if (experiments.get(counter).getOwnerProfile().getId().equals(GlobalVariable.profile.getId())) {
@@ -199,6 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
 //                    savedList.add(allExperiment);
 //                    returneditems.add(allExperiment);
                     }
+
                 }
 
                 userExperiments.setText(current_exp+""+" Experiments Currently Owned");
