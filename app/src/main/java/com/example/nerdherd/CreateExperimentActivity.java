@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CreateExperimentActivity extends AppCompatActivity {
@@ -26,6 +27,9 @@ public class CreateExperimentActivity extends AppCompatActivity {
     private Spinner experimentTypeSpinner;
     private String[] experimentTypes = {"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"};
     private String experimentType = "Binomial Trial";
+    private FireStoreController fireStoreController;
+    private ArrayList<Experiment> experimentList;
+    private Boolean valid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,7 @@ public class CreateExperimentActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter a description for your experiment.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(experimentDescription.length() > 50) { //description must be between 1 and 20 characters
+        if(experimentDescription.length() > 50) { //description must be between 1 and 50 characters
             Toast.makeText(this, "The experiment description must be between 1 and 20 characters", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -101,14 +105,39 @@ public class CreateExperimentActivity extends AppCompatActivity {
 
         //TODO Location Dialog will be implemented here later...
 
-        Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle,"Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
-        FireStoreController firestoreController = new FireStoreController();
-        firestoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
+        fireStoreController = new FireStoreController();
+        experimentList = new ArrayList<Experiment>();
+        fireStoreController.experimentReader(experimentList, new FireStoreController.FireStoreExperimentReadCallback() {
             @Override
-            public void onCallback() {
-                finish();
+            public void onCallback(ArrayList<Experiment> experiments) {
+
+                valid = true;
+
+                for (Experiment existedExperiment : experiments) {
+                    if (existedExperiment.getTitle().equals(experimentTitle)) {
+                        valid = false;
+                    }
+                }
+
+                if (valid){
+                    Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked());
+                    fireStoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
+                        @Override
+                        public void onCallback() {
+                            finish();
+                        }
+                    }, new FireStoreController.FireStoreExperimentFailCallback() {
+                        @Override
+                        public void onCallback() {
+                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "The title is already used, please try another one. Thank you.", Toast.LENGTH_SHORT).show();
+                }
             }
-        }, new FireStoreController.FireStoreExperimentFailCallback() {
+        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
             @Override
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
