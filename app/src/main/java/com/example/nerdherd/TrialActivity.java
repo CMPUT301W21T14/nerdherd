@@ -111,7 +111,6 @@ public class TrialActivity extends AppCompatActivity {
             adapter = new TrialsAdapter(targetexp.getTrials(), null);
             adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
             adapterController.useAdapter();
-            adapter.notifyDataSetChanged();
 //
         }
     }
