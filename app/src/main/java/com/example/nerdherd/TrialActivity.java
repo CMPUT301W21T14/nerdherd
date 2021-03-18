@@ -55,6 +55,8 @@ public class TrialActivity extends AppCompatActivity {
 
         menuController.useMenu(true);
 
+        Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+
         //types of trials:
         //"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"
 
@@ -63,6 +65,21 @@ public class TrialActivity extends AppCompatActivity {
         if (trialType.equals("Binomial Trial")){
 //            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
 //            startActivityForResult(intent, 2);
+
+            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Binomial", new FireStoreController.FireStoreCertainKeepCallback() {
+                @Override
+                public void onCallback(ArrayList<Trial> list) {
+                    adapter = new TrialsAdapter(list, null, "Binomial Trial");
+                    adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
+                    adapterController.useAdapter();
+                }
+            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             addtrials.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,20 +144,6 @@ public class TrialActivity extends AppCompatActivity {
             });
 
             //targetexp.getTrials();
-            fireStoreController.keepGetTrialData(trialArrayList, "Binomial",targetexp.getTitle(), new FireStoreController.FireStoreCertainKeepCallback() {
-                @Override
-                public void onCallback(ArrayList<Trial> list) {
-                    adapter = new TrialsAdapter(targetexp.getTrials(), null, "Binomial Trial");
-                    adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
-                    adapterController.useAdapter();
-                }
-            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
-                @Override
-                public void onCallback() {
-                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            });
-//
         }
     }
 
