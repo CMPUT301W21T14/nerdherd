@@ -296,6 +296,19 @@ public class FireStoreController {
                                 BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
                                 itemList.add(binomialTrial);
                             }
+                            if (type.equals("Count trial")) {
+                                CountTrial countTrial = new CountTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
+                                itemList.add(countTrial);
+                            }
+                            if (type.equals("Measurement trial")) {
+                                MeasurementTrial measurementTrial = new MeasurementTrial(Integer.parseInt(hashTrial.get("totalMeasurementCount").toString()));
+                                itemList.add(measurementTrial);
+                            }
+                            if (type.equals("Non-negative trial")) {
+                                NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
+                                itemList.add(nonnegativeTrial);
+                            }
+
                         }
                     }
                 }

@@ -11,4 +11,12 @@ public class MeasurementTrial extends Trial {
     public int totalMeasureCount(){
         return totalMeasurementCount;
     }
+
+    public int getTotalMeasurementCount() {
+        return totalMeasurementCount;
+    }
+
+    public void setTotalMeasurementCount(int totalMeasurementCount) {
+        this.totalMeasurementCount = totalMeasurementCount;
+    }
 }

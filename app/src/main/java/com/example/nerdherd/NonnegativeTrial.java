@@ -10,4 +10,12 @@ public class NonnegativeTrial extends Trial{
     public int totalNonnegativecount(){
         return totalNonnegativeCount;
     }
+
+    public int getTotalNonnegativeCount() {
+        return totalNonnegativeCount;
+    }
+
+    public void setTotalNonnegativeCount(int totalNonnegativeCount) {
+        this.totalNonnegativeCount = totalNonnegativeCount;
+    }
 }
