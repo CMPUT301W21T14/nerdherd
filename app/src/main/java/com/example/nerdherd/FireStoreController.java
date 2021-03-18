@@ -56,6 +56,7 @@ public class FireStoreController {
     private Boolean locationRequirement;
     private HashMap<String, String> hashMapProfile;
     private ArrayList<String> idList;
+    private ArrayList<Trial> trialList;
 
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -227,6 +228,7 @@ public class FireStoreController {
         experimentData.put("Owner Profile", newExperiment.getOwnerProfile());
         experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
         experimentData.put("Subscriber Id", newExperiment.getSubscriberId());
+        experimentData.put("Trial List", newExperiment.getTrials());
         // Find user information and load data
         accessor(experimentIndicator);
         collectionReference
@@ -265,13 +267,39 @@ public class FireStoreController {
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
-
+                    trialList = (ArrayList<Trial>) doc.getData().get("Trial List");
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, new ArrayList<Trial>());
+                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trialList);
                     experimentList.add(experiment);
                 }
 
                 fireStoreExperimentReadCallback.onCallback(experimentList);
+            }
+        });
+    }
+
+    public void keepGetTrialData(ArrayList<Trial> itemList, String id, String type, FireStoreCertainKeepCallback fireStoreCertainKeepCallback, FireStoreCertainKeepFailCallback fireStoreCertainKeepFailCallback){
+        accessor(experimentIndicator);
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null){
+                    fireStoreCertainKeepFailCallback.onCallback();
+                    return;
+                }
+
+                itemList.clear();
+                for (QueryDocumentSnapshot doc : value){
+                    if(doc.getId().equals(id)){
+                        for(HashMap hashTrial : (ArrayList<HashMap>)(doc.getData().get("Trial List"))){
+                            if (type.equals("Binomial")) {
+                                BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
+                                itemList.add(binomialTrial);
+                            }
+                        }
+                    }
+                }
+                fireStoreCertainKeepCallback.onCallback(itemList);
             }
         });
     }
@@ -365,6 +393,12 @@ public class FireStoreController {
         void onCallback(ArrayList<Experiment> experiments);
     }
     public interface FireStoreCreateExperimentReadFailCallback {
+        void onCallback();
+    }
+    public interface FireStoreCertainKeepCallback{
+        void onCallback(ArrayList<Trial> list);
+    }
+    public interface FireStoreCertainKeepFailCallback{
         void onCallback();
     }
 }
