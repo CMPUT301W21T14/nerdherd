@@ -62,6 +62,10 @@ public class MySubscriptionActivity extends AppCompatActivity {
             public void onClick(View view, int index) {
                 experimentView = new Intent(MySubscriptionActivity.this, ExperimentViewActivity.class);
                 GlobalVariable.indexForExperimentView = index;
+//                Bundle bundle = new Bundle();
+//                //when i make instance of xperimentView, if it contains this and it is not null, then it was instantiated by
+//                bundle.putString("I Subscribed", GlobalVariable.profile.getId());
+//                experimentView.putExtras(bundle);
                 startActivity(experimentView);
                 finish();
             }

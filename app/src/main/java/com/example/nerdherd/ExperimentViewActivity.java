@@ -39,12 +39,19 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private String experimentIndicator = "Experiment";
     private String publishIndicator = "Published";
     private ArrayList<String> idList;
-
+    private Intent publicuser;
+    private String val;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
+//        Bundle pUser = publicuser.getExtras();
+//        if (pUser != null){
+//            Intent intent = getIntent();
+//            val = intent.getStringExtra("I Subscribed");
+//
+//        }
         experimentTitle = findViewById(R.id.experiment_title);
         experimentOwner = findViewById(R.id.experiment_owner);
         experimentStatus = findViewById(R.id.experiment_status);
@@ -110,6 +117,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
             if (idList.contains(GlobalVariable.profile.getId())){
                 unpublishedSubscribe.setVisibility(View.INVISIBLE);
                 menuController.useMenu(true);
+                menuController.setTrialType(experiment.getType());
             }
             else {
                 unpublishedSubscribe.setText("Subscribe");
@@ -132,6 +140,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
                         });
 
                         unpublishedSubscribe.setVisibility(View.INVISIBLE);
+                        menuController.setTrialType(experiment.getType());
                         menuController.useMenu(true);
 
                     }

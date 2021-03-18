@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,7 +36,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private String userEmail = "User Email";
     private String userPassword = "User Password";
     private String userAvatar = "User Avatar";
-
+    private String trialType;
     public MenuController(Context context, Toolbar toolbar, NavigationView navigationView, DrawerLayout drawerLayout) {
         this.context = context;
         this.toolbar = toolbar;
@@ -70,6 +71,9 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    public void setTrialType(String type){
+        trialType = type;
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.user_search && !(context instanceof SearchUserActivity)){
@@ -120,6 +124,14 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             context.startActivity(intent);
             ((Activity)context).finish();
         }
+
+        if (item.getItemId() == R.id.experiment_trails && !(context instanceof TrialActivity)){
+            intent = new Intent(context, TrialActivity.class);
+            intent.putExtra("Type of Trial",trialType);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
 
         return true;
     }
