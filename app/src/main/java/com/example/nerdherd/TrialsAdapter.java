@@ -16,10 +16,11 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
 
     ArrayList<Trial> trials;
     TrialsAdapter.onClickListener listener;
-
-    public TrialsAdapter(ArrayList<Trial> trials, TrialsAdapter.onClickListener listener){
+    private String trialtype;
+    public TrialsAdapter(ArrayList<Trial> trials, TrialsAdapter.onClickListener listener, String trialType){
         this.trials = trials;
         this.listener = listener;
+        this.trialtype = trialType;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -51,9 +52,20 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.user_trial.setText((BinomialTrial)trials.get(position) +"");
+        if (trialtype.equals("Binomial Trial")){
+            holder.user_trial.setText(((BinomialTrial)trials.get(position)).getSuccess()+"");
+        }
+        if(trialtype.equals("Count trial")){
+            holder.user_trial.setText(((CountTrial)trials.get(position)).totaltrialCount()+"");
+        }
+        if(trialtype.equals("Measurement trial")){
+            holder.user_trial.setText(((MeasurementTrial)trials.get(position)).totalMeasureCount()+"");
+        }
+        if(trialtype.equals("Nonnegative_Integer trial")){
+            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).totalNonnegativecount()+"");
+        }
     }
-    
+
 
 
     @Override
