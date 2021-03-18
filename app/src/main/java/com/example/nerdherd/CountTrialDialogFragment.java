@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,10 @@ public class CountTrialDialogFragment extends DialogFragment {
 
     private TextView Counter;
 
+    private int minTrials;
+    public CountTrialDialogFragment(int minTrials){
+        this.minTrials = minTrials;
+    }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
@@ -56,7 +61,13 @@ public class CountTrialDialogFragment extends DialogFragment {
                         if (count[0] == 0){
                             count[0] = 0;
                         }
-                        ((TrialActivity) getActivity()).updateCountTrialView();
+                        //if total number of trials taken is less than the minimum trials
+                        //required then u will be informed
+                        if (count[0]< minTrials){
+                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
+                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
+                        }
+                        ((TrialActivity) getActivity()).updateCountTrialView(count, minTrials);
                     }
                 })
 

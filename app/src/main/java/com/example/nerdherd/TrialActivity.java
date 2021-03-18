@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class TrialActivity extends AppCompatActivity {
 
     private String trialType;
+    private int mintrials;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Toolbar toolbar;
@@ -43,23 +44,31 @@ public class TrialActivity extends AppCompatActivity {
         //"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"
 
         trialType = getIntent().getStringExtra("Type of Trial");
+        mintrials = getIntent().getIntExtra("Min of Trial", -1);
         if (trialType.equals("Binomial Trial")){
 //            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
 //            startActivityForResult(intent, 2);
             addtrials.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new BinomialTrialDialogFragment().show(getSupportFragmentManager(), "EDIT_TEXT");
+                    new BinomialTrialDialogFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT");
                 }
             });
         }
         if (trialType.equals("Count")){
-//            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
-//            startActivityForResult(intent, 2);
             addtrials.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new CountTrialDialogFragment().show(getSupportFragmentManager(), "EDIT_TEXT2");
+                    new CountTrialDialogFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT2");
+                }
+            });
+        }
+        if (trialType.equals("Measurement")){
+
+            addtrials.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new MeaurementTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT3");
                 }
             });
         }
@@ -68,12 +77,25 @@ public class TrialActivity extends AppCompatActivity {
         }
     }
 
-    public void updateBinomialTrialView(){
-
+    public void updateBinomialTrialView(int success, int failure, int minTrial){
+        if (success + failure < minTrial){
+            Log.d("do not update", String.valueOf(success));
+        }
     }
 
-    public void updateCountTrialView(){
+    public void updateCountTrialView(int[] count, int minTrial){
+        if (count[0] < minTrial){
+            Log.d("do not update", String.valueOf(count[0]));
+        }
+    }
+    public void updateMeasurementTrialView(ArrayList<Double> measurements, int minTrial){
+        if (measurements.size() < minTrial){
+            Log.d("do not update", String.valueOf(measurements.size()));
 
+        }
+        else{
+            Log.d("array val confirm", String.valueOf(measurements.get(minTrial-1)));
+        }
     }
 
 //    @Override

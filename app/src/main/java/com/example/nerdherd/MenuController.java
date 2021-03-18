@@ -37,6 +37,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private String userPassword = "User Password";
     private String userAvatar = "User Avatar";
     private String trialType;
+    private int mintrial;
     public MenuController(Context context, Toolbar toolbar, NavigationView navigationView, DrawerLayout drawerLayout) {
         this.context = context;
         this.toolbar = toolbar;
@@ -74,6 +75,11 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     public void setTrialType(String type){
         trialType = type;
     }
+
+    public void setMinTrials(int MinTrials){
+        mintrial = MinTrials;
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.user_search && !(context instanceof SearchUserActivity)){
@@ -128,6 +134,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         if (item.getItemId() == R.id.experiment_trails && !(context instanceof TrialActivity)){
             intent = new Intent(context, TrialActivity.class);
             intent.putExtra("Type of Trial",trialType);
+            intent.putExtra("Min of Trial", mintrial);
             context.startActivity(intent);
             ((Activity)context).finish();
         }

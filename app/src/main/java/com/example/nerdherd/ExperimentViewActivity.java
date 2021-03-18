@@ -118,6 +118,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 unpublishedSubscribe.setVisibility(View.INVISIBLE);
                 menuController.useMenu(true);
                 menuController.setTrialType(experiment.getType());
+                menuController.setMinTrials(experiment.getMinTrials());
             }
             else {
                 unpublishedSubscribe.setText("Subscribe");
@@ -141,6 +142,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
                         unpublishedSubscribe.setVisibility(View.INVISIBLE);
                         menuController.setTrialType(experiment.getType());
+                        menuController.setMinTrials(experiment.getMinTrials());
                         menuController.useMenu(true);
 
                     }
