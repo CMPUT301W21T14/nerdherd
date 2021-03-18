@@ -40,8 +40,13 @@ public class MeaurementTrialFragment extends DialogFragment {
         Recordtbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                measures = Double.parseDouble(Measurement_val.getText().toString());
-                measurements.add(measures);
+                if (!Measurement_val.getText().toString().equals("")){
+                    measures = Double.parseDouble(Measurement_val.getText().toString());
+                    measurements.add(measures);
+                }
+                else{
+                    Toast.makeText(getContext(), "Invalid Input", Toast.LENGTH_SHORT).show();
+                }
                 Measurement_val.setText("");
 
             }
