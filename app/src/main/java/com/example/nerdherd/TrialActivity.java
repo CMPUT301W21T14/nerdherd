@@ -84,8 +84,14 @@ public class TrialActivity extends AppCompatActivity {
                 }
             });
         }
-        else{
-            Log.d("trial type", trialType);
+        if (trialType.equals("Non-Negative Integer Count")){
+
+            addtrials.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new NonnegativeTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT4");
+                }
+            });
         }
     }
 
@@ -108,7 +114,7 @@ public class TrialActivity extends AppCompatActivity {
             Log.d("something", "trying new"+ targetexp.getTrials().toString());
 
             //targetexp.getTrials();
-            adapter = new TrialsAdapter(targetexp.getTrials(), null);
+            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Binomial Trial");
             adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
             adapterController.useAdapter();
 //
@@ -119,6 +125,20 @@ public class TrialActivity extends AppCompatActivity {
         if (count[0] < minTrial){
             Log.d("do not update", String.valueOf(count[0]));
         }
+        else{
+            Trial t1 = new CountTrial(count[0]);
+            //experiment has trials
+            //creating new experiment - but i want access to
+            Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+            targetexp.getTrials().add(t1);
+
+
+            //targetexp.getTrials();
+            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Count trial");
+            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
+            adapterController.useAdapter();
+//
+        }
     }
     public void updateMeasurementTrialView(ArrayList<Double> measurements, int minTrial){
         if (measurements.size() < minTrial){
@@ -126,7 +146,39 @@ public class TrialActivity extends AppCompatActivity {
 
         }
         else{
-            Log.d("array val confirm", String.valueOf(measurements.get(minTrial-1)));
+            Trial t1 = new MeasurementTrial(measurements.size());
+            //experiment has trials
+            //creating new experiment - but i want access to
+            Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+            targetexp.getTrials().add(t1);
+
+
+            //targetexp.getTrials();
+            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Measurement trial");
+            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
+            adapterController.useAdapter();
+//
+        }
+    }
+
+    public void updateNonnegativeTrialView(ArrayList<Integer>NonnegativeTrials, int minTrial){
+        if (NonnegativeTrials.size() < minTrial){
+            Log.d("do not update", String.valueOf(NonnegativeTrials.size()));
+
+        }
+        else{
+            Trial t1 = new NonnegativeTrial(NonnegativeTrials.size());
+            //experiment has trials
+            //creating new experiment - but i want access to
+            Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+            targetexp.getTrials().add(t1);
+
+
+            //targetexp.getTrials();
+            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Nonnegative_Integer trial");
+            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
+            adapterController.useAdapter();
+//
         }
     }
 
