@@ -267,7 +267,7 @@ public class FireStoreController {
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
 
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList);
+                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, new ArrayList<Trial>());
                     experimentList.add(experiment);
                 }
 
@@ -295,7 +295,7 @@ public class FireStoreController {
                         idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
 
                         ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-                        experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList);
+                        experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, new ArrayList<Trial>());
                         experimentList.add(experiment);
                     }
                     fireStoreCreateExperimentReadCallback.onCallback(experimentList);

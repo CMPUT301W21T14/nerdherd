@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -25,10 +28,19 @@ public class TrialActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private MenuController menuController;
     private FloatingActionButton addtrials;
+    private AdapterController adapterController;
+    private TrialsAdapter adapter;
+    private RecyclerView recyclerView;
+    ArrayList<Experiment> dataList;
+    ListView ExperimentList;
+    ArrayAdapter<Experiment> experimentAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trial);
+
+        dataList = new ArrayList<Experiment>();
+        recyclerView = findViewById(R.id.list_recyclerView);
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_trial_view);
@@ -77,9 +89,30 @@ public class TrialActivity extends AppCompatActivity {
         }
     }
 
+
+    private void showTrials(RecyclerView recyclerView, ArrayList<Trial> trials){
+        //use adapter
+    }
+
     public void updateBinomialTrialView(int success, int failure, int minTrial){
         if (success + failure < minTrial){
             Log.d("do not update", String.valueOf(success));
+        }
+        else{
+            Trial t1 = new BinomialTrial(success, failure);
+            //experiment has trials
+            //creating new experiment - but i want access to
+            Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+            targetexp.getTrials().add(t1);
+
+            Log.d("something", "trying new"+ targetexp.getTrials().toString());
+
+            //targetexp.getTrials();
+            adapter = new TrialsAdapter(targetexp.getTrials(), null);
+            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
+            adapterController.useAdapter();
+            adapter.notifyDataSetChanged();
+//
         }
     }
 

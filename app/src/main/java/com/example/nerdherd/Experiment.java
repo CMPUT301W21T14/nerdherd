@@ -16,8 +16,10 @@ public class Experiment implements Serializable {
     private boolean requireLocation = false;
     private boolean published = true;
     private ArrayList<String> subscriberId;
+    private ArrayList<Trial> trials;
 
-    public Experiment(Profile profile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published, ArrayList<String> subscriberId) {
+
+    public Experiment(Profile profile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published, ArrayList<String> subscriberId, ArrayList<Trial> trials) {
         // Let's allow to create Experiment using owner ID only
         // Search classes can search for owner
 
@@ -30,10 +32,16 @@ public class Experiment implements Serializable {
         this.requireLocation = requireLocation;
         this.published = published;
         this.subscriberId = subscriberId;
+        this.trials = trials;
     }
 
+    public ArrayList<Trial> getTrials() {
+        return trials;
+    }
 
-
+    public void setTrials(ArrayList<Trial> trials) {
+        this.trials = trials;
+    }
     // Let's use IDs for Experiment class
     /*
     public Profile getOwnerProfile() { return ownerProfile; }

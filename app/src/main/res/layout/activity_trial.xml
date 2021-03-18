@@ -27,6 +27,15 @@
             android:contentDescription="AddTrial"
             app:srcCompat="@android:drawable/ic_input_add"
             android:focusable="true"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            tools:layout_editor_absoluteX="47dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
