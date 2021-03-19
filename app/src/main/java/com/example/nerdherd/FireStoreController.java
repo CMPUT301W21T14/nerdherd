@@ -330,7 +330,7 @@ public class FireStoreController {
                                 itemList.add(countTrial);
                             }
                             if (type.equals("Measurement trial")) {
-                                MeasurementTrial measurementTrial = new MeasurementTrial(Integer.parseInt(hashTrial.get("totalMeasurementCount").toString()));
+                                MeasurementTrial measurementTrial = new MeasurementTrial((int)(Double.parseDouble(hashTrial.get("totalMeasurementCount").toString())));
                                 itemList.add(measurementTrial);
                             }
                             if (type.equals("Non-negative trial")) {
