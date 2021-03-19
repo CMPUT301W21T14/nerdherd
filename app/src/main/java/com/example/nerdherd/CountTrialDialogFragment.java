@@ -29,7 +29,7 @@ public class CountTrialDialogFragment extends DialogFragment {
     private int minTrials;
 
     /**
-     * Getter/setter for the class
+     * Getter/setter/constructor for the class
      * @param minTrials for the trial to be successful
      */
 

@@ -20,7 +20,7 @@ public class AdapterController {
 
     /**
      * Details per adapter
-     * Getter/setter of the class
+     * Getter/setter/constructor of the class
      * @param context of the adapter
      * @param recyclerView group that contains the views of the data
      * @param adapter itself

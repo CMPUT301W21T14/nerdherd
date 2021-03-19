@@ -1,7 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -27,6 +25,13 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+
+/**
+ * This handles when a user wants to search a specific experiment with keyword
+ * @author Utkarsh S. usaraswa
+ * @author Zhipeng Z. zhipeng4
+ * @author Harjot S. harjotsi
+ */
 
 public class SearchExperimentActivity extends AppCompatActivity{
 

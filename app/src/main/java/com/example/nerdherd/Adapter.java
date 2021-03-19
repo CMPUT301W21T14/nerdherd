@@ -24,7 +24,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     /**
      * Stores user's decision
-     * Getter/setter for the class
+     * Getter/setter/constructor for the class
      * @param images the image itself
      * @param listener to take user's input
      */

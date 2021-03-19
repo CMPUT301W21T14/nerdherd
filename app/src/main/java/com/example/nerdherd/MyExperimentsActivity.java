@@ -19,6 +19,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+/**
+ * The current logged in user sees his experiments for the app to store
+ * @author Zhipeng Z. zhipeng4
+ * @author Ogooluwa S. osameul
+ */
+
 public class MyExperimentsActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;

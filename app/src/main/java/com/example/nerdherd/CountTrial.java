@@ -12,7 +12,7 @@ public class CountTrial extends Trial {
     private Integer totalCount;
 
     /**
-     * Getter/setter of the class
+     * Getter/setter/constructor of the class
      * @param totalcount of the things observed
      */
 

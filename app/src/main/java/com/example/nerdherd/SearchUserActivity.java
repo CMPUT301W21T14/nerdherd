@@ -1,7 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -21,6 +19,13 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
+
+/**
+ * This handles when a user wants to search a specific user with keyword
+ * @author Utkarsh S. usaraswa
+ * @author Zhipeng Z. zhipeng4
+ * @author Harjot S. harjotsi
+ */
 
 public class SearchUserActivity extends AppCompatActivity {
 

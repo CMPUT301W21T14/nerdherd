@@ -1,9 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-/*
-* */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+
+/**
+ * Controls the menu of the app and stores the input of the user
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class MenuController implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -40,6 +42,15 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private String userAvatar = "User Avatar";
     private String trialType;
     private int mintrial;
+
+    /**
+     * Getter/setter/constructor of the class
+     * @param context stores menu details
+     * @param toolbar of the menu
+     * @param navigationView of the menu
+     * @param drawerLayout of the menu
+     */
+
     public MenuController(Context context, Toolbar toolbar, NavigationView navigationView, DrawerLayout drawerLayout) {
         this.context = context;
         this.toolbar = toolbar;

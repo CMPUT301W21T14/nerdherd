@@ -21,8 +21,6 @@ package com.example.nerdherd;
  * @author Alexander Y. Kleymenov
  * @version $Revision$
  */
-/* It helps in registering the userID and passwords
-* */
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

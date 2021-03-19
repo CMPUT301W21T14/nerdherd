@@ -1,10 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-/*It just helps showing the experiment in the main UI
-* */
-
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +10,21 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Shows the experiment in the main UI of the app
+ * @author Zhipeng Z. zhipeng4
+ */
+
 public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.ViewHolder> {
 
     ArrayList<Experiment> experiments;
     ExperimentAdapter.onClickListener listener;
+
+    /**
+     * Getter/setter/constructor for the app
+     * @param experiments add experiment
+     * @param listener for the app to wait for user's input
+     */
 
     public ExperimentAdapter(ArrayList<Experiment> experiments, ExperimentAdapter.onClickListener listener){
         this.experiments = experiments;

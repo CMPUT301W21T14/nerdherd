@@ -1,6 +1,5 @@
 package com.example.nerdherd;
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,22 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * The current logged in user's experiment information is stored for the app to access
+ * @author Zhipeng Z. zhipeng4
+ * @author Ogooluwa S. osameul
+ */
+
 public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapter.ViewHolder> {
 
     ArrayList<Experiment> experiments;
     MyExperimentAdapter.onClickListener listener;
+
+    /**
+     *Getter/setter/constructor of the app
+     * @param experiments this is the current experiment in focus
+     * @param listener for the app to listen to user's input
+     */
 
     public MyExperimentAdapter(ArrayList<Experiment> experiments, MyExperimentAdapter.onClickListener listener){
         this.experiments = experiments;

@@ -1,7 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +18,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+/**
+ * When the user wants to reset their login details
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class Reseter extends AppCompatActivity {
 

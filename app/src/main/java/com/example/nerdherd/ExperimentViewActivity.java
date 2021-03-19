@@ -1,8 +1,5 @@
 package com.example.nerdherd;
 
-/* It helps in viewing the experiment details.
-* */
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,6 +15,13 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+
+/**
+ * Helps in viewing the experiment details on the app
+ * @author Zhipeng Z. zhipeng4
+ * @author Andrew D. adearbor
+ * @author Tas S. saiyera
+ */
 
 public class ExperimentViewActivity extends AppCompatActivity {
 

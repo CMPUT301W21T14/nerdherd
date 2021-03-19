@@ -18,7 +18,7 @@ public class BinomialTrial extends Trial {
     private Integer failure;
 
     /**
-     * Getter/setter for the class
+     * Getter/setter/constructor for the class
      * @param success of the trial
      * @param failure of the trial
      */

@@ -1,6 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +15,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+/**
+ * Register for the app and how the user sees it on the app
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class RegisterActivity extends Activity {
 

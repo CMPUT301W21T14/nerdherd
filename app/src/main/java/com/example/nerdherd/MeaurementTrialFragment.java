@@ -31,7 +31,7 @@ public class MeaurementTrialFragment extends DialogFragment {
 
     /**
      * Constraint for the trial
-     * Getter/setter for the class
+     * Getter/setter/constructor for the class
      * @param minTrials for the trial to be successful
      */
 

@@ -1,6 +1,5 @@
 package com.example.nerdherd;
-//References: https://bit.ly/2OQhXof
-//            https://bit.ly/30UulWN
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -22,6 +21,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * This class displays all the stats of the experiments on the app screen for the user to see
+ * The class contains some reference from <a href="https://bit.ly/2OQhXof"></a>
+ * The class contains some reference from <a href="https://bit.ly/30UulWN"></a>
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class statsActivity extends AppCompatActivity {
 

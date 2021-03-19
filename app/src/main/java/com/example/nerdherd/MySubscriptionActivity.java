@@ -18,6 +18,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+/**
+ * Shows all the experiments the logged in user is currently subscribed to
+ * @author Zhipeng Z. zhipeng4
+ * @author Ogooluwa S. osameul
+ */
+
 public class MySubscriptionActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;

@@ -24,6 +24,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * Edit profile fragment class
+ * Fragment class for the user/owner to edit profile once the profile has been created
+ * @author Zhipeng Z. zhipeng4
+ */
+
 public class EditProfileFragment extends DialogFragment {
 
     //    private ImageView usersAvatar;

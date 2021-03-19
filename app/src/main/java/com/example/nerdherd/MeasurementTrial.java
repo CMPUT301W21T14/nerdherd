@@ -13,7 +13,7 @@ public class MeasurementTrial extends Trial {
 
     /**
      * Records for the user to keep track of
-     * Getter/setter of the class
+     * Getter/setter/constructor of the class
      * @param totalMeasurementCount to keep record
      */
 

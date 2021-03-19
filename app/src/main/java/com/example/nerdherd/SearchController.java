@@ -7,6 +7,14 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Search in the app is controlled by this class
+ * The controller class for Adapter to get notified of the user's behaviour and update the model class as needed
+ * @author Utkarsh S. usaraswa
+ * @author Zhipeng Z. zhipeng4
+ * @author Harjot S. harjotsi
+ */
+
 public class SearchController {
 
     public void searchUser(String keyword, ArrayList<Profile> profileList, ArrayList<Profile> resultList, UserNoResultCallBack userNoResultCallBack, UserResultCallBack userResultCallBack, UserNoKeywordCallBack userNoKeywordCallBack){
