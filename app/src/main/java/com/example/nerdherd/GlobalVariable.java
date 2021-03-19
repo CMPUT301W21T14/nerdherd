@@ -13,4 +13,6 @@ public class GlobalVariable {
     public static Activity editProfile;
     public static Integer indexForEdit = -1;
     public static Integer indexForExperimentView = -1;
+    public static String experimentType = "No";
+    public static Integer experimentMinTrials = -1;
 }

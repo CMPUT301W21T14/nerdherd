@@ -60,8 +60,8 @@ public class TrialActivity extends AppCompatActivity {
         //types of trials:
         //"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"
 
-        trialType = getIntent().getStringExtra("Type of Trial");
-        mintrials = getIntent().getIntExtra("Min of Trial", -1);
+        trialType = GlobalVariable.experimentType;
+        mintrials = GlobalVariable.experimentMinTrials;
         ///ArrayList<Integer> current_exp
 
 

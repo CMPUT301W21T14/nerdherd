@@ -108,7 +108,9 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 publishButtonHandler(publishIndicator, true);
             }
 
-            menuController.useMenu(false);
+            GlobalVariable.experimentType = experiment.getType();
+            GlobalVariable.experimentMinTrials = experiment.getMinTrials();
+            menuController.useMenu(true);
         }
         else{
             idList = GlobalVariable.experimentArrayList.get(index).getSubscriberId();
@@ -142,8 +144,8 @@ public class ExperimentViewActivity extends AppCompatActivity {
                             });
 
                             unpublishedSubscribe.setVisibility(View.INVISIBLE);
-                            menuController.setTrialType(experiment.getType());
-                            menuController.setMinTrials(experiment.getMinTrials());
+                            GlobalVariable.experimentType = experiment.getType();
+                            GlobalVariable.experimentMinTrials = experiment.getMinTrials();
                             menuController.useMenu(true);
 
                         }
