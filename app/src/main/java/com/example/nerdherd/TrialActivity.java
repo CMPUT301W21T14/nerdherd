@@ -45,6 +45,7 @@ public class TrialActivity extends AppCompatActivity {
     private TrialsAdapter.onClickListener listener;
     ArrayList<Experiment> dataList;
     ArrayList<Trial> trialList= new ArrayList<>();
+    ArrayList<Trial> mTrialList = new ArrayList<>();
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
     @Override
@@ -313,8 +314,8 @@ public class TrialActivity extends AppCompatActivity {
             //experiment has trials
             //creating new experiment - but i want access to
             Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-            targetexp.getTrials().add(t1);
-
+            mTrialList.add(t1);
+            targetexp.setTrials(mTrialList);
 
             fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
                 @Override
