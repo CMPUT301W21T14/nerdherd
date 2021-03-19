@@ -22,6 +22,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+/**
+ * Trial activity in the app
+ * 4 types of trial extend this class to get themselves visible on the app
+ * @author Ogooluwa S. osamuel
+ */
+
 public class TrialActivity extends AppCompatActivity {
 
     private String trialType;

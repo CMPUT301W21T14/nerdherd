@@ -1,7 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +10,26 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Adapter class for Trial method class
+ * This makes the trial visible on the app for the user/owner to choose/pick
+ * @author Ogooluwa S. osamuel
+ * @author Zhipeng Z. zhipeng4
+ */
+
 public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder> {
 
     ArrayList<Trial> trials;
     TrialsAdapter.onClickListener listener;
     private String trialtype;
+
+    /**
+     * Getter/setter of the class
+     * @param trials depending on which one the owner chooses
+     * @param listener to wait for the user/owner input
+     * @param trialType 1/4 options
+     */
+
     public TrialsAdapter(ArrayList<Trial> trials, TrialsAdapter.onClickListener listener, String trialType){
         this.trials = trials;
         this.listener = listener;

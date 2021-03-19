@@ -1,9 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-/*We have several avatars saved and user is given flexibility to chose the avatars
-* */
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+/**
+ * Profile avatar picker
+ * We have several avatars saved and user is given flexibility to chose the avatars
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class AvatarPicker extends AppCompatActivity {
 

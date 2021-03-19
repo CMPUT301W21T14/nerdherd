@@ -1,11 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
-/*It provides the LogIn interface, registerButton, LoginButton etc
-* There are various cool features which you'll see while running the App
-* */
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,6 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+/**
+ * Login activity in the app
+ * Login is the first thing the user sees despite them being a user or an owner
+ * It provides login interface, registration button, login button etc
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class LogInActivity extends AppCompatActivity {
 

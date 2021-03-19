@@ -16,6 +16,13 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
 
+/**
+ * Maintain consistency in the app
+ * 4 types of trials have been broken down into their model classes and fragment classes to maintain consistency and so that the app can follow everything being clicked on the screen that affects it
+ * Essentially to create and host dialog per trial
+ * @author Ogooluwa S. osamuel
+ */
+
 public class NonnegativeTrialFragment extends DialogFragment {
     private TextView Nonnegative_val;
     private String recorded_vals;
@@ -23,6 +30,13 @@ public class NonnegativeTrialFragment extends DialogFragment {
     private int minTrials;
     private boolean isInt;
     private int user_recordedVal;
+
+    /**
+     * Constraint for the trial
+     * Getter/setter for the class
+     * @param minTrials for the trial to be successful
+     */
+
     public NonnegativeTrialFragment(int minTrials){
         this.minTrials = minTrials;
     }

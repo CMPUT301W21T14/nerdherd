@@ -24,6 +24,14 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+/**
+ * Profile activity in the app
+ * Profile is unique per user with different parameters
+ * Currently logged in user/owner would see things differently
+ * @author Ogooluwa S. osamuel
+ * @author Zhipeng Z. zhipeng4
+ */
+
 public class ProfileActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;

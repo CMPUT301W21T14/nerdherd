@@ -1,12 +1,21 @@
 package com.example.nerdherd;
 
-/* This class inherits the Trial.
-*Measurement trials are repeated measurements and you record a decimal value of whatever was measured.
-* */
+/**
+ * Third of the 4 trial classes
+ * Allows user to perform a measurement trial or repeated measurements and record a decimal value of the recorded
+ * Inherits Trial class that controls all the information of specific trials regardless of its kind
+ * @author Ogooluwa S. osamuel
+ */
 
 public class MeasurementTrial extends Trial {
 
     private int totalMeasurementCount;
+
+    /**
+     * Records for the user to keep track of
+     * Getter/setter of the class
+     * @param totalMeasurementCount to keep record
+     */
 
     public MeasurementTrial(int totalMeasurementCount) {
         this.totalMeasurementCount = totalMeasurementCount;

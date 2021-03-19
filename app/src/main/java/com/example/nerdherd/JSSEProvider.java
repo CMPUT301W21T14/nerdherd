@@ -23,6 +23,11 @@ import java.security.Provider;
  * @author Alexander Y. Kleymenov
  * @version $Revision$
  */
+
+/**
+ * Maintains secure internet communication for the app to run smoothly
+ */
+
 public final class JSSEProvider extends Provider {
 
     public JSSEProvider() {

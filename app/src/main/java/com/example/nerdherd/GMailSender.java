@@ -40,6 +40,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * GMail connection to the app
+ * Connects to the main GMail domain when the new user signs up for the app
+ */
+
 public class GMailSender extends javax.mail.Authenticator {
     private String mailhost = "smtp.gmail.com";
     private String user;
@@ -49,6 +54,12 @@ public class GMailSender extends javax.mail.Authenticator {
     static {
         Security.addProvider(new JSSEProvider());
     }
+
+    /**
+     * Getter/setter for the app
+     * @param user for the app
+     * @param password for the app
+     */
 
     public GMailSender(String user, String password) {
         this.user = user;

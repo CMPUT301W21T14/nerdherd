@@ -1,9 +1,15 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+/**
+ * Controller class for Profile model class
+ * The controller class for Profile to get notified of the user's behaviour and update the model class as needed
+ * @author Ogooluwa S. osamuel
+ * @author Zhipeng Z. zhipeng4
+ */
+
 
 public class ProfileController {
     private String name;
@@ -15,7 +21,16 @@ public class ProfileController {
     private Integer[] imageList= {R.drawable.zelda, R.drawable.link, R.drawable.mipha, R.drawable.urbosa, R.drawable.riju, R.drawable.revali, R.drawable.daruk, R.drawable.impa, R.drawable.purah, R.drawable.purah_6_years_old, R.drawable.yunobo, R.drawable.king_rhoam, R.drawable.sidon};
     private ArrayList<Integer> imageArray = new ArrayList(Arrays.asList(imageList));
 
-    // Constructor
+    /**
+     * Controls the profile with all the necessary parameters
+     * Getter/setter of the app
+     * @param name of user
+     * @param password of user
+     * @param email of user
+     * @param id of user
+     * @param avatar of user
+     */
+
     public ProfileController(String name, String password, String email, String id, Integer avatar) {
         this.name = name;
         this.password = password;

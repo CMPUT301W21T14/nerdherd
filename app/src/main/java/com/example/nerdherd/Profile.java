@@ -4,12 +4,29 @@ package com.example.nerdherd;
 
 import android.graphics.Bitmap;
 
+/**
+ * User profile
+ * This has all the neccessary requirements of any profile
+ * @author Zhipeng Z. zhipeng4
+ * @author Ogooluwa S. osamuel
+ */
+
 public class Profile {
     private String name;
     private String password;
     private String email;
     private Integer avatar;
     private String id;
+
+    /**
+     * Specific requirements of the profile
+     * Getter/setter of the class
+     * @param name of the user
+     * @param password of the user
+     * @param email of the user
+     * @param id of the user
+     * @param avatar of the user
+     */
 
     public Profile(String name, String password, String email, String id, Integer avatar) {
         this.name = name;

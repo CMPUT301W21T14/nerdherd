@@ -1,14 +1,5 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
-/*This class exists to show the image in the register
-*
-* */
-
-// The following class is modified form the tutorial
-// https://developer.android.com/
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +10,24 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * The class allows it to be visible for the user to pick and choose
+ * The user gets to pick an image for their register
+ * The class contains some motivation from a tutorial found here <a href="https://developer.android.com/"></a>
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     ArrayList<Integer> images;
     onClickListener listener;
+
+    /**
+     * Stores user's decision
+     * Getter/setter for the class
+     * @param images the image itself
+     * @param listener to take user's input
+     */
 
     public Adapter(ArrayList<Integer> images, onClickListener listener) {
         this.images = images;

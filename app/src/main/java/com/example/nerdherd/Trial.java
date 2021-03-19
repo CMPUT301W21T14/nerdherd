@@ -1,11 +1,14 @@
 package com.example.nerdherd;
 
+/**
+ * Extends trial
+ * @author Ogooluwa S. osameul
+ */
+
 public class Trial {
     public Trial() {
 
     }
-
-
 
 //
 //    private int totalTrial;

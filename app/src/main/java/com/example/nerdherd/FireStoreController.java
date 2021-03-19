@@ -1,8 +1,5 @@
 package com.example.nerdherd;
-// Modified from youtube
-// Author: Zhipeng Z zhipeng4
-/*It controls the inflow and outflow of the data and stores that in the remote server Firestore
-* */
+
 import android.util.Log;
 import android.util.Pair;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +25,15 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+/**
+ * Database connection to the app
+ * It controls the inflow and outflow of the data and stores that in the remote server Firestore
+ * Some motivation was taken from youtube tutorials on Firestore
+ * @author Zhipeng Z. zhipeng4
+ * @author Tas S. saiyera
+ */
+
 public class FireStoreController {
     private static final String TAG = "FireStoreController";
     private FirebaseFirestore firebaseFirestore;

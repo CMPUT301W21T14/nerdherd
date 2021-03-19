@@ -11,13 +11,24 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+/**
+ * User visible on the app
+ * Adapter class for user to opt their desired parameters
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     ArrayList<Profile> profiles;
     ArrayList<Integer> images;
     UserAdapter.onClickListener listener;
+
+    /**
+     * Getter/setter/constructor for the class
+     * @param profiles of the user
+     * @param images of the user
+     * @param listener of the user
+     */
 
     public UserAdapter(ArrayList<Profile> profiles, ArrayList<Integer> images, UserAdapter.onClickListener listener){
         this.profiles = profiles;

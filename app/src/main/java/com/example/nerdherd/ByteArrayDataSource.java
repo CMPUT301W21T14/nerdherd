@@ -29,6 +29,11 @@ import java.io.OutputStream;
 
 import javax.activation.DataSource;
 
+/**
+ * Datasource backed by a byte array which could be passed directly or could be initialized if need be
+ * Getter/setter for the class
+ */
+
 public class ByteArrayDataSource implements DataSource {
     private byte[] data;
     private String type;

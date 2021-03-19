@@ -1,8 +1,5 @@
 package com.example.nerdherd;
 
-/* This lets the owner to create the Experiment for the users.
-* */
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,6 +22,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+/**
+ * Experiment activity in the app
+ * Experiments are shown on the app where the owner can create experiment for the users
+ * @author Zhipeng Z. zhipeng4
+ * @author Andrew D. adearbor
+ * @author Tas S. saiyera
+ */
 
 public class CreateExperimentActivity extends AppCompatActivity {
 
@@ -69,6 +74,11 @@ public class CreateExperimentActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    /**
+     * Owner is allowed to make changes to their owned trial for the users
+     * @param view it on the app
+     */
 
     public void createExperiment(View view) {
         EditText editDescriptionView = (EditText) findViewById(R.id.experiment_description_editText);

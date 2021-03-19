@@ -1,10 +1,12 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
 import android.app.Activity;
-
 import java.util.ArrayList;
+
+/**
+ * Global variables for the app to use when need be
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class GlobalVariable {
     public static Profile profile;

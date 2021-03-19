@@ -1,13 +1,13 @@
 package com.example.nerdherd;
 
-// Author: Zhipeng Z zhipeng4
-
-/*It gives all the possible details an Experiment possess like owner of that Experiment, title etc.
-* This defines the specificity per Experiment.
-* */
-
 import java.io.Serializable;
 import java.util.ArrayList;
+
+/**
+ * Specificity per experiment
+ * It gives all the possible details an Experiment possess like owner of that Experiment, title etc for the owner to set as per their needs
+ * @author Zhipeng Z. zhipeng4
+ */
 
 public class Experiment implements Serializable {
 
@@ -22,6 +22,23 @@ public class Experiment implements Serializable {
     private ArrayList<String> subscriberId;
     private ArrayList<Trial> trials;
 
+    /**
+     * Experiment describer
+     * The owners can tweak their experiment based on their needs
+     * @param profile owner of the experiment
+     * @param title the name of the experiment
+     * @param status boolean stating activity of the app
+     * @param description brief explanation of the app purpose
+     * @param type the kind of trial
+     * @param minTrials specify a number
+     * @param requireLocation geolocation availability
+     * @param published boolean confirmation of it being visible to the users
+     * @param subscriberId
+     * @param trials
+     * @author Zhipeng Z. zhipeng 4
+     * @author Andrew D. adearbor
+     * @author Tas S. saiyera
+     */
 
     public Experiment(Profile profile, String title, String status, String description, String type, int minTrials, boolean requireLocation, boolean published, ArrayList<String> subscriberId, ArrayList<Trial> trials) {
         // Let's allow to create Experiment using owner ID only

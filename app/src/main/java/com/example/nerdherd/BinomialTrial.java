@@ -1,19 +1,27 @@
 package com.example.nerdherd;
 
-
-/* This allows the user to perform the Binomial trail giving the boolean outcomes.
-* This inherits the Trail class
-*/
-
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
+
+/**
+ * First of the 4 trial classes
+ * Allows user to perform a binomial trial with boolean outcomes
+ * Inherits Trial class that controls all the information of specific trials regardless of its kind
+ * @author Ogooluwa S. osamuel
+ */
 
 public class BinomialTrial extends Trial {
 
     //will be responsible for just setting the values and stuff
     private Integer success;
     private Integer failure;
+
+    /**
+     * Getter/setter for the class
+     * @param success of the trial
+     * @param failure of the trial
+     */
 
     BinomialTrial (Integer success, Integer failure)
     {

@@ -15,14 +15,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * Maintain consistency in the app
+ * 4 types of trials have been broken down into their model classes and fragment classes to maintain consistency and so that the app can follow everything being clicked on the screen that affects it
+ * Essentially to create and host dialog per trial
+ * @author Ogooluwa S. osamuel
+ */
+
 public class BinomialTrialDialogFragment extends DialogFragment {
 
     private TextView successCounter,failureCounter;
 
     private int minTrials;
+
+    /**
+     * Constraint for the trial
+     * Getter/setter for the class
+     * @param minTrials for the trial to be successful
+     */
+
     public BinomialTrialDialogFragment(int minTrials){
         this.minTrials = minTrials;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
