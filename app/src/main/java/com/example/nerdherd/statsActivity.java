@@ -57,6 +57,10 @@ public class statsActivity extends AppCompatActivity {
                         showList.add(allExperiment);
                     }
                 }
+//                if targetexp.getType().equals("Binomial Trial")
+//                {
+//
+//                }
                 calculate(showList);
                 //                showExperiments(recyclerView, showList);
             }
@@ -78,8 +82,9 @@ public class statsActivity extends AppCompatActivity {
     public void calculate(ArrayList<Experiment> showList){
 
         for (int counter = 0; counter < showList.size();counter++){
-            BinomialTrial binomialTrial = (BinomialTrial)showList.get(counter).getTrials().get(0);
-            Log.d("values", String.valueOf(showList.get(counter).getTrials().get(0)));
+//            if showList.get(counter).
+            Integer trial1 = ((BinomialTrial)showList.get(counter).getTrials().get(0)).getSuccess();
+            Log.d("values", String.valueOf(trial1));
         }
     }
 }
