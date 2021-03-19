@@ -56,7 +56,8 @@ public class FireStoreController {
     private Boolean locationRequirement;
     private HashMap<String, String> hashMapProfile;
     private ArrayList<String> idList;
-    private ArrayList<Trial> trialList;
+    private ArrayList<HashMap> harshTrials;
+    private ArrayList<Trial> trials;
 
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -267,9 +268,14 @@ public class FireStoreController {
                     locationRequirement = Boolean.parseBoolean(doc.getData().get("Location Requirement").toString());
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
-                    trialList = (ArrayList<Trial>) doc.getData().get("Trial List");
+                    harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
+                    trials = new ArrayList<>();
+                    for(HashMap hashTrial : harshTrials){
+                        BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
+                        trials.add(binomialTrial);
+                    }
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
-                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trialList);
+                    experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trials);
                     experimentList.add(experiment);
                 }
 

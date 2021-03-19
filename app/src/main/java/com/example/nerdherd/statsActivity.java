@@ -78,7 +78,7 @@ public class statsActivity extends AppCompatActivity {
     public void calculate(ArrayList<Experiment> showList){
 
         for (int counter = 0; counter < showList.size();counter++){
-            BinomialTrial binomialTrial = new BinomialTrial(showList.get(counter).getTrials().get(0).get("success").toString());
+            BinomialTrial binomialTrial = (BinomialTrial)showList.get(counter).getTrials().get(0);
             Log.d("values", String.valueOf(showList.get(counter).getTrials().get(0)));
         }
     }
