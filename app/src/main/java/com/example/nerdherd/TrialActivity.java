@@ -44,6 +44,7 @@ public class TrialActivity extends AppCompatActivity {
     private ArrayList<Trial> trialArrayList = new ArrayList<Trial>();
     private TrialsAdapter.onClickListener listener;
     ArrayList<Experiment> dataList;
+    ArrayList<Trial> trialList= new ArrayList<>();
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
     @Override
@@ -284,7 +285,8 @@ public class TrialActivity extends AppCompatActivity {
 //            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
             Trial t2 = new NonnegativeTrial(val);
             Experiment targetexp2 = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-            targetexp2.getTrials().add(t2);
+            trialList.add(t2);
+            targetexp2.setTrials(trialList);
 //            for (int counter =0; counter < targetexp.getTrials().size(); counter++){
 //                Log.d("array values", String.valueOf(targetexp.getTrials().get(counter)));
 //            }

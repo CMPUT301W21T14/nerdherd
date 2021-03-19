@@ -277,7 +277,7 @@ public class FireStoreController {
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
                     harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
-                    Log.d("HHH", "-------------------------"+harshTrials.toString());
+
                     trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
                         if (experimentType.equals("Binomial Trial")) {
