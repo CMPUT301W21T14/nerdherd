@@ -84,6 +84,9 @@ public class ExperimentViewActivity extends AppCompatActivity {
             menuController.useMenu(false);
         }
 
+        GlobalVariable.experimentType = experiment.getType();
+        GlobalVariable.experimentMinTrials = experiment.getMinTrials();
+
         if (experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
             if (experiment.getStatus().equals("Ended")) {
                 experimentEnd.setText("Reopen");
@@ -107,9 +110,6 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
                 publishButtonHandler(publishIndicator, true);
             }
-
-            GlobalVariable.experimentType = experiment.getType();
-            GlobalVariable.experimentMinTrials = experiment.getMinTrials();
             menuController.useMenu(true);
         }
         else{
@@ -145,8 +145,6 @@ public class ExperimentViewActivity extends AppCompatActivity {
                             });
 
                             unpublishedSubscribe.setVisibility(View.INVISIBLE);
-                            GlobalVariable.experimentType = experiment.getType();
-                            GlobalVariable.experimentMinTrials = experiment.getMinTrials();
                             menuController.useMenu(true);
 
                         }

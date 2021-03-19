@@ -98,10 +98,10 @@ public class TrialActivity extends AppCompatActivity {
             }
         };
 
+
         if (trialType.equals("Binomial Trial")){
 //            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
 //            startActivityForResult(intent, 2);
-
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Binomial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
