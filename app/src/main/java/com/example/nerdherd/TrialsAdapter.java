@@ -67,15 +67,19 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (trialtype.equals("Binomial Trial")){
             holder.user_trial.setText(((BinomialTrial)trials.get(position)).getSuccess()+"");
+            holder.trials_executed.setText(((BinomialTrial)trials.get(position)).getFailure()+"");
         }
-        if(trialtype.equals("Count trial")){
+        if(trialtype.equals("Count")){
             holder.user_trial.setText(((CountTrial)trials.get(position)).totaltrialCount()+"");
+            holder.trials_executed.setVisibility(View.INVISIBLE);
         }
-        if(trialtype.equals("Measurement trial")){
+        if(trialtype.equals("Measurement")){
             holder.user_trial.setText(((MeasurementTrial)trials.get(position)).totalMeasureCount()+"");
+            holder.trials_executed.setVisibility(View.INVISIBLE);
         }
-        if(trialtype.equals("Nonnegative_Integer trial")){
-            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).totalNonnegativecount()+"");
+        if(trialtype.equals("Non-Negative Integer Count")){
+            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).totaltrialCount()+"");
+            holder.trials_executed.setVisibility(View.INVISIBLE);
         }
     }
 

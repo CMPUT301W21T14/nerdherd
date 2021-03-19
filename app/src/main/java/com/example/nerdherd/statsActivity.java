@@ -117,7 +117,7 @@ public class statsActivity extends AppCompatActivity {
                     else{
                         Quartiles = QuartilesCalculation(trial_values, length,val);
                         quartileVal1.setText(Quartiles.get(0)+"");
-                        quartileVal2.setText(val+"");
+                        quartileVal2.setText(Quartiles.get(2)+"");
                         quartileVal3.setText(Quartiles.get(1)+"");
                     }
 //                    Log.d("testing trialvals", String.valueOf(trial_values.get(0)));
@@ -144,7 +144,7 @@ public class statsActivity extends AppCompatActivity {
                     else{
                         Quartiles = QuartilesCalculation(trial_values, length,val);
                         quartileVal1.setText(Quartiles.get(0)+"");
-                        quartileVal2.setText(val+"");
+                        quartileVal2.setText(Quartiles.get(2)+"");
                         quartileVal3.setText(Quartiles.get(1)+"");
                     }
                 }
@@ -173,7 +173,7 @@ public class statsActivity extends AppCompatActivity {
                     else{
                         Quartiles = QuartilesCalculation(trial_values, length,val);
                         quartileVal1.setText(Quartiles.get(0)+"");
-                        quartileVal2.setText(val+"");
+                        quartileVal2.setText(Quartiles.get(2)+"");
                         quartileVal3.setText(Quartiles.get(1)+"");
                     }
                 }
@@ -202,8 +202,8 @@ public class statsActivity extends AppCompatActivity {
         else{
             for (int counter = 0; counter < targetexp.getTrials().size();counter++){
 //            if showList.get(counter).
-                Log.d("testing non-negative",String.valueOf(((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalNonnegativeCount()));
-                Integer counted_val = ((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalNonnegativeCount();
+                Log.d("testing non-negative",String.valueOf(((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalCount()));
+                Integer counted_val = ((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalCount();
                 trials.add(counted_val);
             }
         }
@@ -307,7 +307,7 @@ public class statsActivity extends AppCompatActivity {
     public int indexing(ArrayList<Integer> values, int left_sub, int right_sub){
         int temp = right_sub - left_sub + 1;
         temp = (temp + 1) / 2-1;
-        return temp + 1;
+        return temp;
     }
 
     /*
@@ -326,12 +326,15 @@ public class statsActivity extends AppCompatActivity {
                 mid_index);
         q1 = values.get(q1);
 
+        int q2 = values.get(mid_index);
+
         // the median of the second section of passed in array
         int q3 = mid_index + indexing(values,
                 mid_index + 1, arr_legnth);
         q3 = values.get(q3);
         quartiles.add(q1);
         quartiles.add(q3);
+        quartiles.add(q2);
         return quartiles;
     }
 

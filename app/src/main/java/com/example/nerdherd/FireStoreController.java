@@ -277,7 +277,7 @@ public class FireStoreController {
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
                     harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
-                    Log.d("HHH", "-------------------------"+harshTrials.toString());
+
                     trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
                         if (experimentType.equals("Binomial Trial")) {
@@ -293,7 +293,7 @@ public class FireStoreController {
                             trials.add(measurementTrial);
                         }
                         if (experimentType.equals("Non-negative trial")) {
-                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
+                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
                             trials.add(nonnegativeTrial);
                         }
                     }
@@ -334,7 +334,7 @@ public class FireStoreController {
                                 itemList.add(measurementTrial);
                             }
                             if (type.equals("Non-negative trial")) {
-                                NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
+                                NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
                                 itemList.add(nonnegativeTrial);
                             }
                         }

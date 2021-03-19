@@ -256,6 +256,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
     public void updateEmail(String Email){
         isNew = true;
+
         useridval = profController.getId();
         emailData = new ArrayList<String>();
         fireStoreController.readData(emailData, "Email", new FireStoreController.FireStoreReadCallback() {
