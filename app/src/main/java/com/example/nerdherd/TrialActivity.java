@@ -1,5 +1,7 @@
 package com.example.nerdherd;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +36,7 @@ public class TrialActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FireStoreController fireStoreController = new FireStoreController();
     private ArrayList<Trial> trialArrayList = new ArrayList<Trial>();
+    private TrialsAdapter.onClickListener listener;
     ArrayList<Experiment> dataList;
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
@@ -64,6 +67,36 @@ public class TrialActivity extends AppCompatActivity {
         mintrials = GlobalVariable.experimentMinTrials;
         ///ArrayList<Integer> current_exp
 
+        listener = new TrialsAdapter.onClickListener() {
+            @Override
+            public void onClick(View view, int index) {
+                if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())) {
+                    new AlertDialog.Builder(TrialActivity.this).setTitle("Ignore").setMessage("Do you want to ignore this result?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    targetexp.getTrials().remove(index);
+                                    fireStoreController.updater("Experiment", targetexp.getTitle(), "Trial List", targetexp.getTrials(), new FireStoreController.FireStoreUpdateCallback() {
+                                        @Override
+                                        public void onCallback() {
+                                            return;
+                                        }
+                                    }, new FireStoreController.FireStoreUpdateFailCallback() {
+                                        @Override
+                                        public void onCallback() {
+                                            return;
+                                        }
+                                    });
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            return;
+                        }
+                    }).show();
+                }
+            }
+        };
 
         if (trialType.equals("Binomial Trial")){
 //            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
@@ -72,7 +105,7 @@ public class TrialActivity extends AppCompatActivity {
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Binomial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
-                    adapter = new TrialsAdapter(list, null, "Binomial Trial");
+                    adapter = new TrialsAdapter(list, listener, "Binomial Trial");
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -82,19 +115,23 @@ public class TrialActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            addtrials.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new BinomialTrialDialogFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT");
-                }
-            });
+            if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                addtrials.setVisibility(View.INVISIBLE);
+            }
+            else {
+                addtrials.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new BinomialTrialDialogFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT");
+                    }
+                });
+            }
         }
         if (trialType.equals("Count")){
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Count trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
-                    adapter = new TrialsAdapter(list, null, "Count");
+                    adapter = new TrialsAdapter(list, listener, "Count");
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -104,18 +141,23 @@ public class TrialActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
-            addtrials.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new CountTrialDialogFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT2");
-                }
-            });
+            if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                addtrials.setVisibility(View.INVISIBLE);
+            }
+            else {
+                addtrials.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new CountTrialDialogFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT2");
+                    }
+                });
+            }
         }
         if (trialType.equals("Measurement")){
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Measurement trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
-                    adapter = new TrialsAdapter(list, null, "Measurement");
+                    adapter = new TrialsAdapter(list, listener, "Measurement");
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -125,12 +167,17 @@ public class TrialActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
-            addtrials.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new MeaurementTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT3");
-                }
-            });
+            if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                addtrials.setVisibility(View.INVISIBLE);
+            }
+            else {
+                addtrials.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new MeaurementTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT3");
+                    }
+                });
+            }
         }
 
         if (trialType.equals("Non-Negative Integer Count")){
@@ -138,7 +185,7 @@ public class TrialActivity extends AppCompatActivity {
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
-                    adapter = new TrialsAdapter(list, null, "Non-Negative Integer Count");
+                    adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -149,12 +196,17 @@ public class TrialActivity extends AppCompatActivity {
                 }
             });
 
-            addtrials.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new NonnegativeTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT4");
-                }
-            });
+            if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                addtrials.setVisibility(View.INVISIBLE);
+            }
+            else {
+                addtrials.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new NonnegativeTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT4");
+                    }
+                });
+            }
         }
     }
 
