@@ -19,7 +19,7 @@ public class testSearch {
         return new Profile("test", "password", "email", "id", 1);
     }
     public Experiment mockExperiment() {
-        return new Experiment(mockProfile(), "test", "status", "description", "type", 1, true, true, new ArrayList());
+        return new Experiment(mockProfile(), "test", "status", "description", "type", 1, true, true, new ArrayList(), new ArrayList());
     }
 
     public void searchExperiment(String keyword, ArrayList<Experiment> showList) {
@@ -83,7 +83,7 @@ public class testSearch {
         assertTrue(resultList.contains(mockExp));
         resultList.clear();
 
-        Experiment secondExperiment = new Experiment(mockProfile(), "second", "status", "description", "type", 1, true, true, new ArrayList());
+        Experiment secondExperiment = new Experiment(mockProfile(), "second", "status", "description", "type", 1, true, true, new ArrayList(), new ArrayList());
         showList.add(secondExperiment);
 
         searchExperiment("second", showList);
