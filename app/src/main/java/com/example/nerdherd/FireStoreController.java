@@ -269,10 +269,13 @@ public class FireStoreController {
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
                     harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
-                    trials = new ArrayList<>();
+                    Log.d("HHH", "-------------------------"+harshTrials.toString());
+                    trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
-                        BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
-                        trials.add(binomialTrial);
+                        if (experimentType.equals("Binomial Trial")) {
+                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
+                            trials.add(binomialTrial);
+                        }
                     }
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trials);
