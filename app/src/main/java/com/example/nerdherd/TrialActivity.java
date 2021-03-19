@@ -173,7 +173,6 @@ public class TrialActivity extends AppCompatActivity {
             //creating new experiment - but i want access to
             Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
             targetexp.getTrials().add(t1);
-
             fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
                 @Override
                 public void onCallback() {
@@ -240,6 +239,7 @@ public class TrialActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
+
 //            //targetexp.getTrials();
 //            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Measurement trial");
 //            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);

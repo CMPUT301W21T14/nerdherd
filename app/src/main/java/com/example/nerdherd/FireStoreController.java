@@ -308,7 +308,6 @@ public class FireStoreController {
                                 NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
                                 itemList.add(nonnegativeTrial);
                             }
-
                         }
                     }
                 }

@@ -121,6 +121,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 menuController.useMenu(true);
                 menuController.setTrialType(experiment.getType());
                 menuController.setMinTrials(experiment.getMinTrials());
+
             }
             else {
                 if (!experiment.getStatus().equals("Ended")) {
