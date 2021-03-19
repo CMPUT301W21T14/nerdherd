@@ -1,6 +1,8 @@
 package com.example.nerdherd;
 // Modified from youtube
 // Author: Zhipeng Z zhipeng4
+/*It controls the inflow and outflow of the data and stores that in the remote server Firestore
+* */
 import android.util.Log;
 import android.util.Pair;
 import com.google.android.gms.tasks.OnCompleteListener;
