@@ -1,5 +1,10 @@
 package com.example.nerdherd;
 
+
+/* This allows the user to perform the Binomial trail giving the boolean outcomes.
+* This inherits the Trail class
+*/
+
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
