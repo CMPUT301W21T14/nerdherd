@@ -133,6 +133,32 @@ public class TrialActivity extends AppCompatActivity {
                 });
             }
         }
+        if (trialType.equals("Non-Negative Integer Count")){
+            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
+                @Override
+                public void onCallback(ArrayList<Trial> list) {
+                    adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
+                    adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
+                    adapterController.useAdapter();
+                }
+            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                addtrials.setVisibility(View.INVISIBLE);
+            }
+            else {
+                addtrials.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new NonnegativeTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT2");
+                    }
+                });
+            }
+        }
         if (trialType.equals("Count")){
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Count trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
@@ -159,6 +185,7 @@ public class TrialActivity extends AppCompatActivity {
                 });
             }
         }
+
         if (trialType.equals("Measurement")){
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Measurement trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
@@ -186,34 +213,7 @@ public class TrialActivity extends AppCompatActivity {
             }
         }
 
-        if (trialType.equals("Non-Negative Integer Count")){
 
-            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
-                @Override
-                public void onCallback(ArrayList<Trial> list) {
-                    adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
-                    adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
-                    adapterController.useAdapter();
-                }
-            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
-                @Override
-                public void onCallback() {
-                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            if (targetexp.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
-                addtrials.setVisibility(View.INVISIBLE);
-            }
-            else {
-                addtrials.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new NonnegativeTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT4");
-                    }
-                });
-            }
-        }
     }
 
 
@@ -273,6 +273,34 @@ public class TrialActivity extends AppCompatActivity {
 //
         }
     }
+
+    public void updateNonnegativeTrialView(ArrayList<Integer>negativeTrials, int minTrial){
+        int val = negativeTrials.size();
+        if (negativeTrials.size() < minTrial){
+            Log.d("do not update", String.valueOf(negativeTrials.size()));
+
+        }
+        else{
+//            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
+            Trial t2 = new NonnegativeTrial(val);
+            Experiment targetexp2 = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+            targetexp2.getTrials().add(t2);
+//            for (int counter =0; counter < targetexp.getTrials().size(); counter++){
+//                Log.d("array values", String.valueOf(targetexp.getTrials().get(counter)));
+//            }
+            fireStoreController.addNewExperiment(targetexp2, new FireStoreController.FireStoreExperimentCallback() {
+                @Override
+                public void onCallback() {
+                    return;
+                }
+            }, new FireStoreController.FireStoreExperimentFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
     public void updateMeasurementTrialView(ArrayList<Double> measurements, int minTrial){
         if (measurements.size() < minTrial){
             Log.d("do not update", String.valueOf(measurements.size()));
@@ -306,36 +334,7 @@ public class TrialActivity extends AppCompatActivity {
         }
     }
 
-    public void updateNonnegativeTrialView(ArrayList<Integer>NonnegativeTrials, int minTrial){
-        if (NonnegativeTrials.size() < minTrial){
-            Log.d("do not update", String.valueOf(NonnegativeTrials.size()));
 
-        }
-        else{
-            Trial t1 = new NonnegativeTrial(NonnegativeTrials.size());
-            //experiment has trials
-            //creating new experiment - but i want access to
-            Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-            targetexp.getTrials().add(t1);
-
-            fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
-                @Override
-                public void onCallback() {
-                    return;
-                }
-            }, new FireStoreController.FireStoreExperimentFailCallback() {
-                @Override
-                public void onCallback() {
-                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            });
-//            //targetexp.getTrials();
-//            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Nonnegative_Integer trial");
-//            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
-//            adapterController.useAdapter();
-//
-        }
-    }
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data)

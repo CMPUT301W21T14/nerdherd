@@ -7,22 +7,27 @@ package com.example.nerdherd;
  * @author Ogooluwa S. osamuel
  */
 
-public class NonnegativeTrial extends Trial{
-    private int totalNonnegativeCount;
 
-    public NonnegativeTrial(int totalNonnegativeCount) {
-        this.totalNonnegativeCount = totalNonnegativeCount;
+/*This again inherits the Trial class.
+ * It allows the user to perform the trails where outcome could be integer
+ * */
+public class NonnegativeTrial extends Trial {
+
+    private Integer totalCount;
+
+    public NonnegativeTrial(Integer totalcount){
+        this.totalCount = totalcount;
     }
 
-    public int totalNonnegativecount(){
-        return totalNonnegativeCount;
+    public Integer totaltrialCount(){
+        return totalCount;
     }
 
-    public int getTotalNonnegativeCount() {
-        return totalNonnegativeCount;
+    public Integer getTotalCount() {
+        return totalCount;
     }
 
-    public void setTotalNonnegativeCount(int totalNonnegativeCount) {
-        this.totalNonnegativeCount = totalNonnegativeCount;
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 }

@@ -293,7 +293,7 @@ public class FireStoreController {
                             trials.add(measurementTrial);
                         }
                         if (experimentType.equals("Non-negative trial")) {
-                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
+                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
                             trials.add(nonnegativeTrial);
                         }
                     }
@@ -334,7 +334,7 @@ public class FireStoreController {
                                 itemList.add(measurementTrial);
                             }
                             if (type.equals("Non-negative trial")) {
-                                NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
+                                NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
                                 itemList.add(nonnegativeTrial);
                             }
                         }
