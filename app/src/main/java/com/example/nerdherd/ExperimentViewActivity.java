@@ -1,5 +1,8 @@
 package com.example.nerdherd;
 
+/* It helps in viewing the experiment details.
+* */
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;

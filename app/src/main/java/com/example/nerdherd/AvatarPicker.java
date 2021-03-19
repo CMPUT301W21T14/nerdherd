@@ -1,6 +1,8 @@
 package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
+/*We have several avatars saved and user is given flexibility to chose the avatars
+* */
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;

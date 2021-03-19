@@ -1,6 +1,9 @@
 package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
+/*It just helps showing the experiment in the main UI
+* */
+
 
 import android.view.LayoutInflater;
 import android.view.View;

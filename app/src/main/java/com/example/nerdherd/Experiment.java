@@ -2,6 +2,10 @@ package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
 
+/*It gives all the possible details an Experiment possess like owner of that Experiment, title etc.
+* This defines the specificity per Experiment.
+* */
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

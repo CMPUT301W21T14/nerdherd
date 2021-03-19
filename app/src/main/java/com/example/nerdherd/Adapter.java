@@ -2,6 +2,13 @@ package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
 
+/*This class exists to show the image in the register
+*
+* */
+
+// The following class is modified form the tutorial
+// https://developer.android.com/
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +19,6 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-// The following class is modified form the tutorial
-// https://developer.android.com/
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 

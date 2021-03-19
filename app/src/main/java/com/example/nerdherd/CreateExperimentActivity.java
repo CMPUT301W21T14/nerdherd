@@ -1,5 +1,8 @@
 package com.example.nerdherd;
 
+/* This lets the owner to create the Experiment for the users.
+* */
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -2,6 +2,10 @@ package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
 
+/*It provides the LogIn interface, registerButton, LoginButton etc
+* There are various cool features which you'll see while running the App
+* */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;

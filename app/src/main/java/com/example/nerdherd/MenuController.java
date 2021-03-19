@@ -1,6 +1,8 @@
 package com.example.nerdherd;
 
 // Author: Zhipeng Z zhipeng4
+/*
+* */
 
 import android.app.Activity;
 import android.content.Context;
