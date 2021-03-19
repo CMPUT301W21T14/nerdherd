@@ -276,18 +276,18 @@ public class FireStoreController {
                             BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
                             trials.add(binomialTrial);
                         }
-//                        if (experimentType.equals("Count")) {
-//                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
-//                            trials.add(binomialTrial);
-//                        }
-//                        if (experimentType.equals("Binomial Trial")) {
-//                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
-//                            trials.add(binomialTrial);
-//                        }
-//                        if (experimentType.equals("Binomial Trial")) {
-//                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
-//                            trials.add(binomialTrial);
-//                        }
+                        if (experimentType.equals("Count")) {
+                            CountTrial countTrial = new CountTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
+                            trials.add(countTrial);
+                        }
+                        if (experimentType.equals("Measurement trial")) {
+                            MeasurementTrial measurementTrial = new MeasurementTrial(Integer.parseInt(hashTrial.get("totalMeasurementCount").toString()));
+                            trials.add(measurementTrial);
+                        }
+                        if (experimentType.equals("Non-negative trial")) {
+                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalNonnegativeCount").toString()));
+                            trials.add(nonnegativeTrial);
+                        }
                     }
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trials);

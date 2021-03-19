@@ -12,7 +12,7 @@ public class MeasurementTrial extends Trial {
         return totalMeasurementCount;
     }
 
-    public int getTotalMeasurementCount() {
+    public double getTotalMeasurementCount() {
         return totalMeasurementCount;
     }
 
