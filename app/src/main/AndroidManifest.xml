@@ -12,6 +12,7 @@
         <activity android:name=".MySubscriptionActivity"></activity>
         <activity android:name=".MyExperimentsActivity" />
         <activity android:name=".ExperimentViewActivity" />
+        <activity android:name=".statsactivity_checking"/>
         <activity android:name=".CreateExperimentActivity" />
         <activity android:name=".SearchUserActivity" />
         <activity android:name=".Reseter" />

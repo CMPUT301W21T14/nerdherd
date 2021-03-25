@@ -8,10 +8,13 @@
     <include
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        layout="@layout/tool_bar_layout"/>
+        layout="@layout/tool_bar_layout"
+        />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        >
 
         <TextView
             android:id="@+id/trials_mean"

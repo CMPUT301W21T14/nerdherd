@@ -63,6 +63,7 @@ public class Experiment implements Serializable {
     public void setTrials(ArrayList<Trial> trials) {
         this.trials = trials;
     }
+
     // Let's use IDs for Experiment class
     /*
     public Profile getOwnerProfile() { return ownerProfile; }

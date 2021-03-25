@@ -1,5 +1,6 @@
 package com.example.nerdherd;
 
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,9 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
             holder.trials_executed.setVisibility(View.INVISIBLE);
         }
         if(trialtype.equals("Measurement")){
-            holder.user_trial.setText(((MeasurementTrial)trials.get(position)).totalMeasureCount()+"");
+            int maxLength = 22;
+            holder.user_trial.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+            holder.user_trial.setText(((MeasurementTrial)trials.get(position)).getMeasurements()+"");
             holder.trials_executed.setVisibility(View.INVISIBLE);
         }
         if(trialtype.equals("Non-Negative Integer Count")){

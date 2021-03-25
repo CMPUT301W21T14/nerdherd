@@ -26,7 +26,7 @@ import java.util.Map;
  * This class displays all the stats of the experiments on the app screen for the user to see
  * The class contains some reference from <a href="https://bit.ly/2OQhXof"></a>
  * The class contains some reference from <a href="https://bit.ly/30UulWN"></a>
- * @author Zhipeng Z. zhipeng4
+ * @author Ogooluwa S. osamuel
  */
 
 public class statsActivity extends AppCompatActivity {
@@ -90,10 +90,12 @@ public class statsActivity extends AppCompatActivity {
                         showList.add(allExperiment);
                     }
                 }
-                Log.d("count trials in exp", String.valueOf(targetexp.getType()));
-                Log.d("size", String.valueOf(targetexp.getTrials().size()));
 
-                //flatten to int array
+//                Log.d("count trials in exp", String.valueOf(targetexp.getType()));
+//                Log.d("size", String.valueOf(targetexp.getTrials()));
+//
+//                //flatten to int array
+//                Log.d("trial type", expType);
                 if (expType.equals("Binomial Trial") && targetexp.getTrials().size() >= 1){
                     trial_values = BinomialConvert(showList);
                     Double trialsMean = calculate_mean(trial_values);
@@ -150,6 +152,7 @@ public class statsActivity extends AppCompatActivity {
                 }
                 if (expType.equals("Measurement")&& targetexp.getTrials().size() >= 1){
 //                    MeasurementConvert(showList);
+                    Log.d("list apparently", String.valueOf(showList.get(0).getTrials()));
                 }
                 if (expType.equals("Non-Negative Integer Count")&& targetexp.getTrials().size() >= 1){
                     Log.d("here", "iam here");

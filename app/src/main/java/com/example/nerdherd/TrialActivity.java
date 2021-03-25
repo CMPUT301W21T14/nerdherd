@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -44,8 +45,11 @@ public class TrialActivity extends AppCompatActivity {
     private ArrayList<Trial> trialArrayList = new ArrayList<Trial>();
     private TrialsAdapter.onClickListener listener;
     ArrayList<Experiment> dataList;
-    ArrayList<Trial> trialList= new ArrayList<>();
+    ArrayList<Trial> trialsList= new ArrayList<>();
     ArrayList<Trial> mTrialList = new ArrayList<>();
+    ArrayList<Trial> TestList = new ArrayList<>();
+    ArrayList<MeasurementTrial> Testtrial2 = new ArrayList<>();
+    ArrayList<NonnegativeTrial> Testtrial3 = new ArrayList<>();
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
     @Override
@@ -140,6 +144,8 @@ public class TrialActivity extends AppCompatActivity {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
                     adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
+                    Testtrial3 = (ArrayList<NonnegativeTrial>)list.clone();
+                    Log.d("counted", String.valueOf(Testtrial3.get(0).getTotalCount()));
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -156,6 +162,7 @@ public class TrialActivity extends AppCompatActivity {
                 addtrials.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("test", String.valueOf(TestList));
                         new NonnegativeTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT2");
                     }
                 });
@@ -193,6 +200,10 @@ public class TrialActivity extends AppCompatActivity {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
                     adapter = new TrialsAdapter(list, listener, "Measurement");
+//                    Log.d("cval", String.valueOf(list));
+                    Testtrial2 = (ArrayList<MeasurementTrial>) list.clone();
+//                    Testtrial2.get(0).getMeasurements();
+//                    Log.d("current val list", String.valueOf(Testtrial2.get(0).getMeasurements()));
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -209,6 +220,7 @@ public class TrialActivity extends AppCompatActivity {
                 addtrials.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         new MeaurementTrialFragment(mintrials).show(getSupportFragmentManager(), "EDIT_TEXT3");
                     }
                 });
@@ -286,11 +298,19 @@ public class TrialActivity extends AppCompatActivity {
 //            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
             Trial t2 = new NonnegativeTrial(val);
             Experiment targetexp2 = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-            trialList.add(t2);
-            targetexp2.setTrials(trialList);
-//            for (int counter =0; counter < targetexp.getTrials().size(); counter++){
-//                Log.d("array values", String.valueOf(targetexp.getTrials().get(counter)));
-//            }
+//              trialsList.add(t2);
+//            targetexp2.getTrials().add(t2);
+//            Testtrial2.add((MeasurementTrial) t1);
+//            ArrayList <Trial> check = new ArrayList<>();
+//            check = (ArrayList<Trial>) Testtrial2.clone();
+//            targetexp.setTrials(check);
+            ArrayList <Trial> checks = new ArrayList<>();
+            Testtrial3.add((NonnegativeTrial)t2);
+            ArrayList <Trial> check = new ArrayList<>();
+            checks = (ArrayList<Trial>) Testtrial3.clone();
+            targetexp2.setTrials(checks);
+//            Log.d("array", String.valueOf(trialsList));
+//            targetexp2.setTrials(TestList);
             fireStoreController.addNewExperiment(targetexp2, new FireStoreController.FireStoreExperimentCallback() {
                 @Override
                 public void onCallback() {
@@ -310,13 +330,28 @@ public class TrialActivity extends AppCompatActivity {
 
         }
         else{
-            Trial t1 = new MeasurementTrial(measurements.size());
+            int size = measurements.size();
+//            Trial t1 = new MeasurementTrial(measurements.size());
+            Trial t1 = new MeasurementTrial(measurements);
+//            ((MeasurementTrial) t1).setTotalMeasurementCount(size);
+            ((MeasurementTrial) t1).setMeasurements(measurements);
             //experiment has trials
             //creating new experiment - but i want access to
             Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-            mTrialList.add(t1);
-            targetexp.setTrials(mTrialList);
-
+            Log.d("testing", String.valueOf(TestList));
+            Testtrial2.add((MeasurementTrial) t1);
+            ArrayList <Trial> check = new ArrayList<>();
+            check = (ArrayList<Trial>) Testtrial2.clone();
+            targetexp.setTrials(check);
+            targetexp.getTrials().add(t1);
+            Log.d("array", String.valueOf(Testtrial2));
+//            targetexp.setTrials(Testtrial2);
+//            trialList.add(t1);
+//            trialList.add(t1);
+//            Log.d("current trial list", String.valueOf(targetexp.getTrials()));
+//
+//            targetexp.setTrials(trialList);
+//            targetexp.getTrials().add(t1);
             fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
                 @Override
                 public void onCallback() {
@@ -329,25 +364,8 @@ public class TrialActivity extends AppCompatActivity {
                 }
             });
 
-//            //targetexp.getTrials();
-//            adapter = new TrialsAdapter(targetexp.getTrials(), null, "Measurement trial");
-//            adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
-//            adapterController.useAdapter();
-//
+
         }
     }
-
-
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // validating same result code as what was passed above
-//        if(requestCode==2)
-//        {
-//
-//        }
-//    }
 
 }
