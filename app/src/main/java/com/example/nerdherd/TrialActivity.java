@@ -50,6 +50,11 @@ public class TrialActivity extends AppCompatActivity {
     ArrayList<Trial> TestList = new ArrayList<>();
     ArrayList<MeasurementTrial> Testtrial2 = new ArrayList<>();
     ArrayList<NonnegativeTrial> Testtrial3 = new ArrayList<>();
+    //
+    ArrayList<BinomialTrial> binomialtrialing = new ArrayList<>();
+    private ArrayList<Integer> binomtrialValues;
+    private ArrayList<Integer> trials_1;
+    //
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
     @Override
@@ -111,12 +116,17 @@ public class TrialActivity extends AppCompatActivity {
         };
 
         if (trialType.equals("Binomial Trial")){
-//            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
-//            startActivityForResult(intent, 2);
 
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Binomial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
+                    binomialtrialing = (ArrayList<BinomialTrial>) list.clone();
+                    binomtrialValues = ConvertBinomial_val();
+
+                    //Test to see if experiment is success - before allowing any trials
+//                    testSucess(binomtrialValues, mintrials);
+                    //
+                    Log.d("testing binomial", String.valueOf(binomtrialValues.size()));
                     adapter = new TrialsAdapter(list, listener, "Binomial Trial");
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
@@ -367,5 +377,36 @@ public class TrialActivity extends AppCompatActivity {
 
         }
     }
+    //
+    //convert to single array of binomial trials
+    public ArrayList<Integer> ConvertBinomial_val(){
+        trials_1 = new ArrayList<Integer>();
+        Log.d("------------------","---------------------------------");
+        for (int y = 0; y < binomialtrialing.size(); y++){
+            trials_1.add(binomialtrialing.get(y).getSuccess());
+            trials_1.add(binomialtrialing.get(y).getFailure());
+        }
+        return trials_1;
+    }
+
+//    public void testSucess(ArrayList<Integer> arr_val, int mintrials){
+//        int size = arr_val.size();
+//        Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+//        String exp_title = (targetexp.getTitle());
+//        String email = targetexp.getOwnerProfile().getEmail();
+////        Log.d("test email", email);
+//        if (size >= mintrials){
+//            try {
+//                GMailSender sender = new GMailSender("richard15765@gmail.com", "ZhiPeng4!");
+//                sender.sendMail("",
+//                        "Hello your experiment" + exp_title + "is a success",
+//                        "richard15765@gmail.com",
+//                        email);
+//            } catch (Exception e) {
+//                Log.e("SendMail", e.getMessage(), e);
+//            }
+//        }
+//    }
+
 
 }

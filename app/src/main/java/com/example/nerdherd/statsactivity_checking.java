@@ -89,7 +89,7 @@ public class statsactivity_checking extends AppCompatActivity {
 
 
         menuController = new MenuController(statsactivity_checking.this, toolbar, navigationView, drawerLayout);
-        menuController.useMenu(false);
+        menuController.useMenu(true);
 
 //        recyclerView = findViewById(R.id.subscription_experiment_recyclerView);
 
@@ -109,25 +109,36 @@ public class statsactivity_checking extends AppCompatActivity {
                 public void onCallback(ArrayList<Trial> list) {
                     Log.d("cval", String.valueOf(list));
                     Testtrial2 = (ArrayList<MeasurementTrial>) list.clone();
-                    //convert to single array
-                    trial_values = measurement_val();
-                    //Mean calculations
-                    Double trialsMean = calculate_mean(trial_values);
-                    trialValues.setText(trialsMean+"");
-                    //Median calculations
-                    int length = trial_values.size();
-                    Double val = calculateMedian(trial_values,length);
-                    median_value.setText(val+"");
-                    //standard deviation calculations
-                    Double std_value = CalculateStandarddeviation(trial_values,length);
-                    stdDeviationValue.setText(std_value+"");
-                    //quartiles calculations - performed on performed on data - with at least 4 data values
+                    if (list.isEmpty()){
+                        trialValues.setText("");
+                        median_value.setText("");
+                        stdDeviationValue.setText("");
+                        quartileVal1.setText("");
+                        quartileVal3.setText("");
+                        quartileVal2.setText("");
+                    }
+                    else {
 
-                    if (trial_values.size() >= 4){
-                        Quartiles = QuartilesCalculation(trial_values, length,val);
-                        quartileVal1.setText(Quartiles.get(0)+"");
-                        quartileVal3.setText(Quartiles.get(1)+"");
-                        quartileVal2.setText(Quartiles.get(2)+"");
+                        //convert to single array
+                        trial_values = measurement_val();
+                        //Mean calculations
+                        Double trialsMean = calculate_mean(trial_values);
+                        trialValues.setText(trialsMean + "");
+                        //Median calculations
+                        int length = trial_values.size();
+                        Double val = calculateMedian(trial_values, length);
+                        median_value.setText(val + "");
+                        //standard deviation calculations
+                        Double std_value = CalculateStandarddeviation(trial_values, length);
+                        stdDeviationValue.setText(std_value + "");
+                        //quartiles calculations - performed on performed on data - with at least 4 data values
+
+                        if (trial_values.size() >= 4) {
+                            Quartiles = QuartilesCalculation(trial_values, length, val);
+                            quartileVal1.setText(Quartiles.get(0) + "");
+                            quartileVal3.setText(Quartiles.get(1) + "");
+                            quartileVal2.setText(Quartiles.get(2) + "");
+                        }
                     }
                 }
             }, new FireStoreController.FireStoreCertainKeepFailCallback() {
@@ -141,35 +152,44 @@ public class statsactivity_checking extends AppCompatActivity {
 
         }
         if (expType.equals("Binomial Trial")) {
-//            Intent intent = new Intent(TrialActivity.this, BinomialTrialActivity.class);
-//            startActivityForResult(intent, 2);
 
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Binomial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
                     Log.d("cval", String.valueOf(list));
-                    binomialtrialing = (ArrayList<BinomialTrial>) list.clone();
-                    binomtrialValues = ConvertBinomial_val();
-                    //Mean calculations
-                    Double trialsMean = calculate_intmean(binomtrialValues);
-                    trialValues.setText(trialsMean + "");
-                    //Median calculations
-                    int len = binomtrialValues.size();
-                    Log.d("i got here", String.valueOf(binomtrialValues));
-                    Double median_calc = calculateMedian2(binomtrialValues, len);
-                    median_value.setText(median_calc + "");
-//                    //standard deviation calculations
-                    Double std_value = CalculateStandarddeviation2(binomtrialValues, len);
-                    stdDeviationValue.setText(std_value + "");
-                    //convert arraylist to double - to reuse quartiles function
-                    doubles_values = convert_double(binomtrialValues);
-                    Log.d("test1", String.valueOf(binomtrialValues));
-                    // quartiles calculations - performed on data - with at least 4 data values
-                    if (binomtrialValues.size() >= 4) {
-                        Quartiles = QuartilesCalculation(doubles_values, len, median_calc);
-                        quartileVal1.setText(Quartiles.get(0) + "");
-                        quartileVal3.setText(Quartiles.get(1) + "");
-                        quartileVal2.setText(Quartiles.get(2) + "");
+                    //no calculations can be done on this
+                    if (list.isEmpty()){
+                        trialValues.setText("");
+                        median_value.setText("");
+                        stdDeviationValue.setText("");
+                        quartileVal1.setText("");
+                        quartileVal3.setText("");
+                        quartileVal2.setText("");
+                    }
+                    else {
+                        binomialtrialing = (ArrayList<BinomialTrial>) list.clone();
+                        binomtrialValues = ConvertBinomial_val();
+                        //Mean calculations
+                        Double trialsMean = calculate_intmean(binomtrialValues);
+                        trialValues.setText(trialsMean + "");
+                        //Median calculations
+                        int len = binomtrialValues.size();
+                        Log.d("i got here", String.valueOf(binomtrialValues));
+                        Double median_calc = calculateMedian2(binomtrialValues, len);
+                        median_value.setText(median_calc + "");
+                        //                    //standard deviation calculations
+                        Double std_value = CalculateStandarddeviation2(binomtrialValues, len);
+                        stdDeviationValue.setText(std_value + "");
+                        //convert arraylist to double - to reuse quartiles function
+                        doubles_values = convert_double(binomtrialValues);
+                        Log.d("test1", String.valueOf(binomtrialValues));
+                        // quartiles calculations - performed on data - with at least 4 data values
+                        if (binomtrialValues.size() >= 4) {
+                            Quartiles = QuartilesCalculation(doubles_values, len, median_calc);
+                            quartileVal1.setText(Quartiles.get(0) + "");
+                            quartileVal3.setText(Quartiles.get(1) + "");
+                            quartileVal2.setText(Quartiles.get(2) + "");
+                        }
                     }
                 }
             }, new FireStoreController.FireStoreCertainKeepFailCallback() {
@@ -186,26 +206,36 @@ public class statsactivity_checking extends AppCompatActivity {
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
                     counttrialing = (ArrayList<CountTrial>) list.clone();
-                    counttrialValues = countConvert();
-                    //Mean calculations
-                    Double CountMean = calculate_intmean(counttrialValues);
-                    trialValues.setText(CountMean + "");
-                    //Median calculations
-                    int len = counttrialValues.size();
-                    Log.d("i got here", String.valueOf(counttrialValues));
-                    Double median_calc2 = calculateMedian2(counttrialValues, len);
-                    median_value.setText(median_calc2 + "");
-                    //standard deviation calculations
-                    Double std_value2 = CalculateStandarddeviation2(counttrialValues, len);
-                    stdDeviationValue.setText(std_value2 + "");
-                    //convert arraylist to double - to reuse quartiles function
-                    doubles_values2 = convert_double(counttrialValues);
-                    // quartiles calculations - performed on data - with at least 4 data values
-                    if (counttrialValues.size() >= 4) {
-                        Quartiles = QuartilesCalculation(doubles_values2, len, median_calc2);
-                        quartileVal1.setText(Quartiles.get(0) + "");
-                        quartileVal3.setText(Quartiles.get(1) + "");
-                        quartileVal2.setText(Quartiles.get(2) + "");
+                    if (list.isEmpty()){
+                        trialValues.setText("");
+                        median_value.setText("");
+                        stdDeviationValue.setText("");
+                        quartileVal1.setText("");
+                        quartileVal3.setText("");
+                        quartileVal2.setText("");
+                    }
+                    else {
+                        counttrialValues = countConvert();
+                        //Mean calculations
+                        Double CountMean = calculate_intmean(counttrialValues);
+                        trialValues.setText(CountMean + "");
+                        //Median calculations
+                        int len = counttrialValues.size();
+                        Log.d("i got here", String.valueOf(counttrialValues));
+                        Double median_calc2 = calculateMedian2(counttrialValues, len);
+                        median_value.setText(median_calc2 + "");
+                        //standard deviation calculations
+                        Double std_value2 = CalculateStandarddeviation2(counttrialValues, len);
+                        stdDeviationValue.setText(std_value2 + "");
+                        //convert arraylist to double - to reuse quartiles function
+                        doubles_values2 = convert_double(counttrialValues);
+                        // quartiles calculations - performed on data - with at least 4 data values
+                        if (counttrialValues.size() >= 4) {
+                            Quartiles = QuartilesCalculation(doubles_values2, len, median_calc2);
+                            quartileVal1.setText(Quartiles.get(0) + "");
+                            quartileVal3.setText(Quartiles.get(1) + "");
+                            quartileVal2.setText(Quartiles.get(2) + "");
+                        }
                     }
                 }
             }, new FireStoreController.FireStoreCertainKeepFailCallback() {
@@ -213,7 +243,6 @@ public class statsactivity_checking extends AppCompatActivity {
                 public void onCallback() {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
-
             });
         }
 
