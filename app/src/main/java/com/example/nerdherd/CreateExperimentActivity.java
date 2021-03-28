@@ -137,6 +137,12 @@ public class CreateExperimentActivity extends AppCompatActivity {
                 }
 
                 if (valid) {
+
+                    if (requireLocationCheck.isChecked()){
+                        Intent intent = new Intent(CreateExperimentActivity.this, MapsActivity.class);
+                        startActivity(intent);
+                    }
+
                     Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked(), idList, new ArrayList<Trial>());
                     fireStoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
                         @Override
