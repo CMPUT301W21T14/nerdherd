@@ -1,5 +1,6 @@
 package com.example.nerdherd;
 
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -35,11 +37,14 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Vi
         TextView title;
         TextView owner;
         TextView status;
+        View layout;
+
         public ViewHolder(View view){
             super(view);
             title = view.findViewById(R.id.experimentTitle);
             owner = view.findViewById(R.id.experimentOwner);
             status = view.findViewById(R.id.experimentStatus);
+            layout = view.findViewById(R.id.listItemLayout);
             view.setOnClickListener(this);
         }
 
@@ -63,6 +68,15 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Vi
         holder.title.setText(experiments.get(position).getTitle());
         holder.owner.setText(experiments.get(position).getOwnerProfile().getName());
         holder.status.setText(experiments.get(position).getStatus());
+        String experimentType = experiments.get(position).getType();
+        if (experimentType.compareTo("Binomial Trial") == 0)
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("002ECC71",16)); //Green
+        else if (experimentType.compareTo("Count") == 0)
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("00E74C3C",16)); //Red
+        else if (experimentType.compareTo("Measurement") == 0)
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("00F7DC6F",16)); //Yellow
+        else if (experimentType.compareTo("Non-Negative Integer Count") == 0)
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("003498DB",16)); //Blue
     }
 
     @Override

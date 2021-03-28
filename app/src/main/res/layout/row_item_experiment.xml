@@ -2,8 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listItemLayout"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="150dp"
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/experimentStatus"
@@ -19,8 +21,8 @@
         android:id="@+id/textView13"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:text="Status: "
         android:textSize="24sp"
@@ -33,8 +35,8 @@
         android:id="@+id/experimentTitle"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="36sp"
         android:textStyle="bold"
@@ -46,8 +48,8 @@
         android:id="@+id/textView11"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:text="Owner: "
         android:textSize="24sp"
@@ -65,9 +67,6 @@
         app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/experimentTitle"
         app:layout_constraintWidth_percent="0.7" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
