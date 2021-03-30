@@ -155,7 +155,7 @@ public class TrialActivity extends AppCompatActivity {
                 public void onCallback(ArrayList<Trial> list) {
                     adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
                     Testtrial3 = (ArrayList<NonnegativeTrial>)list.clone();
-                    Log.d("counted", String.valueOf(Testtrial3.get(0).getTotalCount()));
+                    
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
