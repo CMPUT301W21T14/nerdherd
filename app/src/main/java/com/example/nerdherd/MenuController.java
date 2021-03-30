@@ -75,7 +75,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             trails.setVisible(false);
         }
 
-        if (context instanceof  ExperimentViewActivity){
+        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking){
             viewExperiments.setVisible(true);
         }
         else{
@@ -158,6 +158,11 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             ((Activity)context).finish();
         }
 
+        if (item.getItemId() == R.id.experiment_questions && !(context instanceof QuestionsActivity)) {
+            intent = new Intent(context, QuestionsActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
 
 
         return true;
