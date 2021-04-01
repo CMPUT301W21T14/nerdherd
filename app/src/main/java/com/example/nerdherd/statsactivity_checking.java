@@ -3,7 +3,6 @@ package com.example.nerdherd;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,15 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class statsactivity_checking extends AppCompatActivity {
     private FireStoreController fireStoreController;
@@ -40,12 +32,14 @@ public class statsactivity_checking extends AppCompatActivity {
     private ArrayList<Double> trials;
     private ArrayList<Integer> trials_1;
     private ArrayList<Integer> trials_2;
+    private ArrayList<Integer> trials_4;
     private ArrayList<Double> quartiles;
     private ArrayList<Double> Quartiles;
     //    private ArrayList<Integer> trials_1;
     private ArrayList<Double> trial_values;
     private ArrayList<Integer> binomtrialValues;
     private ArrayList<Integer> counttrialValues;
+    private ArrayList<Integer> nonNegativetrialValues;
     private Experiment targetexp;
     private TextView trialValues;
     private TextView median_value;
@@ -67,10 +61,13 @@ public class statsactivity_checking extends AppCompatActivity {
     ArrayList<Double> doubles_values = new ArrayList<>();
     ArrayList<Double> doubles_values2 = new ArrayList<>();
     ArrayList<MeasurementTrial> Testtrial2 = new ArrayList<>();
+    ArrayList<NonnegativeTrial> Testtrial3 = new ArrayList<>();
     ArrayList<BinomialTrial> binomialtrialing = new ArrayList<>();
     ArrayList<CountTrial> counttrialing = new ArrayList<>();
+    ArrayList<NonnegativeTrial> nonNegativetrialing = new ArrayList<>();
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
+    private ArrayList<Integer> testing_1;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -201,6 +198,65 @@ public class statsactivity_checking extends AppCompatActivity {
             });
         }
 
+        if (expType.equals("Non-Negative Integer Count")) {
+            testing_1 = new ArrayList<Integer>();
+            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
+                @Override
+                public void onCallback(ArrayList<Trial> list) {
+                    if (list.isEmpty()) {
+                        trialValues.setText("");
+                        median_value.setText("");
+                        stdDeviationValue.setText("");
+                        quartileVal1.setText("");
+                        quartileVal3.setText("");
+                        quartileVal2.setText("");
+                    } else {
+                        Testtrial3 = (ArrayList<NonnegativeTrial>) list.clone();
+
+                        for (int i = 0; i < Testtrial3.size(); ++i) {
+                            for(int j = 0; j < Testtrial3.get(i).getNonNegativeTrials().size(); ++j) {
+                                testing_1.add((Testtrial3.get(i).getNonNegativeTrials().get(j)));
+
+                            }
+                        }
+                        int su = 0;
+                        for (int y =0; y < testing_1.size(); y++){
+                            su = su + testing_1.get(0);
+                        }
+                        Log.d("non-negative", String.valueOf(testing_1.get(0)));
+//                        Log.d("val_test", String.valueOf(testing_1));
+////                        nonNegativetrialValues = nonNegative_val();
+////                        Log.d("test long", String.valueOf(Testtrial3.get(0).getNonNegativeTrials().get(0)));
+//
+//                        //Mean calculations
+//                        double val = calculate_intmean2(testing_1);
+//                        trialValues.setText(CountMean + "");
+                        //Median calculations
+//                        int len = nonNegativetrialValues.size();
+//                        Log.d("i got here", String.valueOf(nonNegativetrialValues));
+//                        Double median_calc2 = calculateMedian2(nonNegativetrialValues, len);
+//                        median_value.setText(median_calc2 + "");
+//                        //standard deviation calculations
+//                        Double std_value2 = CalculateStandarddeviation2(nonNegativetrialValues, len);
+//                        stdDeviationValue.setText(std_value2 + "");
+//                        //convert arraylist to double - to reuse quartiles function
+//                        doubles_values2 = convert_double(nonNegativetrialValues);
+//                        // quartiles calculations - performed on data - with at least 4 data values
+//                        if (nonNegativetrialValues.size() >= 4) {
+//                            Quartiles = QuartilesCalculation(doubles_values2, len, median_calc2);
+//                            quartileVal1.setText(Quartiles.get(0) + "");
+//                            quartileVal3.setText(Quartiles.get(1) + "");
+//                            quartileVal2.setText(Quartiles.get(2) + "");
+//                        }
+                    }
+                }
+            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         if (expType.equals("Count")) {
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Count trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @Override
@@ -244,6 +300,8 @@ public class statsactivity_checking extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
         }
 
     }
@@ -266,6 +324,20 @@ public class statsactivity_checking extends AppCompatActivity {
         }
         return total_sum / values.size();
     }
+
+    public double calculate_intmean2(ArrayList<Integer>values){
+        double sum = 0;
+        int n = values.size();
+        ArrayList<Integer> val = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            sum+=values.get(i);
+        }
+        return sum / n;
+//        return total_sum / values.size();
+    }
+
+
+
 
     //handle double Median calculations
     public Double calculateMedian(ArrayList<Double>values, int arr_legnth)
@@ -371,6 +443,20 @@ public class statsactivity_checking extends AppCompatActivity {
             }
         }
         return trials;
+    }
+
+    /*This will convert 2d array Nonnegative into single array -
+        to do calculations on all the data
+     */
+    public ArrayList<Integer> nonNegative_val(){
+        trials_1 = new ArrayList<Integer>();
+        Log.d("------------------","---------------------------------");
+        for (int i = 0; i < Testtrial3.size(); ++i) {
+            for(int j = 0; j < Testtrial3.get(i).getNonNegativeTrials().size(); ++j) {
+                trials_1.add(Testtrial3.get(i).getNonNegativeTrials().get(j));
+            }
+        }
+        return trials_1;
     }
 
     //convert to single array of binomial trials

@@ -154,32 +154,32 @@ public class statsActivity extends AppCompatActivity {
 //                    MeasurementConvert(showList);
                     Log.d("list apparently", String.valueOf(showList.get(0).getTrials()));
                 }
-                if (expType.equals("Non-Negative Integer Count")&& targetexp.getTrials().size() >= 1){
-                    Log.d("here", "iam here");
-                    trial_values = NonnegativeConvert(showList);
-                    Double trialsMean = calculate_mean(trial_values);
-                    trialValues.setText(trialsMean+"");
-                    //median calculation
-                    int length = trial_values.size();
-                    Double val =calculateMedian(trial_values,length);
-                    median_value.setText(val+"");
-                    //std calculation
-                    Double val_2 = CalculateStandarddeviation(trial_values,length);
-                    val_2 = ((double)((int)(val_2 *100.0)))/100.0;
-                    stdDeviationValue.setText(val_2+"");
-                    //Quartiles Calculation
-                    if (targetexp.getTrials().size() == 1){
-                        quartileVal1.setText(val+"");
-                        quartileVal2.setText(val+"");
-                        quartileVal3.setText(val+"");
-                    }
-                    else{
-                        Quartiles = QuartilesCalculation(trial_values, length,val);
-                        quartileVal1.setText(Quartiles.get(0)+"");
-                        quartileVal2.setText(Quartiles.get(2)+"");
-                        quartileVal3.setText(Quartiles.get(1)+"");
-                    }
-                }
+//                if (expType.equals("Non-Negative Integer Count")&& targetexp.getTrials().size() >= 1){
+//                    Log.d("here", "iam here");
+//                    trial_values = NonnegativeConvert(showList);
+//                    Double trialsMean = calculate_mean(trial_values);
+//                    trialValues.setText(trialsMean+"");
+//                    //median calculation
+//                    int length = trial_values.size();
+//                    Double val =calculateMedian(trial_values,length);
+//                    median_value.setText(val+"");
+//                    //std calculation
+//                    Double val_2 = CalculateStandarddeviation(trial_values,length);
+//                    val_2 = ((double)((int)(val_2 *100.0)))/100.0;
+//                    stdDeviationValue.setText(val_2+"");
+//                    //Quartiles Calculation
+//                    if (targetexp.getTrials().size() == 1){
+//                        quartileVal1.setText(val+"");
+//                        quartileVal2.setText(val+"");
+//                        quartileVal3.setText(val+"");
+//                    }
+//                    else{
+//                        Quartiles = QuartilesCalculation(trial_values, length,val);
+//                        quartileVal1.setText(Quartiles.get(0)+"");
+//                        quartileVal2.setText(Quartiles.get(2)+"");
+//                        quartileVal3.setText(Quartiles.get(1)+"");
+//                    }
+//                }
                 //                showExperiments(recyclerView, showList);
             }
 
@@ -197,21 +197,21 @@ public class statsActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<Integer> NonnegativeConvert(ArrayList<Experiment>showList){
-        trials = new ArrayList<Integer>();
-        if (targetexp.getTrials().size() == 0){
-            Log.d("dont display", "This experiment has no trials");
-        }
-        else{
-            for (int counter = 0; counter < targetexp.getTrials().size();counter++){
-//            if showList.get(counter).
-                Log.d("testing non-negative",String.valueOf(((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalCount()));
-                Integer counted_val = ((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalCount();
-                trials.add(counted_val);
-            }
-        }
-        return trials;
-    }
+//    public ArrayList<Integer> NonnegativeConvert(ArrayList<Experiment>showList){
+//        trials = new ArrayList<Integer>();
+//        if (targetexp.getTrials().size() == 0){
+//            Log.d("dont display", "This experiment has no trials");
+//        }
+//        else{
+//            for (int counter = 0; counter < targetexp.getTrials().size();counter++){
+////            if showList.get(counter).
+//                Log.d("testing non-negative",String.valueOf(((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalCount()));
+//                Integer counted_val = ((NonnegativeTrial)showList.get(0).getTrials().get(counter)).getTotalCount();
+//                trials.add(counted_val);
+//            }
+//        }
+//        return trials;
+//    }
     //instead of counts - it should be an array of measurments for each trial
     //need to convert to integer array
 //    public void MeasurementConvert(ArrayList<Experiment> showList){

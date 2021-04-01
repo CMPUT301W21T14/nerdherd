@@ -67,6 +67,7 @@ public class FireStoreController {
     private ArrayList<HashMap> harshTrials;
     private ArrayList<Trial> trials;
     private ArrayList<Double> mTrials;
+    private ArrayList<Integer> nTrials;
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
         collectionReference = firebaseFirestore.collection(indicator);
@@ -297,13 +298,9 @@ public class FireStoreController {
                             trials.add(measurementTrial);
                             Log.d("item list", String.valueOf(measurementTrial));
                         }
-//                        if (experimentType.equals("Measurement trial")) {
-////
-//                            MeasurementTrial measurementTrial = new MeasurementTrial((int) Double.parseDouble(hashTrial.get("totalMeasurementCount").toString()));
-//                            trials.add(measurementTrial);
-//                        }
                         if (experimentType.equals("Non-negative trial")) {
-                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
+                            nTrials = (ArrayList<Integer>) hashTrial.get("nonNegativeTrials");
+                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(nTrials);
                             trials.add(nonnegativeTrial);
                         }
                     }
@@ -349,8 +346,12 @@ public class FireStoreController {
                                 Log.d("item list", String.valueOf(measurementTrial));
                             }
                             if (type.equals("Non-negative trial")) {
-                                NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
+                                Log.d("checking for sure", String.valueOf(hashTrial.get("nonNegativeTrials")));
+                                nTrials = (ArrayList<Integer>) hashTrial.get("nonNegativeTrials");
+                                Log.d("list", String.valueOf(nTrials));
+                                NonnegativeTrial nonnegativeTrial= new NonnegativeTrial(nTrials);
                                 itemList.add(nonnegativeTrial);
+                                Log.d("item list", String.valueOf(nonnegativeTrial));
                             }
                         }
                     }

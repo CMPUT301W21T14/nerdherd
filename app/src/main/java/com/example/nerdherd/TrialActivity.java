@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class TrialActivity extends AppCompatActivity {
 
     private String trialType;
+    private String trialStatus;
     private int mintrials;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -81,6 +82,9 @@ public class TrialActivity extends AppCompatActivity {
         //"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"
 
         trialType = GlobalVariable.experimentType;
+        if (targetexp.getStatus().equals("Ended")){
+            addtrials.setVisibility(View.INVISIBLE);
+        }
         mintrials = GlobalVariable.experimentMinTrials;
         ///ArrayList<Integer> current_exp
 
@@ -155,7 +159,7 @@ public class TrialActivity extends AppCompatActivity {
                 public void onCallback(ArrayList<Trial> list) {
                     adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
                     Testtrial3 = (ArrayList<NonnegativeTrial>)list.clone();
-                    
+
                     adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);
                     adapterController.useAdapter();
                 }
@@ -300,27 +304,26 @@ public class TrialActivity extends AppCompatActivity {
 
     public void updateNonnegativeTrialView(ArrayList<Integer>negativeTrials, int minTrial){
         int val = negativeTrials.size();
+        Log.d("hereee", "i got here");
         if (negativeTrials.size() < minTrial){
             Log.d("do not update", String.valueOf(negativeTrials.size()));
 
         }
         else{
 //            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
-            Trial t2 = new NonnegativeTrial(val);
+            Log.d("passed values", String.valueOf(negativeTrials));
+            Trial t2 = new NonnegativeTrial(negativeTrials);
+            ((NonnegativeTrial) t2).setNonNegativeTrials(negativeTrials);
+            //experiment has trials
+            //creating new experiment - but i want access to
             Experiment targetexp2 = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-//              trialsList.add(t2);
-//            targetexp2.getTrials().add(t2);
-//            Testtrial2.add((MeasurementTrial) t1);
-//            ArrayList <Trial> check = new ArrayList<>();
-//            check = (ArrayList<Trial>) Testtrial2.clone();
-//            targetexp.setTrials(check);
-            ArrayList <Trial> checks = new ArrayList<>();
-            Testtrial3.add((NonnegativeTrial)t2);
+//            Log.d("testing", String.valueOf(TestList));
+//            Testtrial3.add((NonnegativeTrial) t2);
             ArrayList <Trial> check = new ArrayList<>();
-            checks = (ArrayList<Trial>) Testtrial3.clone();
-            targetexp2.setTrials(checks);
-//            Log.d("array", String.valueOf(trialsList));
-//            targetexp2.setTrials(TestList);
+            check = (ArrayList<Trial>) Testtrial3.clone();
+            targetexp2.setTrials(check);
+//            Log.d("is dup", String.valueOf(Test))
+            targetexp2.getTrials().add(t2);
             fireStoreController.addNewExperiment(targetexp2, new FireStoreController.FireStoreExperimentCallback() {
                 @Override
                 public void onCallback() {
@@ -335,47 +338,43 @@ public class TrialActivity extends AppCompatActivity {
         }
     }
     public void updateMeasurementTrialView(ArrayList<Double> measurements, int minTrial){
-        if (measurements.size() < minTrial){
-            Log.d("do not update", String.valueOf(measurements.size()));
 
-        }
-        else{
-            int size = measurements.size();
-//            Trial t1 = new MeasurementTrial(measurements.size());
-            Trial t1 = new MeasurementTrial(measurements);
+
+        //Testtrial2 - contains all current trials
+        //check if adding trials to Testtrial2 will result in success
+
+        int size = measurements.size();
+        Trial t1 = new MeasurementTrial(measurements);
 //            ((MeasurementTrial) t1).setTotalMeasurementCount(size);
-            ((MeasurementTrial) t1).setMeasurements(measurements);
-            //experiment has trials
-            //creating new experiment - but i want access to
-            Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-            Log.d("testing", String.valueOf(TestList));
-            Testtrial2.add((MeasurementTrial) t1);
-            ArrayList <Trial> check = new ArrayList<>();
-            check = (ArrayList<Trial>) Testtrial2.clone();
-            targetexp.setTrials(check);
-            targetexp.getTrials().add(t1);
-            Log.d("array", String.valueOf(Testtrial2));
-//            targetexp.setTrials(Testtrial2);
-//            trialList.add(t1);
-//            trialList.add(t1);
-//            Log.d("current trial list", String.valueOf(targetexp.getTrials()));
-//
-//            targetexp.setTrials(trialList);
-//            targetexp.getTrials().add(t1);
-            fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
-                @Override
-                public void onCallback() {
-                    return;
-                }
-            }, new FireStoreController.FireStoreExperimentFailCallback() {
-                @Override
-                public void onCallback() {
-                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
+        ((MeasurementTrial) t1).setMeasurements(measurements);
+        //experiment has trials
+        //creating new experiment - but i want access to
+        Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+        Log.d("testing", String.valueOf(TestList));
+        Testtrial2.add((MeasurementTrial) t1);
+        //check after adding trials the size
+//        int fullSize = Testtrial2.size() +
+        if (Testtrial2.size() >= minTrial){
+            //alert the user that the Experiment was a success
+            Log.d("Success", "Experiment is a sucess");
         }
+        //
+        ArrayList <Trial> check = new ArrayList<>();
+        check = (ArrayList<Trial>) Testtrial2.clone();
+        targetexp.setTrials(check);
+        targetexp.getTrials().add(t1);
+        fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
+            @Override
+            public void onCallback() {
+                return;
+            }
+        }, new FireStoreController.FireStoreExperimentFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
     //
     //convert to single array of binomial trials

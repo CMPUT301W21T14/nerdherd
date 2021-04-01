@@ -1,6 +1,7 @@
 package com.example.nerdherd;
 
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
         this.trials = trials;
         this.listener = listener;
         this.trialtype = trialType;
+        Log.d("type", String.valueOf(trialType));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -81,7 +83,10 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
             holder.trials_executed.setVisibility(View.INVISIBLE);
         }
         if(trialtype.equals("Non-Negative Integer Count")){
-            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).totaltrialCount()+"");
+            Log.d("Does duplicate", String.valueOf(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials()));
+            int size = ((NonnegativeTrial)trials.get(position)).getNonNegativeTrials().size();
+            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials()+"");
+
             holder.trials_executed.setVisibility(View.INVISIBLE);
         }
     }
