@@ -21,6 +21,8 @@ public class Experiment implements Serializable {
     private boolean published = true;
     private ArrayList<String> subscriberId;
     private ArrayList<Trial> trials;
+    private int pendingReplies = 0;
+    private ArrayList<Question> questions = new ArrayList<Question>();
 
     /**
      * Experiment describer
@@ -113,5 +115,20 @@ public class Experiment implements Serializable {
 
     public void setSubscriberId(ArrayList<String> subscriberId) {
         this.subscriberId = subscriberId;
+    }
+    public int getPendingReplies() {
+        return pendingReplies;
+    }
+    public void addReply() {
+        this.pendingReplies += 1;
+    }
+    public void removeReply() {
+        this.pendingReplies -= 1;
+    }
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+    public void addQuestion(Question question) {
+        questions.add(question);
     }
 }
