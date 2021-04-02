@@ -51,6 +51,8 @@ public class SearchExperimentActivity extends AppCompatActivity{
     private Button searchButton;
     private String keyword;
     private ArrayList<Experiment> resultList;
+    private long backPressedTime;
+    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +78,10 @@ public class SearchExperimentActivity extends AppCompatActivity{
                 experimentView = new Intent(SearchExperimentActivity.this, ExperimentViewActivity.class);
                 GlobalVariable.indexForExperimentView = index;
                 startActivity(experimentView);
-                finish();
+                //finish(); //clicking on back after selecting an experiment doesn't exit the app
             }
         };
+
 
         savedList = new ArrayList<Experiment>();
         showList = new ArrayList<Experiment>();
@@ -136,6 +139,21 @@ public class SearchExperimentActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // this sees if the user has pressed back button twice within 2 seconds to exit the app
+    @Override
+    public void onBackPressed() {
+
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 
     // Start the CreateExperiment Activity on button press

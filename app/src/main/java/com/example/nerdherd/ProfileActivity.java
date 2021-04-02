@@ -71,6 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
     private String useridval;
     private ArrayList<String> updateditem;
     private String CurrentName;
+    private long backPressedTime;
+    private Toast backToast;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -203,11 +205,21 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    // this sees if the user has pressed back button twice within 2 seconds to exit the app
+    @Override
+    public void onBackPressed() {
 
-
-
-
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 
 
