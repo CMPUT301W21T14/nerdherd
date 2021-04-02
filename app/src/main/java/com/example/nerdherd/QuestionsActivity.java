@@ -32,7 +32,7 @@ public class QuestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 
-        questionListView = findViewById(R.id.question_repy_list);
+        questionListView = findViewById(R.id.question_list);
         buttonView = findViewById(R.id.questions_button);
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_question_view);
@@ -55,7 +55,7 @@ public class QuestionsActivity extends AppCompatActivity {
             });
         }
         else {
-            buttonView.setText("Ask a question");
+            buttonView.setText("Ask a Question");
             buttonView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,25 +67,32 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view, int index) {
                 // TODO: Open Question specific Activity
+                Intent questionIntent = new Intent(QuestionsActivity.this, QuestionViewActivity.class);
+                GlobalVariable.indexForQuestionView = index;
+                startActivity(questionIntent);
             }
         };
 
         // TODO: get the question list from firestore
         // Test Garbage
         Question testQuestion = new Question("Does this even work?");
-        Question testQuestion2 = new Question("Second in the list");
+        Question testQuestion2 = new Question("Second in the list I actually have no replies, I am also very long and will hopefully not break something... Is this long enough?");
         Reply testReply = new Reply("yes", "approved");
+        Reply testReply2 = new Reply("no", "pending");
         testQuestion.addReply(testReply);
+        testQuestion.addReply(testReply2);
         testQuestion.incrementReplies();
         testQuestion2.incrementReplies();
         testQuestion2.incrementReplies();
         ArrayList<Question> testList = new ArrayList<Question>();
         testList.add(testQuestion);
         testList.add(testQuestion2);
+        GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView).questions = testList;
         listQuestions(testList);
     }
 
     public void listQuestions(ArrayList<Question> questions) {
+        GlobalVariable.questionArrayList = questions;
         questionsAdapter = new QuestionsAdapter(questions, listener);
         AdapterController adapterController = new AdapterController(QuestionsActivity.this, questionListView, questionsAdapter);
         adapterController.useAdapter();

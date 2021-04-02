@@ -22,7 +22,7 @@ public class Experiment implements Serializable {
     private ArrayList<String> subscriberId;
     private ArrayList<Trial> trials;
     private int pendingReplies = 0;
-    private ArrayList<Question> questions = new ArrayList<Question>();
+    public ArrayList<Question> questions = new ArrayList<Question>();
 
     /**
      * Experiment describer
