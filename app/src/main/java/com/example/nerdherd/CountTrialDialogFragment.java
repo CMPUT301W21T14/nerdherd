@@ -76,10 +76,10 @@ public class CountTrialDialogFragment extends DialogFragment {
                         }
                         //if total number of trials taken is less than the minimum trials
                         //required then u will be informed
-                        if (count[0]< minTrials){
-                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
-                        }
+//                        if (count[0]< minTrials){
+//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
+//                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
+//                        }
                         ((TrialActivity) getActivity()).updateCountTrialView(count, minTrials);
                     }
                 })

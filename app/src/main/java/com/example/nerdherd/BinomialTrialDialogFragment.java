@@ -89,10 +89,10 @@ public class BinomialTrialDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //if total number of trials taken is less than the minimum trials
                         //required then u will be informed
-                        if (successcount[0]+failcounter[0] < minTrials){
-                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
-                        }
+//                        if (successcount[0]+failcounter[0] < minTrials){
+//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
+//                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
+//                        }
 
                         if (successcount[0] == 0){
                             successcount[0] = 0;

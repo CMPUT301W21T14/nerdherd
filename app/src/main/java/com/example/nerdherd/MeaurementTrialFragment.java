@@ -94,9 +94,9 @@ public class MeaurementTrialFragment extends DialogFragment {
 //                        }
                         //pass the arraylist
                         int count = measurements.size();
-                        if (count < minTrials){
-                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-                        }
+//                        if (count < minTrials){
+//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
+//                        }
                         ((TrialActivity) getActivity()).updateMeasurementTrialView(measurements, minTrials);
                     }
                 })
