@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Trial activity in the app
@@ -50,6 +51,7 @@ public class TrialActivity extends AppCompatActivity {
     ArrayList<MeasurementTrial> Testtrial2 = new ArrayList<>();
     ArrayList<NonnegativeTrial> Testtrial3 = new ArrayList<>();
     //
+    private ArrayList<Long> Arraylongs = new ArrayList<>();
     private ArrayList<Integer> Testtrial4 = new ArrayList<>();
     ArrayList<BinomialTrial> binomialtrialing = new ArrayList<>();
     private ArrayList<Integer> binomtrialValues;
@@ -59,7 +61,10 @@ public class TrialActivity extends AppCompatActivity {
     private ArrayList<Integer> counttrials_1;
     private GMailSender GMailSender;
     private ArrayList<Long> testing_1;
-    private ArrayList<Long> testing_2 = new ArrayList<>();
+    private ArrayList<Integer> testing_2 = new ArrayList<>();
+    ArrayList<NonnegativeTrial> nonNegativetrialing = new ArrayList<>();
+    private ArrayList<Integer> nonNegativetrialValues;
+    private ArrayList<Integer> test_nonNegative;
     //
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
@@ -180,25 +185,17 @@ public class TrialActivity extends AppCompatActivity {
                 public void onCallback(ArrayList<Trial> list) {
                     adapter = new TrialsAdapter(list, listener, "Non-Negative Integer Count");
 //                    Testtrial3 = (ArrayList<NonnegativeTrial>)list.clone();
-                    for (int x = 0; x < list.size(); x++){
-                        Testtrial3.add((NonnegativeTrial)list.get(x));
-                    }
-//                    Testtrial4 = (ArrayList<Integer>)list.clone();
-                    for (int i = 0; i < Testtrial3.size(); ++i) {
-                        for(int j = 0; j < Testtrial3.get(i).getNonNegativeTrials().size(); ++j) {
-//                            testing_1.add((long) Math.toIntExact(Testtrial3.get(i).getNonNegativeTrials().get(j)));
-                            testing_2.add(Long.valueOf(Testtrial3.get(i).getNonNegativeTrials().get(j)));
-                        }
-                    }
-                    Log.d("test", String.valueOf(testing_2));
+                    nonNegativetrialing = (ArrayList<NonnegativeTrial>) list.clone();
+                    nonNegativetrialValues = nonNegative_val();
+
                     int sum_2 = 0;
 
-                    Testtrial4 = (ArrayList<Integer>)testing_2.clone();
+//                    Testtrial4 = (ArrayList<Integer>)testing_2.clone();
 //                    for (int y =0; y < testing_2.size(); y++){
 //                        sum_2+=testing_2.get(y);
 //                    }
-                    Long l2 = Long.valueOf(Testtrial4.get(4));
-                    Log.d("tota sum", String.valueOf(l2));
+//                    Long l2 = Long.valueOf(Testtrial4.get(4));
+//                    Log.d("tota sum", String.valueOf(l2));
 //                    for (long y =0; y < testing_1.size(); y++){
 //                        Math.toIntExact((testing_1.get().intValue()));
 //                    }
@@ -382,45 +379,62 @@ public class TrialActivity extends AppCompatActivity {
 
     }
 
-    public void updateNonnegativeTrialView(ArrayList<Integer>negativeTrials, int minTrial){
-        int val = negativeTrials.size();
+    public void updateNonnegativeTrialView(ArrayList<Long>negativeTrials, int minTrial){
+
+        Log.d("database", nonNegativetrialValues.toString());
         Log.d("hereee", "i got here");
-        if (negativeTrials.size() < minTrial){
-            Log.d("do not update", String.valueOf(negativeTrials.size()));
+        int val = negativeTrials.size();
+
+        //sum of current trials
+        int counted = 0;
+        for (int i=0;i<val;++i) {
+            counted+=negativeTrials.get(i).longValue();
         }
-        else{
+
+        Log.d("arrays", negativeTrials.toString());
 //            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
-            Log.d("passed values", String.valueOf(negativeTrials));
-            Trial t2 = new NonnegativeTrial(negativeTrials);
-            ((NonnegativeTrial) t2).setNonNegativeTrials(negativeTrials);
-            //experiment has trials
-            //creating new experiment - but i want access to
-            Experiment targetexp2 = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
-//            Log.d("testing", String.valueOf(TestList));
-//            Testtrial3.add((NonnegativeTrial) t2);
-            ArrayList <Trial> check = new ArrayList<>();
-            check = (ArrayList<Trial>) Testtrial3.clone();
-//            for (int i = 0; i < Testtrial3.size(); ++i) {
-//                for(int j = 0; j < Testtrial3.get(i).getNonNegativeTrials().size(); ++j) {
-//                    Log.d("this is type test", (Testtrial3.get(i).getNonNegativeTrials().get(j)).toString());
-//                }
-//            }
-//            Log.d("this is type test", ((NonnegativeTrial)check.get(0)).getNonNegativeTrials().toString());
-            targetexp2.setTrials(check);
-//            Log.d("is dup", String.valueOf(Test))
-            targetexp2.getTrials().add(t2);
-            fireStoreController.addNewExperiment(targetexp2, new FireStoreController.FireStoreExperimentCallback() {
-                @Override
-                public void onCallback() {
-                    return;
-                }
-            }, new FireStoreController.FireStoreExperimentFailCallback() {
-                @Override
-                public void onCallback() {
-                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            });
+        Log.d("passed values", String.valueOf(negativeTrials));
+        Trial t2 = new NonnegativeTrial(negativeTrials);
+        ((NonnegativeTrial) t2).setNonNegativeTrials(negativeTrials);
+
+        //experiment has trials
+        //creating new experiment - but i want access to
+        Experiment targetexp = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
+        //take sum of previous trials
+        int sum = 0;
+        for (int y =0; y < nonNegativetrialValues.size(); y++){
+            sum+=nonNegativetrialValues.get(y);
         }
+        int fullSize = sum + counted;
+        Log.d("fullSize", String.valueOf(fullSize));
+        //send email per instance of application - to remind the owner
+        if (fullSize >= minTrial && GlobalVariable.success.equals("No")){
+            Log.d("Exp is successfull", "Successful");
+            String OwnerEmail = targetexp.getOwnerProfile().getEmail();
+            String ExperimentName = targetexp.getTitle();
+            String OwnerName = targetexp.getOwnerProfile().getName();
+            //alert the user that the Experiment was a success
+            sender("Successful Experiment", "Hello" + " "+OwnerName+ " "+"Your Experiment"
+                    + " "+ "("+ExperimentName+")"+ " "+"is a success!", OwnerEmail);
+            GlobalVariable.success = "yes";
+        }
+        ArrayList <Trial> check = new ArrayList<>();
+        check = (ArrayList<Trial>) nonNegativetrialing.clone();
+        Log.d("testing set", check.toString());
+        targetexp.setTrials(check);
+        targetexp.getTrials().add(t2);
+        fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
+            @Override
+            public void onCallback() {
+                return;
+            }
+        }, new FireStoreController.FireStoreExperimentFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
     public void updateMeasurementTrialView(ArrayList<Double> measurements, int minTrial){
 
@@ -489,6 +503,18 @@ public class TrialActivity extends AppCompatActivity {
         return counttrials_1;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public ArrayList<Integer> nonNegative_val(){
+        test_nonNegative= new ArrayList<Integer>();
+        Log.d("------------------","---------------------------------");
+        for (int i = 0; i < nonNegativetrialing.size(); ++i) {
+            for(int j = 0; j < nonNegativetrialing.get(i).getNonNegativeTrials().size(); ++j) {
+                test_nonNegative.add(Math.toIntExact(nonNegativetrialing.get(i).getNonNegativeTrials().get(j)));
+            }
+        }
+        return test_nonNegative;
+    }
 
     private void sender(String subject, String body, String target){
         new Thread(new Runnable() {

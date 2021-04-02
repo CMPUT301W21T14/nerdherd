@@ -1,5 +1,6 @@
 package com.example.nerdherd;
 
+import android.os.Build;
 import android.util.Log;
 import android.util.Pair;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 /**
  * Database connection to the app
@@ -67,7 +69,7 @@ public class FireStoreController {
     private ArrayList<HashMap> harshTrials;
     private ArrayList<Trial> trials;
     private ArrayList<Double> mTrials;
-    private ArrayList<Integer> nTrials;
+    private ArrayList<Long> nTrials;
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
         collectionReference = firebaseFirestore.collection(indicator);
@@ -299,7 +301,7 @@ public class FireStoreController {
                             Log.d("item list", String.valueOf(measurementTrial));
                         }
                         if (experimentType.equals("Non-negative trial")) {
-                            nTrials = (ArrayList<Integer>) hashTrial.get("nonNegativeTrials");
+                            nTrials = (ArrayList<Long>) hashTrial.get("nonNegativeTrials");
                             NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(nTrials);
                             trials.add(nonnegativeTrial);
                         }
@@ -317,6 +319,7 @@ public class FireStoreController {
     public void keepGetTrialData(ArrayList<Trial> itemList, String id, String type, FireStoreCertainKeepCallback fireStoreCertainKeepCallback, FireStoreCertainKeepFailCallback fireStoreCertainKeepFailCallback){
         accessor(experimentIndicator);
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null){
@@ -347,7 +350,11 @@ public class FireStoreController {
                             }
                             if (type.equals("Non-negative trial")) {
                                 Log.d("checking for sure", String.valueOf(hashTrial.get("nonNegativeTrials")));
-                                nTrials = (ArrayList<Integer>) hashTrial.get("nonNegativeTrials");
+                                nTrials = (ArrayList<Long>) hashTrial.get("nonNegativeTrials");
+//                                for (int y = 0; y < nTrials.size(); y++){
+//                                    int x = Math.toIntExact(nTrials.get(y));
+//                                    nTrials.set(y, x);
+//                                }
                                 Log.d("list", String.valueOf(nTrials));
                                 NonnegativeTrial nonnegativeTrial= new NonnegativeTrial(nTrials);
                                 itemList.add(nonnegativeTrial);

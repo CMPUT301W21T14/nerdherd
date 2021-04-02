@@ -16,17 +16,20 @@ import java.util.ArrayList;
 public class NonnegativeTrial extends Trial {
 
     private Integer totalCount;
-    private ArrayList<Integer> nonNegativeTrials;
+    private ArrayList<Long> nonNegativeTrials;
 
-    public NonnegativeTrial(ArrayList<Integer>nonNegatives){
+    public NonnegativeTrial(ArrayList<Long>nonNegatives){
         this.nonNegativeTrials = nonNegatives;
     }
 
-    public ArrayList<Integer> getNonNegativeTrials(){
+    public ArrayList<Long> getNonNegativeTrials(){
+
+//
         return nonNegativeTrials;
     }
 
-    public void setNonNegativeTrials(ArrayList<Integer> nonNegativeResult){
+
+    public void setNonNegativeTrials(ArrayList<Long> nonNegativeResult){
         this.nonNegativeTrials = nonNegativeResult;
     }
 }

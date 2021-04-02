@@ -1,5 +1,6 @@
 package com.example.nerdherd;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -33,6 +35,7 @@ public class statsactivity_checking extends AppCompatActivity {
     private ArrayList<Integer> trials_1;
     private ArrayList<Integer> trials_2;
     private ArrayList<Integer> trials_4;
+    private ArrayList<Integer> test_nonNegative;
     private ArrayList<Double> quartiles;
     private ArrayList<Double> Quartiles;
     //    private ArrayList<Integer> trials_1;
@@ -90,7 +93,7 @@ public class statsactivity_checking extends AppCompatActivity {
 
 //        recyclerView = findViewById(R.id.subscription_experiment_recyclerView);
 
-        int maxLength = 7;
+        int maxLength = 6;
         savedList = new ArrayList<Experiment>();
         showList = new ArrayList<Experiment>();
         fireStoreController = new FireStoreController();
@@ -99,6 +102,9 @@ public class statsactivity_checking extends AppCompatActivity {
         trialValues.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         median_value.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         stdDeviationValue.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+        quartileVal1.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+        quartileVal2.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
+        quartileVal3.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
         Log.d("Experiment type", expType);
         if (expType.equals("Measurement")) {
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Measurement trial", new FireStoreController.FireStoreCertainKeepCallback() {
@@ -201,6 +207,7 @@ public class statsactivity_checking extends AppCompatActivity {
         if (expType.equals("Non-Negative Integer Count")) {
             testing_1 = new ArrayList<Integer>();
             fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
                     if (list.isEmpty()) {
@@ -211,19 +218,36 @@ public class statsactivity_checking extends AppCompatActivity {
                         quartileVal3.setText("");
                         quartileVal2.setText("");
                     } else {
-                        Testtrial3 = (ArrayList<NonnegativeTrial>) list.clone();
+                        nonNegativetrialing = (ArrayList<NonnegativeTrial>) list.clone();
+                        nonNegativetrialValues = nonNegative_val();
 
-                        for (int i = 0; i < Testtrial3.size(); ++i) {
-                            for(int j = 0; j < Testtrial3.get(i).getNonNegativeTrials().size(); ++j) {
-                                testing_1.add((Testtrial3.get(i).getNonNegativeTrials().get(j)));
-
-                            }
+                        Log.d("all values", nonNegativetrialValues.toString());
+                        //Mean calculations
+                        Double trialsMean = calculate_intmean(nonNegativetrialValues);
+                        trialValues.setText(trialsMean + "");
+                        //Median calculations
+                        int len = nonNegativetrialValues.size();
+                        Log.d("i got here", String.valueOf(nonNegativetrialValues));
+                        Double median_calc = calculateMedian2(nonNegativetrialValues, len);
+                        median_value.setText(median_calc + "");
+                        //                    //standard deviation calculations
+                        Double std_value = CalculateStandarddeviation2(nonNegativetrialValues, len);
+                        stdDeviationValue.setText(std_value + "");
+                        //convert arraylist to double - to reuse quartiles function
+                        doubles_values = convert_double(nonNegativetrialValues);
+                        Log.d("test1", String.valueOf(nonNegativetrialValues));
+                        // quartiles calculations - performed on data - with at least 4 data values
+                        if (nonNegativetrialValues.size() >= 4) {
+                            Quartiles = QuartilesCalculation(doubles_values, len, median_calc);
+                            quartileVal1.setText(Quartiles.get(0) + "");
+                            quartileVal3.setText(Quartiles.get(1) + "");
+                            quartileVal2.setText(Quartiles.get(2) + "");
                         }
-                        int su = 0;
-                        for (int y =0; y < testing_1.size(); y++){
-                            su = su + testing_1.get(0);
-                        }
-                        Log.d("non-negative", String.valueOf(testing_1.get(0)));
+//                        int su = 0;
+//                        for (int y =0; y < testing_1.size(); y++){
+//                            su = su + Math.toIntExact(testing_1.get(y));
+//                        }
+                        Log.d("non-negative", String.valueOf(testing_1));
 //                        Log.d("val_test", String.valueOf(testing_1));
 ////                        nonNegativetrialValues = nonNegative_val();
 ////                        Log.d("test long", String.valueOf(Testtrial3.get(0).getNonNegativeTrials().get(0)));
@@ -448,15 +472,16 @@ public class statsactivity_checking extends AppCompatActivity {
     /*This will convert 2d array Nonnegative into single array -
         to do calculations on all the data
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Integer> nonNegative_val(){
-        trials_1 = new ArrayList<Integer>();
+        test_nonNegative= new ArrayList<Integer>();
         Log.d("------------------","---------------------------------");
-        for (int i = 0; i < Testtrial3.size(); ++i) {
-            for(int j = 0; j < Testtrial3.get(i).getNonNegativeTrials().size(); ++j) {
-                trials_1.add(Testtrial3.get(i).getNonNegativeTrials().get(j));
+        for (int i = 0; i < nonNegativetrialing.size(); ++i) {
+            for(int j = 0; j < nonNegativetrialing.get(i).getNonNegativeTrials().size(); ++j) {
+                test_nonNegative.add(Math.toIntExact(nonNegativetrialing.get(i).getNonNegativeTrials().get(j)));
             }
         }
-        return trials_1;
+        return test_nonNegative;
     }
 
     //convert to single array of binomial trials

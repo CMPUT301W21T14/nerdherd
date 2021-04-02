@@ -1,6 +1,7 @@
 package com.example.nerdherd;
 
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,9 +66,11 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         holder.title.setText(experiments.get(position).getTitle());
         holder.owner.setText(experiments.get(position).getOwnerProfile().getName());
         holder.status.setText(experiments.get(position).getStatus());
+        Log.d("current names", experiments.get(position).getOwnerProfile().getName());
         String experimentType = experiments.get(position).getType();
         if (experimentType.compareTo("Binomial Trial") == 0)
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("002ECC71",16)); //Green

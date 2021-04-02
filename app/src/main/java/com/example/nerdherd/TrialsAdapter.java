@@ -85,7 +85,10 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
         if(trialtype.equals("Non-Negative Integer Count")){
             Log.d("Does duplicate", String.valueOf(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials()));
             int size = ((NonnegativeTrial)trials.get(position)).getNonNegativeTrials().size();
-            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials()+"");
+
+            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials().toString());
+
+
 
             holder.trials_executed.setVisibility(View.INVISIBLE);
         }

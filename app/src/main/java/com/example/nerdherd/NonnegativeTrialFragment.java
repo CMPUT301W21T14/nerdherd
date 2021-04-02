@@ -49,7 +49,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
         //link to xml
         Button Recordtbn = view.findViewById(R.id.record_nonNegativeTrial);
 
-        ArrayList<Integer> Nonnegativetrials = new ArrayList<Integer>();
+        ArrayList<Long> Nonnegativetrials = new ArrayList<>();
 
         Nonnegative_val = view.findViewById(R.id.nonNegative_input);
 
@@ -60,7 +60,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
                 isInt = check_int(recorded_vals);
                 if (isInt){
                     user_recordedVal = Integer.parseInt(recorded_vals);
-                    Nonnegativetrials.add(user_recordedVal);
+                    Nonnegativetrials.add((long) user_recordedVal);
                 }
                 else{
                     Toast.makeText(getContext(), "Invalid Input: only Non-negative Integer Allowed", Toast.LENGTH_SHORT).show();

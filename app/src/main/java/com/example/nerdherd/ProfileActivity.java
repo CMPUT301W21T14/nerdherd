@@ -1,6 +1,8 @@
 package com.example.nerdherd;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -73,13 +75,15 @@ public class ProfileActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-
+    private Experiment experiment;
     private Button usersExpDetailed;
     private ArrayList<Experiment> savedList;
     private ArrayList<Experiment> returneditems;
 
     private int current_exp;
     private int publicUSer_exp;
+    private ArrayList<Experiment> revealList;
+    private ArrayList<Experiment> savedList2;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -306,6 +310,9 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onCallback() {
                     uname.setText(Name+"");
                     usersname.setText(Name+"");
+                    Log.d("Experiments owned", String.valueOf(GlobalVariable.experimentArrayList.get(0).getTitle()));
+                    GlobalVariable.profile.setName(Name);
+
 
                 }
             }, new FireStoreController.FireStoreUpdateFailCallback() {
@@ -349,8 +356,38 @@ public class ProfileActivity extends AppCompatActivity {
         }
         if (!Password.isEmpty() | !Name.isEmpty() | !Email.isEmpty() | avatar != -1){
             Toast.makeText(getApplicationContext(), "User Profile Updated", Toast.LENGTH_SHORT).show();
+            updateFirestore(Name, Email,avatar);
         }
     }
+
+    public void updateFirestore(String name, String email, Integer avatar){
+        revealList = new ArrayList<Experiment>();
+        savedList2 = new ArrayList<Experiment>();
+        fireStoreController.experimentReader(savedList2, new FireStoreController.FireStoreExperimentReadCallback() {
+            @Override
+            public void onCallback(ArrayList<Experiment> experiments) {
+
+                revealList.clear();
+
+                for (Experiment allExperiment : experiments){
+                    if (allExperiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                        revealList.add(allExperiment);
+                    }
+                }
+                Log.d("reveal list", String.valueOf(revealList.get(0)));
+                for (int y=0; y < revealList.size(); y++){
+
+                }
+
+            }
+        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }
 

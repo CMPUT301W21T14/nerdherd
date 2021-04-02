@@ -11,127 +11,245 @@
         layout="@layout/tool_bar_layout"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         >
-
-        <TextView
-            android:id="@+id/trials_mean"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="84dp"
-            android:text="MEAN"
-            android:textStyle="bold"
-            android:textSize="30sp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewContactInfo"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:padding="8dp"
+            android:layout_marginTop="80dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:layout_editor_absoluteY="150dp"
+            app:cardElevation="25dp"
+            app:layout_constraintTop_toTopOf="@+id/clayout"
+            android:backgroundTint="@color/LoginBackground"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintcard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-        <TextView
-            android:id="@+id/mean_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="25sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trials_mean" />
+                <TextView
+                    android:id="@+id/trials_mean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="MEAN"
+                    android:textColor="@color/Gradient"
+                    android:textSize="27sp"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/trials_median"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="94dp"
-            android:text="MEDIAN"
-            android:textStyle="bold"
-            android:textSize="30sp"
+                <TextView
+                    android:id="@+id/mean_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/trials_mean" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+                    <!--      Median Section  -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewContactInfo2"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:padding="8dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/trials_mean" />
+            tools:layout_editor_absoluteY="150dp"
+            app:cardElevation="25dp"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewContactInfo"
+            android:backgroundTint="@color/LoginBackground"
+            >
 
-        <TextView
-            android:id="@+id/median_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text=""
-            android:textSize="25sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trials_median" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintcard2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
 
-        <TextView
-            android:id="@+id/trials_stddeviation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="44dp"
-            android:text="STANDARD DEVIATION"
-            android:textSize="30sp"
-            android:textStyle="bold"
+                >
+
+                <TextView
+                    android:id="@+id/trials_median"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="MEDIAN"
+                    android:textColor="@color/Gradient"
+                    android:textSize="20sp"
+                    android:textStyle="italic"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/median_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="25dp"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/trials_median" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--      STANDARD DEVIATION Section  -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewContactInfo4"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:padding="8dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            tools:layout_editor_absoluteY="150dp"
+            app:cardElevation="25dp"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewContactInfo"
+            android:backgroundTint="@color/LoginBackground"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintcard4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+
+                >
+
+                <TextView
+                    android:id="@+id/trials_stddeviation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="Standard deviation"
+                    android:textColor="@color/Gradient"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/std_deviationValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/trials_stddeviation" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+                        <!--   QUARTILES     -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardviewContactInfo3"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:padding="8dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/median_value" />
+            tools:layout_editor_absoluteY="150dp"
+            app:cardElevation="25dp"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewContactInfo4"
+            android:backgroundTint="@color/LoginBackground"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintcard3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
 
-        <TextView
-            android:id="@+id/std_deviationValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                >
 
-            android:layout_marginTop="18dp"
-            android:text=""
-            android:textSize="25sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trials_stddeviation" />
+                <TextView
+                    android:id="@+id/trials_Quartiles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="44dp"
+                    android:text="QUARTILES"
+                    android:textColor="@color/Gradient"
+                    android:textSize="28sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:textStyle="italic"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/trials_Quartiles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:text="QUARTILES"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/std_deviationValue" />
+                <TextView
+                    android:id="@+id/std_quartilesValue1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/std_quartilesValue1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text=""
-            android:layout_marginLeft="40dp"
-            android:textSize="25sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trials_Quartiles" />
+                <TextView
+                    android:id="@+id/std_quartilesValue2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/white"
+                    app:layout_constraintLeft_toLeftOf="@id/std_quartilesValue1"
+                    app:layout_constraintRight_toRightOf="@+id/std_quartilesValue3"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/std_quartilesValue2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text=""
-            android:textSize="25sp"
-            app:layout_constraintLeft_toLeftOf="@+id/std_quartilesValue1"
-            app:layout_constraintRight_toRightOf="@+id/std_quartilesValue3"
-            app:layout_constraintTop_toBottomOf="@+id/trials_Quartiles" />
+                <TextView
+                    android:id="@+id/std_quartilesValue3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:textStyle="italic"
+                    android:textColor="@color/white"
+                    app:layout_constraintRight_toRightOf="parent"
 
-        <TextView
-            android:id="@+id/std_quartilesValue3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text=""
-            android:textSize="25sp"
-            app:layout_constraintLeft_toLeftOf="@+id/std_quartilesValue2"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trials_Quartiles" />
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
