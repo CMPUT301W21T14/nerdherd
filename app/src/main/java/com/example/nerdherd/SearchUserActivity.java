@@ -72,9 +72,11 @@ public class SearchUserActivity extends AppCompatActivity {
                 profileView = new Intent(SearchUserActivity.this, ProfileActivity.class);
                 profileView.putExtra(EXTRA_MESSAGE, index);
                 startActivity(profileView);
-                finish();
+                //finish(); //finish was taken to fix the back button to go back to user screen instead of closing the app
             }
         };
+
+
 
         fireStoreController.readProfile(profiles, null, "All User", null, null, new FireStoreController.FireStoreProfileListCallback() {
             @Override

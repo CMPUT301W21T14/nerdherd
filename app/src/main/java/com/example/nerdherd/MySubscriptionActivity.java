@@ -43,6 +43,8 @@ public class MySubscriptionActivity extends AppCompatActivity {
     private String keyword;
     private ArrayList<Experiment> resultList;
     private RecyclerView recyclerView;
+    private long backPressedTime;
+    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class MySubscriptionActivity extends AppCompatActivity {
 //                bundle.putString("I Subscribed", GlobalVariable.profile.getId());
 //                experimentView.putExtras(bundle);
                 startActivity(experimentView);
-                finish();
+                //finish(); //clicking back takes us to the previous activity
             }
         };
         savedList = new ArrayList<Experiment>();
@@ -132,6 +134,21 @@ public class MySubscriptionActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // this sees if the user has pressed back button twice within 2 seconds to exit the app
+    @Override
+    public void onBackPressed() {
+
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 
     private void showExperiments(RecyclerView recyclerView, ArrayList<Experiment> experiments){
