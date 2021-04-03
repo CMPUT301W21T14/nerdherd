@@ -78,9 +78,9 @@ public class QuestionsActivity extends AppCompatActivity {
         Question testQuestion = new Question("Does this even work?");
         Question testQuestion2 = new Question("Second in the list I actually have no replies, I am also very long and will hopefully not break something... Is this long enough?");
         Question testQuestion3 = new Question("A Third Question?");
-        Reply testReply = new Reply("yes", "approved");
-        Reply testReply1 = new Reply("A super long reply that will hopefully be longer than one line, long story short yes this does in fact work.", "pending");
-        Reply testReply2 = new Reply("no", "pending");
+        Reply testReply = new Reply("yes");
+        Reply testReply1 = new Reply("A super long reply that will hopefully be longer than one line, long story short yes this does in fact work.");
+        Reply testReply2 = new Reply("no");
         testQuestion.addReply(testReply);
         testQuestion.addReply(testReply1);
         testQuestion.addReply(testReply2);

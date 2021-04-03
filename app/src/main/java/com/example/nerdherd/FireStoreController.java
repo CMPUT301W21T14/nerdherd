@@ -295,18 +295,14 @@ public class FireStoreController {
 
                             Question q = new Question(question);
 
-                            int numReplies = ((Long)questionData.get("Number of Replies")).intValue();
-                            q.setNumberOfReplies(numReplies);
-
                             ArrayList<HashMap> replies = (ArrayList<HashMap>) questionData.get("Replies");
 
-                            Log.d("Question: ", question+'['+numReplies+']');
+                            Log.d("Question: ", question);
 
                             for( HashMap replyData : replies ) {
                                 String reply = replyData.get("Content").toString();
-                                String status = replyData.get("Status").toString();
-                                Log.d("Reply: ", reply+'['+status+']');
-                                Reply r = new Reply(reply, status);
+                                Log.d("Reply: ", reply);
+                                Reply r = new Reply(reply);
                                 q.addReply(r);
                             }
                             questionArrayList.add(q);
