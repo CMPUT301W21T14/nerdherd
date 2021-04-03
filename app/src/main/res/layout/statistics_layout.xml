@@ -250,6 +250,14 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/plot"
+            app:layout_constraintTop_toBottomOf="@id/cardviewContactInfo3"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="PLOT"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -261,6 +269,8 @@
         android:fitsSystemWindows="true"
         android:layout_gravity = "start"
         app:itemTextAppearance="@style/NavigationViewStyle"/>
+
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
