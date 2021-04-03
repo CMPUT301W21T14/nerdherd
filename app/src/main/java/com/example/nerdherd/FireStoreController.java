@@ -242,6 +242,7 @@ public class FireStoreController {
         experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
         experimentData.put("Subscriber Id", newExperiment.getSubscriberId());
         experimentData.put("Trial List", newExperiment.getTrials());
+        experimentData.put("Questions", newExperiment.getQuestions());
         // Find user information and load data
         accessor(experimentIndicator);
         collectionReference

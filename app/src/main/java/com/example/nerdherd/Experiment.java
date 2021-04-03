@@ -22,7 +22,7 @@ public class Experiment implements Serializable {
     private ArrayList<String> subscriberId;
     private ArrayList<Trial> trials;
     private int pendingReplies = 0;
-    public ArrayList<Question> questions = new ArrayList<Question>();
+    public ArrayList<Question> questions;
 
     /**
      * Experiment describer
@@ -56,6 +56,7 @@ public class Experiment implements Serializable {
         this.published = published;
         this.subscriberId = subscriberId;
         this.trials = trials;
+        this.questions = new ArrayList<>();
     }
 
     public ArrayList<Trial> getTrials() {
