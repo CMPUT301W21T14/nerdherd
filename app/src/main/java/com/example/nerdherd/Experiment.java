@@ -21,7 +21,7 @@ public class Experiment implements Serializable {
     private boolean published = true;
     private ArrayList<String> subscriberId;
     private ArrayList<Trial> trials;
-    public ArrayList<Question> questions = new ArrayList<Question>();
+    private ArrayList<Question> questions = new ArrayList<Question>();
 
     /**
      * Experiment describer
@@ -120,6 +120,6 @@ public class Experiment implements Serializable {
         return questions;
     }
     public void addQuestion(Question question) {
-        questions.add(question);
+        this.questions.add(question);
     }
 }

@@ -59,6 +59,13 @@ public class QuestionsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         questionInput.setText("");
+                        /*
+                        String input = questionInput.getText().toString();
+                        questionInput.setText("");
+                        Question newQuestion = new Question(input);
+                        experiment.addQuestion(newQuestion);
+                        //TODO: save the experiment
+                        */
                     }
                 });
             }
@@ -72,24 +79,12 @@ public class QuestionsActivity extends AppCompatActivity {
                 startActivity(questionIntent);
             }
         };
+    }
 
-        // TODO: get the question list from firestore
-        // Test Garbage
-        Question testQuestion = new Question("Does this even work?");
-        Question testQuestion2 = new Question("Second in the list I actually have no replies, I am also very long and will hopefully not break something... Is this long enough?");
-        Question testQuestion3 = new Question("A Third Question?");
-        Reply testReply = new Reply("yes");
-        Reply testReply1 = new Reply("A super long reply that will hopefully be longer than one line, long story short yes this does in fact work.");
-        Reply testReply2 = new Reply("no");
-        testQuestion.addReply(testReply);
-        testQuestion.addReply(testReply1);
-        testQuestion.addReply(testReply2);
-        ArrayList<Question> testList = new ArrayList<Question>();
-        testList.add(testQuestion);
-        testList.add(testQuestion2);
-        testList.add(testQuestion3);
-        GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView).questions = testList;
-        listQuestions(testList);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        listQuestions();
     }
 
     public void makeFakeQuestion() {
@@ -135,9 +130,8 @@ public class QuestionsActivity extends AppCompatActivity {
         });
     }
 
-    public void listQuestions(ArrayList<Question> questions) {
-        GlobalVariable.questionArrayList = questions;
-        questionsAdapter = new QuestionsAdapter(questions, listener);
+    public void listQuestions() {
+        questionsAdapter = new QuestionsAdapter(experiment.getQuestions(), listener);
         AdapterController adapterController = new AdapterController(QuestionsActivity.this, questionListView, questionsAdapter);
         adapterController.useAdapter();
     }

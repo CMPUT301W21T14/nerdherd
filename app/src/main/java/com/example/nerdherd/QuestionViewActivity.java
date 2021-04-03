@@ -25,6 +25,7 @@ public class QuestionViewActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Experiment experiment;
     private boolean isOwner;
+    private ReplyAdapter replyAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +57,28 @@ public class QuestionViewActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         replyInput.setText("");
+                        /*
+                        String input = replyInput.getText().toString();
+                        replyInput.setText("");
+                        Reply newReply = new Reply(input);
+                        experiment.getQuestions().get(GlobalVariable.indexForQuestionView).addReply(newReply);
+                        //TODO: save the experiment
+                        */
                     }
                 });
             }
         });
-
         questionContent.setText(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getContent());
-        listReplies(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getReplies());
     }
 
-    public void listReplies(ArrayList<Reply> replies) {
-        GlobalVariable.replyArrayList = replies;
-        ReplyAdapter replyAdapter = new ReplyAdapter(replies);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        listReplies();
+    }
+
+    public void listReplies() {
+        replyAdapter = new ReplyAdapter(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getReplies());
         AdapterController adapterController = new AdapterController(QuestionViewActivity.this, replyListView, replyAdapter);
         adapterController.useAdapter();
     }
