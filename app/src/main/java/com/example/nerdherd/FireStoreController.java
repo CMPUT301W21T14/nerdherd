@@ -291,11 +291,11 @@ public class FireStoreController {
 
                         for (HashMap questionData : questionList) {
                             Log.d("Test: ", questionData.toString());
-                            String question = questionData.get("Content").toString();
+                            String question = questionData.get("content").toString();
 
                             Question q = new Question(question);
 
-                            ArrayList<String> replies = (ArrayList<String>) questionData.get("Replies");
+                            ArrayList<String> replies = (ArrayList<String>) questionData.get("replies");
 
                             Log.d("Question: ", question);
 

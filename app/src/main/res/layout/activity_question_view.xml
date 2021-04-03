@@ -9,7 +9,10 @@
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/draw_layout_replies_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="-49dp">
 
         <include
             layout="@layout/tool_bar_layout"
@@ -31,6 +34,17 @@
                 android:layout_marginRight="8dp"
                 android:text="Add a Reply"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/reply_input"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/reply_input"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:hint="Enter your reply"
+                android:textSize="18sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

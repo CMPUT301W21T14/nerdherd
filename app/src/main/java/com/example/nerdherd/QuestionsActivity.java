@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -22,6 +23,7 @@ public class QuestionsActivity extends AppCompatActivity {
     private MenuController menuController;
     private RecyclerView questionListView;
     private Button buttonView;
+    private EditText questionInput;
     private Experiment experiment;
     private boolean isOwner;
     private QuestionsAdapter questionsAdapter;
@@ -34,6 +36,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
         questionListView = findViewById(R.id.question_list);
         buttonView = findViewById(R.id.questions_button);
+        questionInput = findViewById(R.id.question_input);
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_question_view);
         navigationView = findViewById(R.id.navigator);
@@ -48,7 +51,14 @@ public class QuestionsActivity extends AppCompatActivity {
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: open question creation dialogue
+                buttonView.setText("Confirm");
+                questionInput.setVisibility(View.VISIBLE);
+                buttonView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        questionInput.setText("");
+                    }
+                });
             }
         });
         listener = new QuestionsAdapter.onClickListener() {

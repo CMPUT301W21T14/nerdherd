@@ -21,7 +21,7 @@ public class Experiment implements Serializable {
     private boolean published = true;
     private ArrayList<String> subscriberId;
     private ArrayList<Trial> trials;
-    public ArrayList<Question> questions;
+    public ArrayList<Question> questions = new ArrayList<Question>();
 
     /**
      * Experiment describer
