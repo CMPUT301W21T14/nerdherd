@@ -63,7 +63,6 @@ public class QuestionViewActivity extends AppCompatActivity {
                         Reply newReply = new Reply(input);
                         experiment.getQuestions().get(GlobalVariable.indexForQuestionView).addReply(newReply);
                         saveExperimentReplies();
-                        listReplies();
                     }
                 });
             }
@@ -103,6 +102,7 @@ public class QuestionViewActivity extends AppCompatActivity {
             public void onCallback() {
                 // successfully updated in the database
                 Toast.makeText(getApplicationContext(), "New question asked", Toast.LENGTH_LONG).show();
+                listReplies();
             }
         }, new FireStoreController.FireStoreUpdateFailCallback() {
             @Override

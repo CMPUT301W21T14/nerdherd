@@ -74,7 +74,6 @@ public class QuestionsActivity extends AppCompatActivity {
                 Intent questionIntent = new Intent(QuestionsActivity.this, QuestionViewActivity.class);
                 GlobalVariable.indexForQuestionView = index;
                 startActivity(questionIntent);
-                listQuestions();
             }
         };
     }
@@ -111,6 +110,7 @@ public class QuestionsActivity extends AppCompatActivity {
             public void onCallback() {
                 // successfully updated in the database
                 Toast.makeText(getApplicationContext(), "New question asked", Toast.LENGTH_LONG).show();
+                listQuestions();
             }
         }, new FireStoreController.FireStoreUpdateFailCallback() {
             @Override
