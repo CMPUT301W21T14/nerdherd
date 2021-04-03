@@ -70,6 +70,7 @@ public class FireStoreController {
     private ArrayList<Trial> trials;
     private ArrayList<Double> mTrials;
     private ArrayList<Long> nTrials;
+    private ArrayList<HashMap> questionList;
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
         collectionReference = firebaseFirestore.collection(indicator);
@@ -280,6 +281,24 @@ public class FireStoreController {
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
                     harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
+                    Object obj = doc.getData().get("Questions");
+                    if(obj != null) {
+                        questionList = (ArrayList<HashMap>) (doc.getData().get("Questions"));
+
+
+                        for (HashMap questionData : questionList) {
+                            Log.d("Test: ", questionData.toString());
+                            String question = questionData.get("Content").toString();
+                            int numReplies = ((Long)questionData.get("Number of Replies")).intValue();
+                            ArrayList<HashMap> replies = (ArrayList<HashMap>) questionData.get("Replies");
+                            Log.d("Question: ", question+'['+numReplies+']');
+                            for( HashMap replyData : replies ) {
+                                String reply = replyData.get("Content").toString();
+                                String status = replyData.get("Status").toString();
+                                Log.d("Reply: ", reply+'['+status+']');
+                            }
+                        }
+                    }
 
                     trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
