@@ -1,10 +1,13 @@
 package com.example.nerdherd;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +74,7 @@ public class statsactivity_checking extends AppCompatActivity {
     ListView ExperimentList;
     ArrayAdapter<Experiment> experimentAdapter;
     private ArrayList<Integer> testing_1;
+    private Button checkPlot;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -85,6 +89,7 @@ public class statsactivity_checking extends AppCompatActivity {
         quartileVal1 = findViewById(R.id.std_quartilesValue1);
         quartileVal2 = findViewById(R.id.std_quartilesValue2);
         quartileVal3 = findViewById(R.id.std_quartilesValue3);
+        checkPlot = findViewById(R.id.plot);
         setSupportActionBar(toolbar);
 
 
@@ -93,6 +98,13 @@ public class statsactivity_checking extends AppCompatActivity {
 
 //        recyclerView = findViewById(R.id.subscription_experiment_recyclerView);
 
+        checkPlot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(statsactivity_checking.this, TrialsPlot.class);
+                startActivity(intent);
+            }
+        });
         int maxLength = 6;
         savedList = new ArrayList<Experiment>();
         showList = new ArrayList<Experiment>();
@@ -171,6 +183,7 @@ public class statsactivity_checking extends AppCompatActivity {
                     }
                     else {
                         binomialtrialing = (ArrayList<BinomialTrial>) list.clone();
+
                         binomtrialValues = ConvertBinomial_val();
                         //Mean calculations
                         Double trialsMean = calculate_intmean(binomtrialValues);
@@ -466,6 +479,7 @@ public class statsactivity_checking extends AppCompatActivity {
                 trials.add(Testtrial2.get(i).getMeasurements().get(j));
             }
         }
+        Log.d("Measurement Histogram", trials.toString());
         return trials;
     }
 
@@ -491,8 +505,10 @@ public class statsactivity_checking extends AppCompatActivity {
 //        Log.d("binomial trial", String.valueOf(binomialtrialing.get(0).getSuccess()));
         for (int y = 0; y < binomialtrialing.size(); y++){
             trials_1.add(binomialtrialing.get(y).getSuccess());
+            Log.d("bsuccess_count", binomialtrialing.get(y).getSuccess().toString());
             trials_1.add(binomialtrialing.get(y).getFailure());
         }
+
         return trials_1;
     }
 
