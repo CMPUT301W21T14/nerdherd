@@ -242,6 +242,7 @@ public class FireStoreController {
         experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
         experimentData.put("Subscriber Id", newExperiment.getSubscriberId());
         experimentData.put("Trial List", newExperiment.getTrials());
+        experimentData.put("Questions", newExperiment.getQuestions());
         // Find user information and load data
         accessor(experimentIndicator);
         collectionReference
@@ -294,18 +295,15 @@ public class FireStoreController {
 
                             Question q = new Question(question);
 
-                            int numReplies = ((Long)questionData.get("Number of Replies")).intValue();
-                            q.setNumberOfReplies(numReplies);
+                            ArrayList<String> replies = (ArrayList<String>) questionData.get("Replies");
 
-                            ArrayList<HashMap> replies = (ArrayList<HashMap>) questionData.get("Replies");
+                            Log.d("Question: ", question);
 
-                            Log.d("Question: ", question+'['+numReplies+']');
-
-                            for( HashMap replyData : replies ) {
-                                String reply = replyData.get("Content").toString();
-                                String status = replyData.get("Status").toString();
-                                Log.d("Reply: ", reply+'['+status+']');
-                                Reply r = new Reply(reply, status);
+                            // don't judge
+                            for( String replyData : replies ) {
+                                String reply = replyData;
+                                Log.d("Reply: ", reply);
+                                Reply r = new Reply(reply);
                                 q.addReply(r);
                             }
                             questionArrayList.add(q);
