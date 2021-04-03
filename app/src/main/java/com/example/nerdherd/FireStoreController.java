@@ -281,22 +281,34 @@ public class FireStoreController {
                     hashMapProfile = (HashMap<String, String>)doc.getData().get("Owner Profile");
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
                     harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
-                    Object obj = doc.getData().get("Questions");
-                    if(obj != null) {
-                        questionList = (ArrayList<HashMap>) (doc.getData().get("Questions"));
 
+                    // Checks to see if our experiment 'has' questions before getting null objects as the database changes
+                    Object qObj = doc.getData().get("Questions");
+                    ArrayList<Question> questionArrayList = new ArrayList<>();
+                    if(qObj != null) {
+                        questionList = (ArrayList<HashMap>) (qObj);
 
                         for (HashMap questionData : questionList) {
                             Log.d("Test: ", questionData.toString());
                             String question = questionData.get("Content").toString();
+
+                            Question q = new Question(question);
+
                             int numReplies = ((Long)questionData.get("Number of Replies")).intValue();
+                            q.setNumberOfReplies(numReplies);
+
                             ArrayList<HashMap> replies = (ArrayList<HashMap>) questionData.get("Replies");
+
                             Log.d("Question: ", question+'['+numReplies+']');
+
                             for( HashMap replyData : replies ) {
                                 String reply = replyData.get("Content").toString();
                                 String status = replyData.get("Status").toString();
                                 Log.d("Reply: ", reply+'['+status+']');
+                                Reply r = new Reply(reply, status);
+                                q.addReply(r);
                             }
+                            questionArrayList.add(q);
                         }
                     }
 
@@ -328,6 +340,10 @@ public class FireStoreController {
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trials);
                     experimentList.add(experiment);
+
+                    for( Question q : questionArrayList ) {
+                        experiment.addQuestion(q);
+                    }
                 }
 
                 fireStoreExperimentReadCallback.onCallback(experimentList);

@@ -27,4 +27,5 @@ public class Question {
     public String getContent() {
         return content;
     }
+    public void setNumberOfReplies( int numReplies ) { numberOfReplies = numReplies; }
 }
