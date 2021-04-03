@@ -5,11 +5,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -17,74 +17,66 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class QuestionsActivity extends AppCompatActivity {
+public class QuestionViewActivity extends AppCompatActivity {
 
+    private RecyclerView replyListView;
+    private Button replyButton;
+    private EditText replyInput;
+    private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Toolbar toolbar;
-    private MenuController menuController;
-    private RecyclerView questionListView;
-    private Button buttonView;
-    private EditText questionInput;
     private Experiment experiment;
     private boolean isOwner;
-    private QuestionsAdapter questionsAdapter;
-    private QuestionsAdapter.onClickListener listener;
+    private ReplyAdapter replyAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions);
+        setContentView(R.layout.activity_question_view);
 
-        questionListView = findViewById(R.id.question_list);
-        buttonView = findViewById(R.id.questions_button);
-        questionInput = findViewById(R.id.question_input);
+        replyListView = findViewById(R.id.reply_list);
+        replyButton = findViewById(R.id.add_reply_button);
+        replyInput = findViewById(R.id.reply_input);
         toolbar = findViewById(R.id.toolbar);
-        drawerLayout = findViewById(R.id.draw_layout_question_view);
+        drawerLayout = findViewById(R.id.draw_layout_replies_view);
         navigationView = findViewById(R.id.navigator);
+        TextView questionContent = findViewById(R.id.question_text);
 
         experiment = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
         isOwner = experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId());
 
         setSupportActionBar(toolbar);
-        menuController = new MenuController(QuestionsActivity.this, toolbar, navigationView, drawerLayout);
+        MenuController menuController = new MenuController(QuestionViewActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(true);
-        buttonView.setText("Ask a Question");
-        buttonView.setOnClickListener(new View.OnClickListener() {
+
+        replyButton.setText("Add a Reply");
+        replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonView.setText("Confirm");
-                questionInput.setVisibility(View.VISIBLE);
-                buttonView.setOnClickListener(new View.OnClickListener() {
+                replyButton.setText("Confirm");
+                replyInput.setVisibility(View.VISIBLE);
+                replyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String input = questionInput.getText().toString();
-                        questionInput.setText("");
-                        Question newQuestion = new Question(input);
-                        experiment.addQuestion(newQuestion);
-                        saveExperimentQuestions();
+                        String input = replyInput.getText().toString();
+                        replyInput.setText("");
+                        Reply newReply = new Reply(input);
+                        experiment.getQuestions().get(GlobalVariable.indexForQuestionView).addReply(newReply);
+                        saveExperimentReplies();
                     }
                 });
             }
         });
-        listener = new QuestionsAdapter.onClickListener() {
-            @Override
-            public void onClick(View view, int index) {
-                // TODO: Open Question specific Activity
-                Intent questionIntent = new Intent(QuestionsActivity.this, QuestionViewActivity.class);
-                GlobalVariable.indexForQuestionView = index;
-                startActivity(questionIntent);
-            }
-        };
+        questionContent.setText(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getContent());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        listQuestions();
+        listReplies();
     }
 
-    public void saveExperimentQuestions() {
+    public void saveExperimentReplies() {
         // This saves the entire experiments 'Questions' field over again
         ArrayList<HashMap> data = new ArrayList<>();                // Array list of hashmaps
         for( int i=0;i<experiment.getQuestions().size();i++ ) {     // Find all our questions (elements of data)
@@ -110,7 +102,7 @@ public class QuestionsActivity extends AppCompatActivity {
             public void onCallback() {
                 // successfully updated in the database
                 Toast.makeText(getApplicationContext(), "New question asked", Toast.LENGTH_LONG).show();
-                listQuestions();
+                listReplies();
             }
         }, new FireStoreController.FireStoreUpdateFailCallback() {
             @Override
@@ -120,9 +112,9 @@ public class QuestionsActivity extends AppCompatActivity {
         });
     }
 
-    public void listQuestions() {
-        questionsAdapter = new QuestionsAdapter(experiment.getQuestions(), listener);
-        AdapterController adapterController = new AdapterController(QuestionsActivity.this, questionListView, questionsAdapter);
+    public void listReplies() {
+        replyAdapter = new ReplyAdapter(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getReplies());
+        AdapterController adapterController = new AdapterController(QuestionViewActivity.this, replyListView, replyAdapter);
         adapterController.useAdapter();
     }
 }

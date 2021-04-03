@@ -70,6 +70,7 @@ public class FireStoreController {
     private ArrayList<Trial> trials;
     private ArrayList<Double> mTrials;
     private ArrayList<Long> nTrials;
+    private ArrayList<HashMap> questionList;
     private void accessor(String indicator){
         firebaseFirestore = FirebaseFirestore.getInstance();
         collectionReference = firebaseFirestore.collection(indicator);
@@ -241,6 +242,7 @@ public class FireStoreController {
         experimentData.put("Owner Id", newExperiment.getOwnerProfile().getId());
         experimentData.put("Subscriber Id", newExperiment.getSubscriberId());
         experimentData.put("Trial List", newExperiment.getTrials());
+        experimentData.put("Questions", newExperiment.getQuestions());
         // Find user information and load data
         accessor(experimentIndicator);
         collectionReference
@@ -281,6 +283,33 @@ public class FireStoreController {
                     idList = (ArrayList<String>) doc.getData().get("Subscriber Id");
                     harshTrials = (ArrayList<HashMap>)(doc.getData().get("Trial List"));
 
+                    // Checks to see if our experiment 'has' questions before getting null objects as the database changes
+                    Object qObj = doc.getData().get("Questions");
+                    ArrayList<Question> questionArrayList = new ArrayList<>();
+                    if(qObj != null) {
+                        questionList = (ArrayList<HashMap>) (qObj);
+
+                        for (HashMap questionData : questionList) {
+                            Log.d("Test: ", questionData.toString());
+                            String question = questionData.get("content").toString();
+
+                            Question q = new Question(question);
+
+                            ArrayList<String> replies = (ArrayList<String>) questionData.get("replies");
+
+                            Log.d("Question: ", question);
+
+                            // don't judge
+                            for( String replyData : replies ) {
+                                String reply = replyData;
+                                Log.d("Reply: ", reply);
+                                Reply r = new Reply(reply);
+                                q.addReply(r);
+                            }
+                            questionArrayList.add(q);
+                        }
+                    }
+
                     trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
                         if (experimentType.equals("Binomial Trial")) {
@@ -309,6 +338,10 @@ public class FireStoreController {
                     ownerProfile = new Profile(hashMapProfile.get("name"), hashMapProfile.get("password"), hashMapProfile.get("email"), hashMapProfile.get("id"), Integer.valueOf(String.valueOf(hashMapProfile.get("avatar"))));
                     experiment = new Experiment(ownerProfile, experimentTitle, experimentStatus, experimentDescription, experimentType, experimentTrials, locationRequirement, experimentPublish, idList, trials);
                     experimentList.add(experiment);
+
+                    for( Question q : questionArrayList ) {
+                        experiment.addQuestion(q);
+                    }
                 }
 
                 fireStoreExperimentReadCallback.onCallback(experimentList);
