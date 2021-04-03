@@ -25,13 +25,14 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView content;
         TextView replyCount;
+        TextView staticReply;
         View layout;
 
         public ViewHolder(View view){
             super(view);
             content = view.findViewById(R.id.question_content);
             replyCount = view.findViewById(R.id.reply_count);
-            layout = view.findViewById(R.id.listItemLayout);
+            layout = view.findViewById(R.id.question_list_layout);
             view.setOnClickListener(this);
         }
 
@@ -54,6 +55,11 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
         Question targetQuestion = questions.get(position);
         holder.content.setText(targetQuestion.getContent());
         holder.replyCount.setText(String.valueOf(targetQuestion.getNumberOfReplies()));
+        holder.content.setTextColor(0xFF000000 + Integer.parseInt("00212F3C",16));
+        if (position % 2 == 0)
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("005DADE2",16));
+        else
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("003498DB",16));
     }
 
     @Override

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -32,6 +33,7 @@ public class QuestionViewActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_replies_view);
         navigationView = findViewById(R.id.navigator);
+        TextView questionContent = findViewById(R.id.question_text);
 
         experiment = GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView);
         isOwner = experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId());
@@ -40,6 +42,7 @@ public class QuestionViewActivity extends AppCompatActivity {
         MenuController menuController = new MenuController(QuestionViewActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(true);
 
+        questionContent.setText(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getContent());
         listReplies(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getReplies());
     }
 
