@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class QuestionsActivity extends AppCompatActivity {
 
@@ -88,6 +90,49 @@ public class QuestionsActivity extends AppCompatActivity {
         testList.add(testQuestion3);
         GlobalVariable.experimentArrayList.get(GlobalVariable.indexForExperimentView).questions = testList;
         listQuestions(testList);
+    }
+
+    public void makeFakeQuestion() {
+        // Modify things within 'Experiment.questions' -> then the following code "should" save it properly in firebase - it will update automatically on our end
+        Question ques = new Question("New test question");
+        ques.addReply(new Reply("reply"));
+        experiment.addQuestion(ques);
+
+        // This saves the entire experiments 'Questions' field over again
+        ArrayList<HashMap> data = new ArrayList<>();                // Array list of hashmaps
+        for( int i=0;i<experiment.getQuestions().size();i++ ) {     // Find all our questions (elements of data)
+            HashMap<Integer, HashMap> question = new HashMap<>();  // This is an array element of data
+            Question q = experiment.getQuestions().get(i);          // Current question
+
+            HashMap<String, Object> qdata = new HashMap<>();        // Question data (content: question, replies: arraylist<string>
+
+            qdata.put("content", q.getContent());                   // qdata.content = question
+
+            ArrayList<String> rdata = new ArrayList<>();            // rdata = qdata.replies
+
+            for( int j=0; j<q.getReplies().size();++j) {            // for each reply in question
+                String reply = q.getReplies().get(j).getContent();
+                rdata.add(reply);
+            }
+            qdata.put("replies", rdata);                            //This question now has all of it's replies
+            data.add(qdata);                                //This question now gets put into the question map [0], qdata
+        }
+
+
+
+        FireStoreController fireStoreController = new FireStoreController();
+        fireStoreController.updater("Experiment", experiment.getTitle(), "Questions1", data, new FireStoreController.FireStoreUpdateCallback() {
+            @Override
+            public void onCallback() {
+                // successfully updated in the database
+                Toast.makeText(getApplicationContext(), "New question asked", Toast.LENGTH_LONG).show();
+            }
+        }, new FireStoreController.FireStoreUpdateFailCallback() {
+            @Override
+            public void onCallback() {
+                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void listQuestions(ArrayList<Question> questions) {
