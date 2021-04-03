@@ -295,12 +295,13 @@ public class FireStoreController {
 
                             Question q = new Question(question);
 
-                            ArrayList<HashMap> replies = (ArrayList<HashMap>) questionData.get("Replies");
+                            ArrayList<String> replies = (ArrayList<String>) questionData.get("Replies");
 
                             Log.d("Question: ", question);
 
-                            for( HashMap replyData : replies ) {
-                                String reply = replyData.get("Content").toString();
+                            // don't judge
+                            for( String replyData : replies ) {
+                                String reply = replyData;
                                 Log.d("Reply: ", reply);
                                 Reply r = new Reply(reply);
                                 q.addReply(r);
