@@ -25,7 +25,6 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView content;
         TextView replyCount;
-        TextView staticReply;
         View layout;
 
         public ViewHolder(View view){
@@ -54,7 +53,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Question targetQuestion = questions.get(position);
         holder.content.setText(targetQuestion.getContent());
-        holder.replyCount.setText(String.valueOf(targetQuestion.getNumberOfReplies()));
+        holder.replyCount.setText(String.valueOf(targetQuestion.getReplies().size()));
         holder.content.setTextColor(0xFF000000 + Integer.parseInt("00212F3C",16));
         if (position % 2 == 0)
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("005DADE2",16));

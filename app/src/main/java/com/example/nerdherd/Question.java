@@ -6,7 +6,6 @@ public class Question {
 
     private String content;
     private ArrayList<Reply> replies = new ArrayList<Reply>();
-    private int numberOfReplies = 0;
 
     public Question(String content) {
         this.content = content;
@@ -19,13 +18,7 @@ public class Question {
         this.replies.add(reply);
     }
 
-    public int getNumberOfReplies() { return this.numberOfReplies; }
-    public void incrementReplies() {
-        numberOfReplies += 1;
-    }
-
     public String getContent() {
         return content;
     }
-    public void setNumberOfReplies( int numReplies ) { numberOfReplies = numReplies; }
 }
