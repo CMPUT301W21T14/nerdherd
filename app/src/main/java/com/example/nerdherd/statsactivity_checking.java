@@ -75,6 +75,7 @@ public class statsactivity_checking extends AppCompatActivity {
     ArrayAdapter<Experiment> experimentAdapter;
     private ArrayList<Integer> testing_1;
     private Button checkPlot;
+    private Button Histogrambtn;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -90,6 +91,7 @@ public class statsactivity_checking extends AppCompatActivity {
         quartileVal2 = findViewById(R.id.std_quartilesValue2);
         quartileVal3 = findViewById(R.id.std_quartilesValue3);
         checkPlot = findViewById(R.id.plot);
+        Histogrambtn = findViewById(R.id.histogram);
         setSupportActionBar(toolbar);
 
 
@@ -102,6 +104,13 @@ public class statsactivity_checking extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(statsactivity_checking.this, TrialsPlot.class);
+                startActivity(intent);
+            }
+        });
+        Histogrambtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(statsactivity_checking.this, TrialsHistogram.class);
                 startActivity(intent);
             }
         });

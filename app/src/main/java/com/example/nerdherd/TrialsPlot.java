@@ -21,6 +21,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrialsPlot extends AppCompatActivity  {
     private FireStoreController fireStoreController;
@@ -105,6 +107,19 @@ public class TrialsPlot extends AppCompatActivity  {
                     else {
                         counttrialing = (ArrayList<CountTrial>) list.clone();
                         counttrialValues = countConvert();
+                        //
+                        Map<Integer, Integer> hm = new HashMap<>();
+                        for (Integer i : counttrialValues) {
+                            Integer j = hm.get(i);
+                            hm.put(i, (j == null) ? 1 : j + 1);
+                        }
+
+                        // displaying the occurrence of elements in the arraylist
+                        for (Map.Entry<Integer, Integer> val : hm.entrySet()) {
+                            Log.d("map valus", val.toString());
+                        }
+
+                        //
                         create_Chart(counttrialValues);
                     }
                 }
@@ -154,6 +169,7 @@ public class TrialsPlot extends AppCompatActivity  {
 
 
         }
+
 
     }
 
@@ -281,10 +297,10 @@ public class TrialsPlot extends AppCompatActivity  {
             labelName.add(trial_val);
         }
 
-        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Trials Success");
+        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Trials");
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         Description description = new Description();
-        description.setText("Trials");
+        description.setText("");
         description.setTextSize(15);
         barChart.setDescription(description);
         BarData barData = new BarData(barDataSet);

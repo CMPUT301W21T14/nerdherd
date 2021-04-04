@@ -76,7 +76,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
 
-        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialsPlot || context instanceof QuestionViewActivity)){
+        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialsPlot || context instanceof QuestionViewActivity || context instanceof TrialsHistogram ){
             viewExperiments.setVisible(true);
         }
         else{
