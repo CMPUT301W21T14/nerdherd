@@ -81,9 +81,9 @@ public class NonnegativeTrialFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         int count = Nonnegativetrials.size();
-                        if (count < minTrials){
-                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-                        }
+//                        if (count < minTrials){
+//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
+//                        }
                         ((TrialActivity) getActivity()).updateNonnegativeTrialView(Nonnegativetrials, minTrials);
                     }
                 })

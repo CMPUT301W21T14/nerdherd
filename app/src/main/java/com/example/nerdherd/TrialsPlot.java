@@ -1,9 +1,11 @@
 package com.example.nerdherd;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,6 +36,7 @@ public class TrialsPlot extends AppCompatActivity  {
     ArrayList<String> labelName;
     ArrayList<Double> doubles_values2 = new ArrayList<>();
     ArrayList<Integer> measurements = new ArrayList<Integer>();
+    ArrayList<Integer> nonnegatives = new ArrayList<>();
     private NavigationView navigationView;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
@@ -52,6 +55,11 @@ public class TrialsPlot extends AppCompatActivity  {
     private ArrayList<Double> Quartiles;
     private ArrayList<Integer> trial_values;
     private ArrayList<Double> quartiles;
+    ArrayList<NonnegativeTrial> nonNegativetrialing = new ArrayList<>();
+    private ArrayList<Integer> nonNegativetrialValues;
+    private ArrayList<Integer> test_nonNegative;
+    private ArrayList<Integer> testing_1;
+    ArrayList<Double> doubles_values = new ArrayList<>();
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -170,8 +178,79 @@ public class TrialsPlot extends AppCompatActivity  {
 
         }
 
+        if (expType.equals("Non-Negative Integer Count")) {
+            testing_1 = new ArrayList<Integer>();
+            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onCallback(ArrayList<Trial> list) {
+                    if (list.isEmpty()) {
+
+                    } else {
+                        nonNegativetrialing = (ArrayList<NonnegativeTrial>) list.clone();
+                        nonNegativetrialValues = nonNegative_val();
+                        //Median calculations
+                        int len = nonNegativetrialValues.size();
+                        Log.d("i got here", String.valueOf(nonNegativetrialValues));
+                        Double median_calc = calculateMedian2(nonNegativetrialValues, len);
+
+                        //                    //standard deviation calculations
+                        Double std_value = CalculateStandarddeviation2(nonNegativetrialValues, len);
+
+                        doubles_values = convert_double(nonNegativetrialValues);
+                        Log.d("test1", String.valueOf(nonNegativetrialValues));
+                        // quartiles calculations - performed on data - with at least 4 data values
+                        if (nonNegativetrialValues.size() >= 4) {
+                            Quartiles = QuartilesCalculation(doubles_values, len, median_calc);
+                            for(int y = 0; y < Quartiles.size(); y++){
+                                nonnegatives.add(Quartiles.get(y).intValue());
+                            }
+                            create_Chart(nonnegatives);
+                        }
+                    }
+                }
+            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
 
     }
+
+    //handle int std deviation- for population
+    public double CalculateStandarddeviation2(ArrayList<Integer> values, int arr_legnth)
+    {
+        double sum_val = 0.0;
+        double std_deviation = 0.0;
+        for(double num_val :values) {
+            sum_val += num_val;
+        }
+
+        double mean = sum_val/arr_legnth;
+        for(double num: values) {
+            std_deviation += Math.pow(num - mean, 2);
+        }
+
+        Log.d("i got here",String.valueOf(Math.sqrt(std_deviation/arr_legnth)));
+        return Math.sqrt(std_deviation/arr_legnth);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public ArrayList<Integer> nonNegative_val(){
+        test_nonNegative= new ArrayList<Integer>();
+        Log.d("------------------","---------------------------------");
+        for (int i = 0; i < nonNegativetrialing.size(); ++i) {
+            for(int j = 0; j < nonNegativetrialing.get(i).getNonNegativeTrials().size(); ++j) {
+                test_nonNegative.add(Math.toIntExact(nonNegativetrialing.get(i).getNonNegativeTrials().get(j)));
+            }
+        }
+        return test_nonNegative;
+    }
+
 
 
     public ArrayList<Double> convert_double(ArrayList<Integer> doubleVal){
@@ -309,12 +388,10 @@ public class TrialsPlot extends AppCompatActivity  {
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labelName));
 
-        xAxis.setPosition(XAxis.XAxisPosition.TOP);
-        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(labelName.size());
-        xAxis.setLabelRotationAngle(270);
         barChart.animateY(2000);
         barChart.invalidate();
 
