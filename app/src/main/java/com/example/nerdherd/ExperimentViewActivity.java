@@ -108,7 +108,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
             if (experiment.isPublished()) {
 
-                unpublishedSubscribe.setText("Unpublished");
+                unpublishedSubscribe.setText("Unpublish");
 
                 publishButtonHandler(publishIndicator, false);
             }
