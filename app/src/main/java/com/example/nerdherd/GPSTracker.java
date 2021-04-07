@@ -42,8 +42,6 @@ public class GPSTracker extends Provider.Service implements LocationListener {
         getLocation();
     }
 
-
-
     public void getLocation() {
 
     }
@@ -51,6 +49,8 @@ public class GPSTracker extends Provider.Service implements LocationListener {
     public boolean getIsGPSTrackingEnabled() {
         return this.isGPSTrackingEnabled;
     }
+
+
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
