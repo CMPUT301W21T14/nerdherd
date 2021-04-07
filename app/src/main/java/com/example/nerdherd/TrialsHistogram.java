@@ -112,8 +112,6 @@ public class TrialsHistogram extends AppCompatActivity  {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
         }
         // Represents counts of counts. How many 0s, how many 2s.
         if (expType.equals("Non-Negative Integer Count")){
@@ -145,14 +143,7 @@ public class TrialsHistogram extends AppCompatActivity  {
                     Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
                 }
             });
-
-
         }
-
-
-
-
-
     }
 
 
