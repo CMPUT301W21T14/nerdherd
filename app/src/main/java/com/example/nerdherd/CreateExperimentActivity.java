@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,11 +41,18 @@ public class CreateExperimentActivity extends AppCompatActivity {
     private ArrayList<Experiment> experimentList;
     private Boolean valid;
     private ArrayList<String> idList;
+    String stringLatitude, stringLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_experiment);
+        GPSTracker gpsTracker = new GPSTracker(this);
+
+        if (gpsTracker.getIsGPSTrackingEnabled()) {
+            stringLatitude = String.valueOf(gpsTracker.latitude);
+            String stringLongitude = String.valueOf(gpsTracker.longitude);
+        }
 
         //Initialize the spinner drop down
         experimentTypeSpinner = (Spinner) findViewById(R.id.experiment_type_spinner);
@@ -139,7 +147,13 @@ public class CreateExperimentActivity extends AppCompatActivity {
                 if (valid) {
 
                     if (requireLocationCheck.isChecked()){
-                        Intent intent = new Intent(CreateExperimentActivity.this, MapsActivity.class);
+                        String label = "Cinnamon & Toast";
+                        String uriBegin = "geo:43.651070,79.347015";
+                        String query = "43.651070,-79.347015(" + label + ")";
+                        String encodedQuery = Uri.encode(query);
+                        String uriString = uriBegin + "?q=" + encodedQuery;
+                        Uri uri = Uri.parse(uriString);
+                        Intent intent = new Intent (Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                     }
 
