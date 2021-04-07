@@ -4,15 +4,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.Camera;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.Preview;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -21,35 +13,44 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.util.Size;
+import android.util.SparseArray;
 import android.view.Display;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nerdherd.R;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.WriterException;
 
-import java.util.concurrent.ExecutionException;
+import java.io.IOException;
 
-// Stolen completely from https://www.c-sharpcorner.com/article/how-to-generate-qr-code-in-android/
-// And here; https://learntodroid.com/how-to-create-a-qr-code-scanner-app-in-android/
-// Cite properly afterwards
+// https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
 public class QRCodeActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CAMERA = 0;
-    private PreviewView previewView;
-    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
-    private Button qrCodeFoundButton;
-    private String qrCode;
-    private Button qrCodeExitButton;
-    private TextView qrCodeDataTextView;
-    private Button qrCodeExecuteButton;
-    private ImageView qrCodeImageView;
+    private SurfaceView surfaceView;
+    private BarcodeDetector barcodeDetector;
+    private CameraSource cameraSource;
+
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
+
+    private TextView barcodeText;
+    private String barcodeData;
+
+    private EditText generateQREditText;
+    private Button generateQRButton;
+    private ImageView generatedQRImageView;
+
     private String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/"; // If we want to save the image somewhere
     private Bitmap bitmap;
     private QRGEncoder qrgEncoder;
@@ -59,41 +60,20 @@ public class QRCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_scan);
 
-        qrCodeDataTextView = findViewById(R.id.tv_qr_content);
-        qrCodeExecuteButton = findViewById(R.id.btn_execute_qr_intent);
-        qrCodeImageView = findViewById(R.id.qr_code_image_view);
+        surfaceView = findViewById(R.id.surface_view);
+        barcodeText = findViewById(R.id.barcode_text);
 
-        qrCodeExecuteButton.setOnClickListener(new View.OnClickListener() {
+        generateQREditText = findViewById(R.id.et_qr_generate_data);
+        generateQRButton = findViewById(R.id.btn_generate_qr);
+        generatedQRImageView = findViewById(R.id.iv_generated_qr);
+
+        generateQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                generateQRCode(generateQREditText.getText().toString());
             }
         });
-
-        previewView = findViewById(R.id.activity_q_r_scan_previewView);
-        qrCodeExitButton = findViewById(R.id.activit_q_r_scan_exit_button);
-        qrCodeFoundButton = findViewById(R.id.qrCodeFoundButton);
-        qrCodeFoundButton.setVisibility(View.INVISIBLE);
-        qrCodeFoundButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), qrCode, Toast.LENGTH_SHORT).show();
-                Log.i(QRCodeActivity.class.getSimpleName(), "QR Code Found: " + qrCode);
-                // qrCode is in whatever format we generate them in
-                generateQRCode(qrCode);
-            }
-        });
-
-        qrCodeExitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //??
-                finish();
-            }
-        });
-
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-        requestCamera();
+        initialiseDetectorsAndSources();
     }
 
     // This function generates a QR code and displays it in qrCodeImageView
@@ -116,8 +96,8 @@ public class QRCodeActivity extends AppCompatActivity {
                     smallerDimension);
             try {
                 bitmap = qrgEncoder.encodeAsBitmap();
-                qrCodeImageView.setImageBitmap(bitmap);
-                qrCodeDataTextView.setText(qrData);
+
+                generatedQRImageView.setImageBitmap(bitmap);
             } catch (WriterException e) {
                 Log.v("GenerateQRCode", e.toString());
             }
@@ -126,7 +106,7 @@ public class QRCodeActivity extends AppCompatActivity {
 
     private void requestCamera() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            startCamera();
+            initialiseDetectorsAndSources();
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                 ActivityCompat.requestPermissions(QRCodeActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
@@ -140,56 +120,78 @@ public class QRCodeActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCamera();
+                initialiseDetectorsAndSources();
             } else {
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void startCamera() {
-        cameraProviderFuture.addListener(() -> {
-            try {
-                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                bindCameraPreview(cameraProvider);
-            } catch (ExecutionException | InterruptedException e) {
-                Toast.makeText(this, "Error starting camera " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }, ContextCompat.getMainExecutor(this));
-    }
+    private void initialiseDetectorsAndSources() {
 
-    private void bindCameraPreview(@NonNull ProcessCameraProvider cameraProvider) {
-        previewView.setPreferredImplementationMode(PreviewView.ImplementationMode.SURFACE_VIEW);
-
-        Preview preview = new Preview.Builder()
+        barcodeDetector = new BarcodeDetector.Builder(this)
+                .setBarcodeFormats(Barcode.ALL_FORMATS)
                 .build();
 
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+        cameraSource = new CameraSource.Builder(this, barcodeDetector)
+                .setRequestedPreviewSize(1920, 1080)
+                .setAutoFocusEnabled(true) //you should add this feature
+                .setRequestedFps(1)
                 .build();
 
-        preview.setSurfaceProvider(previewView.createSurfaceProvider());
-
-        ImageAnalysis imageAnalysis =
-                new ImageAnalysis.Builder()
-                        .setTargetResolution(new Size(1280, 720))
-                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                        .build();
-
-        // This finds the QR code and gets the data somehow - magic I guess
-        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new QRCodeImageAnalyzer(new QRCodeFoundListener() {
+        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
-            public void onQRCodeFound(String _qrCode) {
-                qrCode = _qrCode;
-                qrCodeFoundButton.setVisibility(View.VISIBLE);
+            public void surfaceCreated(SurfaceHolder holder) {
+                try {
+                    if (ActivityCompat.checkSelfPermission(QRCodeActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        cameraSource.start(surfaceView.getHolder());
+                    } else {
+                        ActivityCompat.requestPermissions(QRCodeActivity.this, new
+                                String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
-            public void qrCodeNotFound() {
-                qrCodeFoundButton.setVisibility(View.INVISIBLE);
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             }
-        }));
 
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                cameraSource.stop();
+            }
+        });
+
+
+        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+            @Override
+            public void release() {
+                // Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void receiveDetections(Detector.Detections<Barcode> detections) {
+                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+                if (barcodes.size() != 0) {
+                    barcodeText.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Barcode b = barcodes.valueAt(0);
+                            barcodeData = b.displayValue;
+                            String format = "Barcode";
+                            if(b.format == Barcode.QR_CODE) {
+                                format = "QR Code";
+                            }
+                            barcodeText.setText(format+":"+barcodeData);
+                        }
+                    }, 500);
+                } else {
+                    barcodeText.setText("No Barcode Found");
+                }
+            }
+        });
     }
 }
