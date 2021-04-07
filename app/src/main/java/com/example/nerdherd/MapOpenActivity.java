@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +25,7 @@ public class MapOpenActivity extends AppCompatActivity {
 
     /* Define a request code to send to Google Play services This code is
      * returned in Activity.onActivityResult*/
-    
+
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
@@ -33,4 +34,17 @@ public class MapOpenActivity extends AppCompatActivity {
         setContentView(R.layout.map_demo_activity);
 
     }
+
+    protected void loadMap(GoogleMap googleMap) { //fused location provider -h
+        map = googleMap;
+        if (map != null) {
+            // Map is ready
+            Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+            //MapOpenActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
+            // MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+        } else {
+            Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
