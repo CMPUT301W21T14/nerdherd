@@ -17,6 +17,9 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Base activity for viewing the replies on a particular Question
+ */
 public class QuestionViewActivity extends AppCompatActivity {
 
     private RecyclerView replyListView;
@@ -76,6 +79,9 @@ public class QuestionViewActivity extends AppCompatActivity {
         listReplies();
     }
 
+    /**
+     * Saves the experiment's questions field to Firebase, updates the list on callback
+     */
     public void saveExperimentReplies() {
         // This saves the entire experiments 'Questions' field over again
         ArrayList<HashMap> data = new ArrayList<>();                // Array list of hashmaps
@@ -112,6 +118,9 @@ public class QuestionViewActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adapts and displays the most up to date version of the Reply list
+     */
     public void listReplies() {
         replyAdapter = new ReplyAdapter(experiment.getQuestions().get(GlobalVariable.indexForQuestionView).getReplies());
         AdapterController adapterController = new AdapterController(QuestionViewActivity.this, replyListView, replyAdapter);

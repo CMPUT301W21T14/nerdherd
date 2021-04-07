@@ -341,6 +341,9 @@ public class statsActivity extends AppCompatActivity {
         return quartiles;
     }
 
-
+    // exposes targetexp for testing purposes
+    public void setTarget(Experiment exp) {
+        targetexp = exp;
+    }
 
 }

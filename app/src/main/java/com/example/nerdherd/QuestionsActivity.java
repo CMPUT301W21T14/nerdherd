@@ -17,6 +17,9 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Base Activity for viewing the questions on an experiment
+ */
 public class QuestionsActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -70,7 +73,6 @@ public class QuestionsActivity extends AppCompatActivity {
         listener = new QuestionsAdapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
-                // TODO: Open Question specific Activity
                 Intent questionIntent = new Intent(QuestionsActivity.this, QuestionViewActivity.class);
                 GlobalVariable.indexForQuestionView = index;
                 startActivity(questionIntent);
@@ -84,8 +86,10 @@ public class QuestionsActivity extends AppCompatActivity {
         listQuestions();
     }
 
+    /**
+     * Saves the experiment's questions field to Firebase, updates the list on callback
+     */
     public void saveExperimentQuestions() {
-        // This saves the entire experiments 'Questions' field over again
         ArrayList<HashMap> data = new ArrayList<>();                // Array list of hashmaps
         for( int i=0;i<experiment.getQuestions().size();i++ ) {     // Find all our questions (elements of data)
             HashMap<Integer, HashMap> question = new HashMap<>();  // This is an array element of data
@@ -120,6 +124,9 @@ public class QuestionsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Adapts and displays te newest version of the questions list
+     */
     public void listQuestions() {
         questionsAdapter = new QuestionsAdapter(experiment.getQuestions(), listener);
         AdapterController adapterController = new AdapterController(QuestionsActivity.this, questionListView, questionsAdapter);
