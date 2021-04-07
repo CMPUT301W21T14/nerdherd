@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.nerdherd.QRCodes.QRCodeActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;

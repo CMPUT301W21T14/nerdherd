@@ -1,4 +1,4 @@
-package com.example.nerdherd.QRCodes;
+package com.example.nerdherd;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.example.nerdherd.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
