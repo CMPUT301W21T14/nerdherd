@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.nerdherd.QRCodes.QRCodeActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -98,6 +98,12 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.user_search && !(context instanceof SearchUserActivity)){
             intent = new Intent(context, SearchUserActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if(item.getItemId() == R.id.qr_code) {
+            intent = new Intent(context, QRCodeActivity.class);
             context.startActivity(intent);
             ((Activity)context).finish();
         }
