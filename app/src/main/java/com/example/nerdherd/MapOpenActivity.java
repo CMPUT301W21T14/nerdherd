@@ -2,17 +2,17 @@ package com.example.nerdherd;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class MapOpenActivity extends AppCompatActivity {
-
-
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -33,9 +33,30 @@ public class MapOpenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_demo_activity);
 
+        if (TextUtils.isEmpty("map_key")) {
+            throw new IllegalStateException("You forgot to supply a Google Maps API key");
+        }
+
+        if (savedInstanceState != null && savedInstanceState.keySet().contains(KEY_LOCATION)) {
+            // Since KEY_LOCATION was found in the Bundle, we can be sure that mCurrentLocation
+            // is not null.
+            mCurrentLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+        }
+
+        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap map) {
+                    loadMap(map);
+                }
+            });
+        } else {
+            Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    protected void loadMap(GoogleMap googleMap) { //fused location provider -h
+    protected void loadMap(GoogleMap googleMap) { //fused location provider
         map = googleMap;
         if (map != null) {
             // Map is ready
