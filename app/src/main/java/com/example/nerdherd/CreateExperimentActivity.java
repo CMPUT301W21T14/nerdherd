@@ -2,8 +2,15 @@ package com.example.nerdherd;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +40,7 @@ import java.util.HashMap;
  */
 
 public class CreateExperimentActivity extends AppCompatActivity {
-
+    public static final int PERMISSIONS_REQUEST_LOCATION = 99;
     private Spinner experimentTypeSpinner;
     private String[] experimentTypes = {"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"};
     private String experimentType = "Binomial Trial";
@@ -42,17 +49,41 @@ public class CreateExperimentActivity extends AppCompatActivity {
     private Boolean valid;
     private ArrayList<String> idList;
     String stringLatitude, stringLongitude;
+    Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_experiment);
-        GPSTracker gpsTracker = new GPSTracker(this);
+        /*GPSTracker gpsTracker = new GPSTracker(this);
 
         if (gpsTracker.getIsGPSTrackingEnabled()) {
             stringLatitude = String.valueOf(gpsTracker.latitude);
             String stringLongitude = String.valueOf(gpsTracker.longitude);
+        }*/
+
+        // https://stackoverflow.com/questions/1513485/how-do-i-get-the-current-gps-location-programmatically-in-android
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(CreateExperimentActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
+            }
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                    // Can use lastLocation for the location of trials
+                    // Remember to convert to a GeoPoint for firebase
+                    lastLocation = location;
+                    Log.d("LastLoc: ", location.toString());
+                }
+            });
         }
+
 
         //Initialize the spinner drop down
         experimentTypeSpinner = (Spinner) findViewById(R.id.experiment_type_spinner);

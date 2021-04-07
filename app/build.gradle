@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.3.1'
     //implementation of the google services
-    implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
-    implementation "org.permissionsdispatcher:permissionsdispatcher:$permissionDispatcherVersion"
-    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$permissionDispatcherVersion"
+    implementation "com.google.android.gms:play-services-location:18.0.0"
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
+    annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0"
 }
