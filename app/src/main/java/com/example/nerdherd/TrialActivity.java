@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -97,6 +98,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
 
     private Button ignoreUserBtn;
     private EditText ignoreUserEt;
+    private TextView locRequiredTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
 
         ignoreUserBtn = findViewById(R.id.btn_ignore_experimenter);
         ignoreUserEt = findViewById(R.id.et_ignore_experimenter);
+        locRequiredTv = findViewById(R.id.tv_location_required);
 
         eMgr.addOnChangeListener(this);
 
@@ -132,6 +135,12 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         if(!experiment.getOwnerId().equals(LocalUser.getUserId())) {
             ignoreUserBtn.setVisibility(View.GONE);
             ignoreUserEt.setVisibility(View.GONE);
+        }
+
+        if(experiment.isLocationRequired()) {
+            beginLocationUpdates();
+        } else {
+            locRequiredTv.setVisibility(View.GONE);
         }
 
         FloatingActionButton addTrialButton = findViewById(R.id.addTrial);

@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Statistics"
-            app:layout_constraintEnd_toStartOf="@+id/btn_add_trials"
+            app:layout_constraintEnd_toStartOf="@+id/btn_view_geomap"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
@@ -62,6 +62,16 @@
             android:layout_height="wrap_content"
             android:text="Add Trials"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_view_geomap"
+            app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
+
+        <Button
+            android:id="@+id/btn_view_geomap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GeoMap"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_trials"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_view_stats"
             app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />

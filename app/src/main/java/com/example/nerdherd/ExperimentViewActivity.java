@@ -49,6 +49,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private Button experimentQuestions;
     private Button experimentTrials;
     private Button experimentStatistics;
+    private Button experimentGeoMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentQuestions = findViewById(R.id.btn_view_questions);
         experimentTrials = findViewById(R.id.btn_add_trials);
         experimentStatistics = findViewById(R.id.btn_view_stats);
+        experimentGeoMap = findViewById(R.id.btn_view_geomap);
 
         experimentTitle = findViewById(R.id.experiment_title);
         experimentOwner = findViewById(R.id.experiment_owner);
@@ -122,6 +124,12 @@ public class ExperimentViewActivity extends AppCompatActivity {
             experimentPublish.setText("Unpublish");
         } else {
             experimentPublish.setText("Unpublish");
+        }
+
+        if(currentExperiment.getStatus().equals("Ended")) {
+            experimentPublish.setVisibility(View.GONE);
+            experimentTrials.setVisibility(View.GONE);
+
         }
 
         experimentSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +201,15 @@ public class ExperimentViewActivity extends AppCompatActivity {
             }
         });
 
+        experimentGeoMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Maps activity entry point
+                Intent nintent = new Intent(ExperimentViewActivity.this, MapsActivity.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
     }
 
     /*
