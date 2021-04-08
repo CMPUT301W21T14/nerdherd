@@ -9,12 +9,20 @@ import com.example.nerdherd.GPSTracker;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.example.nerdherd.QRResult;
+import com.example.nerdherd.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This stores all local data needed by the user along with some convenience data
+ */
 public class LocalUser implements ProfileManager.ProfileCreateEventListener {
+    public static Integer[] imageList= {R.drawable.zelda, R.drawable.link, R.drawable.mipha, R.drawable.urbosa, R.drawable.riju, R.drawable.revali, R.drawable.daruk, R.drawable.impa, R.drawable.purah, R.drawable.purah_6_years_old, R.drawable.yunobo, R.drawable.king_rhoam, R.drawable.sidon};
+    public static ArrayList<Integer> imageArray = new ArrayList(Arrays.asList(imageList));
     private static Set<String> custom_barcodes;
     private static Set<String> subscribed_experiments;
     private static HashMap<String, String> registeredBarcodeMap = new HashMap<>();

@@ -22,9 +22,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.Model.UserProfile;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
+import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Profile activity in the app
@@ -34,7 +39,8 @@ import java.util.ArrayList;
  * @author Zhipeng Z. zhipeng4
  */
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements ProfileManager.ProfileOnChangeEventListener {
+
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
@@ -74,6 +80,9 @@ public class ProfileActivity extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToast;
 
+    private ProfileManager pMgr = ProfileManager.getInstance();
+    private ExperimentManager eMgr = ExperimentManager.getInstance();
+
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -105,9 +114,48 @@ public class ProfileActivity extends AppCompatActivity {
         usersExpDetailed = findViewById(R.id.more_info);
         userExperiments = findViewById(R.id.expOwned);
         edtUserProfile = findViewById(R.id.edt_profile);
-        name = GlobalVariable.profile.getName();
-        email = GlobalVariable.profile.getEmail();
+        usersname = findViewById(R.id.UsersName);
+        usersemail = findViewById(R.id.usersEmail);
+        uname = findViewById(R.id.Name);
         usersAvatar = findViewById(R.id.avatarEdit2);
+
+        pMgr.addOnChangeListener(this);
+
+        updateViews();
+
+        edtUserProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new EditProfileFragment().show(getSupportFragmentManager(), "EDIT_TEXT2");
+            }
+        });
+
+        usersExpDetailed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, MyExperimentsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void updateViews() {
+        UserProfile up = pMgr.getProfile(LocalUser.getUserId());
+        if(up == null) {
+            Log.d("Null userId", "very bad");
+            // shouldn't happen
+            return;
+        }
+
+        int numExperiments = eMgr.getOwnedExperiments().size();
+        userExperiments.setText(numExperiments+""+" Experiments Currently Owned");
+        uname.setText(up.getUserName());
+        usersname.setText(up.getUserName());
+        usersemail.setText(up.getContactInfo());
+        usersAvatar.setImageResource(LocalUser.imageArray.get(up.getAvatarId()));
+    }
+
+        /*
         publicuser = getIntent();
         Bundle pUser = publicuser.getExtras();
         profController= new ProfileController();
@@ -208,7 +256,7 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+    }*/
 
     // this sees if the user has pressed back button twice within 2 seconds to exit the app
     @Override
@@ -225,8 +273,13 @@ public class ProfileActivity extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
+    @Override
+    public void onProfileDataChanged() {
+        updateViews();
+    }
 
-    public void getDescription() {
+
+    /*public void getDescription() {
         current_exp = 0;
         savedList = new ArrayList<Experiment>();
         fireStoreController = new FireStoreController();
@@ -402,7 +455,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
 
-    }
+    }*/
 
 
 }

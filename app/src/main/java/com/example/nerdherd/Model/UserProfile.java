@@ -4,6 +4,7 @@ public class UserProfile {
     private String userName;
     private String userId;
     private String contactInfo;
+    private int avatarId;
 
     public UserProfile() {
         // Empty constructor for serialization
@@ -14,6 +15,15 @@ public class UserProfile {
         this.userName=userName;
         this.contactInfo=contactInfo;
     }
+
+    public int getAvatarId() {
+        return avatarId;
+    }
+
+    public void setAvatarId(int avatarId) {
+        this.avatarId = avatarId;
+    }
+
 
     public String getUserName() {
         return userName;

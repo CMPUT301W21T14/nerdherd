@@ -3,6 +3,7 @@ package com.example.nerdherd.ObjectManager;
 import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Model.UserProfile;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -143,6 +144,25 @@ public class ProfileManager implements DatabaseListener {
         return null;
     }
 
+    public ArrayList<UserProfile> searchProfileByKeyword(String keyword) {
+        ArrayList<UserProfile> list = new ArrayList<>();
+        for( UserProfile p : profileList ) {
+            if(p.getContactInfo().contains(keyword)) {
+                list.add(p);
+                continue;
+            }
+            if(p.getUserName().contains(keyword)) {
+                list.add(p);
+                continue;
+            }
+            if(p.getUserId().contains(keyword)) {
+                list.add(p);
+                continue;
+            }
+        }
+        return list;
+    }
+
     public boolean isValidUsername(String userName) {
         // Check if duplicate usernames
         for( UserProfile p : profileList ) {
@@ -154,6 +174,14 @@ public class ProfileManager implements DatabaseListener {
         // Can also check for length ect
 
         return true;
+    }
+
+    public void updateProfile(String userName, String contactInfo, int avatarId) {
+        UserProfile up = getProfile(LocalUser.getUserId());
+        up.setContactInfo(contactInfo);
+        up.setUserName(userName);
+        up.setAvatarId(avatarId);
+        databaseAdapter.updateProfile(up);
     }
 
     private void checkProfileDataChange(ArrayList<UserProfile> newData) {

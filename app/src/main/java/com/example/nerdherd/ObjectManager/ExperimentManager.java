@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.Experiment;
 import com.example.nerdherd.Model.ExperimentE;
 import com.example.nerdherd.Model.Region;
 import com.example.nerdherd.Model.TrialT;
@@ -249,6 +250,16 @@ public class ExperimentManager implements DatabaseListener {
             }
         }
         return null;
+    }
+
+    public ArrayList<ExperimentE> getOwnedExperiments() {
+        ArrayList<ExperimentE> list = new ArrayList<>();
+        for(ExperimentE e : experimentList ) {
+            if( e.getOwnerId().equals(LocalUser.getUserId()) ) {
+                list.add(e);
+            }
+        }
+        return list;
     }
 
     private void checkExperimentDataChange(ArrayList<ExperimentE> newData) {
