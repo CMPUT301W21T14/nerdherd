@@ -320,21 +320,22 @@ public class FireStoreController {
                             trials.add(binomialTrial);
                         }
                         if (experimentType.equals("Count")) {
-                            CountTrial countTrial = new CountTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
+                            CountTrial countTrial = new CountTrial(Integer.parseInt(hashTrial.get("totalCount").toString()),  hashTrial.get("timestamp").toString());
 
                             trials.add(countTrial);
                         }
                         if (experimentType.equals("Measurement trial")) {
                             Log.d("checking for sure", String.valueOf(hashTrial.get("measurements")));
                             mTrials = (ArrayList<Double>) hashTrial.get("measurements");
+                            String timeStamp =  hashTrial.get("timestamp").toString();
                             Log.d("list", String.valueOf(mTrials));
-                            MeasurementTrial measurementTrial = new MeasurementTrial(mTrials);
+                            MeasurementTrial measurementTrial = new MeasurementTrial(mTrials, timeStamp);
                             trials.add(measurementTrial);
                             Log.d("item list", String.valueOf(measurementTrial));
                         }
                         if (experimentType.equals("Non-negative trial")) {
                             nTrials = (ArrayList<Long>) hashTrial.get("nonNegativeTrials");
-                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(nTrials);
+                            NonnegativeTrial nonnegativeTrial = new NonnegativeTrial(nTrials, hashTrial.get("timestamp").toString());
                             trials.add(nonnegativeTrial);
                         }
                     }
@@ -372,15 +373,16 @@ public class FireStoreController {
                                 itemList.add(binomialTrial);
                             }
                             if (type.equals("Count trial")) {
-                                CountTrial countTrial = new CountTrial(Integer.parseInt(hashTrial.get("totalCount").toString()));
+                                CountTrial countTrial = new CountTrial(Integer.parseInt(hashTrial.get("totalCount").toString()),  hashTrial.get("timestamp").toString());
                                 itemList.add(countTrial);
                             }
 
                             if (type.equals("Measurement trial")) {
                                 Log.d("checking for sure", String.valueOf(hashTrial.get("measurements")));
                                 mTrials = (ArrayList<Double>) hashTrial.get("measurements");
+                                String timeStamp =  hashTrial.get("timestamp").toString();
                                 Log.d("list", String.valueOf(mTrials));
-                                MeasurementTrial measurementTrial = new MeasurementTrial(mTrials);
+                                MeasurementTrial measurementTrial = new MeasurementTrial(mTrials, timeStamp);
                                 itemList.add(measurementTrial);
                                 Log.d("item list", String.valueOf(measurementTrial));
                             }
@@ -392,7 +394,7 @@ public class FireStoreController {
 //                                    nTrials.set(y, x);
 //                                }
                                 Log.d("list", String.valueOf(nTrials));
-                                NonnegativeTrial nonnegativeTrial= new NonnegativeTrial(nTrials);
+                                NonnegativeTrial nonnegativeTrial= new NonnegativeTrial(nTrials, hashTrial.get("timestamp").toString());
                                 itemList.add(nonnegativeTrial);
                                 Log.d("item list", String.valueOf(nonnegativeTrial));
                             }

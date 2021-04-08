@@ -297,7 +297,7 @@ public class TrialActivity extends AppCompatActivity {
 
     public void updateBinomialTrialView(int success, int failure, int minTrial){
 
-        Trial t1 = new BinomialTrial(success, failure, new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date()));
+        Trial t1 = new BinomialTrial(success, failure, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         //experiment has trials
         //creating new experiment - but i want access to
         Log.d("test binomial", String.valueOf(binomialtrialing.size()));
@@ -341,7 +341,7 @@ public class TrialActivity extends AppCompatActivity {
 
     public void updateCountTrialView(int[] count, int minTrial){
 
-        Trial t1 = new CountTrial(count[0]);
+        Trial t1 = new CountTrial(count[0],new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         int counted = (count[0]);
 
 
@@ -398,7 +398,7 @@ public class TrialActivity extends AppCompatActivity {
         Log.d("arrays", negativeTrials.toString());
 //            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
         Log.d("passed values", String.valueOf(negativeTrials));
-        Trial t2 = new NonnegativeTrial(negativeTrials);
+        Trial t2 = new NonnegativeTrial(negativeTrials, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         ((NonnegativeTrial) t2).setNonNegativeTrials(negativeTrials);
 
         //experiment has trials
@@ -447,7 +447,7 @@ public class TrialActivity extends AppCompatActivity {
         //check if adding trials to Testtrial2 will result in success
 
         int size = measurements.size();
-        Trial t1 = new MeasurementTrial(measurements);
+        Trial t1 = new MeasurementTrial(measurements, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 //            ((MeasurementTrial) t1).setTotalMeasurementCount(size);
         ((MeasurementTrial) t1).setMeasurements(measurements);
         //experiment has trials

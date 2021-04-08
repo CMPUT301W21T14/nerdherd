@@ -144,6 +144,37 @@ public class TrialsHistogram extends AppCompatActivity  {
                 }
             });
         }
+        // Represents counts of counts. How many 0s, how many 2s.
+        if (expType.equals("Non-Negative Integer Count")){
+            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onCallback(ArrayList<Trial> list) {
+
+                    if (list.isEmpty()){
+
+                    }
+                    else {
+                        nonNegativetrialing = (ArrayList<NonnegativeTrial>) list.clone();
+                        nonNegativetrialValues = nonNegative_val();
+                        //
+                        Map<Integer, Integer> hm = new HashMap<>();
+                        for (Integer i : nonNegativetrialValues) {
+                            Integer j = hm.get(i);
+                            hm.put(i, (j == null) ? 1 : j + 1);
+                        }
+
+                        //
+                        create_Chart(hm);
+                    }
+                }
+            }, new FireStoreController.FireStoreCertainKeepFailCallback() {
+                @Override
+                public void onCallback() {
+                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
