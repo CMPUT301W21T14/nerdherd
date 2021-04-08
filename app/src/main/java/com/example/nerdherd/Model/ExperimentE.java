@@ -5,6 +5,10 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a single experiment. Which should be modified through
+ * ExperimentManager to preserve state between client and database
+ */
 public class ExperimentE {
     public static final int EXPERIMENT_TYPE_BINOMIAL = 0;
     public static final int EXPERIMENT_TYPE_COUNT = 1;
@@ -30,6 +34,29 @@ public class ExperimentE {
         // Default constructor for serialization
     }
 
+    /**
+     * Experiment class Object
+     * @param experimentId
+     *      String - unique Id of the Experiment
+     * @param title
+     *      String - title of the experiment
+     * @param description
+     *      String - description of the experiment
+     * @param ownerId
+     *      String - unique owned Id associated with a UserProfile - this user created and controls the experiment
+     * @param region
+     *      Region - a region object containing a description, point location, and range around that location
+     * @param minimumTrials
+     *      int - minimum amount of trials for the experiment to be published
+     * @param type
+     *      int - enumerated type of experiment; Binomial=0, Count=1, Measurement=2, Non-Negative=3
+     * @param date
+     *      TimeStamp - firebase timestamp object to keep control of when experiment was created
+     * @param locationRequired
+     *      Boolean - dictates whether or not location data must be included with submitted trial
+     * @param published
+     *      Boolean - current publish status of experiment. Can publish and unpublish as needed. This removes it from public view.
+     */
     public ExperimentE(String experimentId, String title, String description, String ownerId, Region region, int minimumTrials, int type, Timestamp date, boolean locationRequired, boolean published) {
         this.experimentId = experimentId;
         this.description = description;

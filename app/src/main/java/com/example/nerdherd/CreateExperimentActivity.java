@@ -49,10 +49,6 @@ public class CreateExperimentActivity extends AppCompatActivity implements Exper
     private Spinner experimentTypeSpinner;
     private String[] experimentTypes = {"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"};
     private String experimentType = "Binomial Trial";
-    private FireStoreController fireStoreController;
-    private ArrayList<Experiment> experimentList;
-    private Boolean valid;
-    private ArrayList<String> idList;
 
     private EditText etLongitude;
     private EditText etLattitude;
@@ -152,8 +148,6 @@ public class CreateExperimentActivity extends AppCompatActivity implements Exper
         int range = (int) validateDouble(etRange.getText().toString());
         String regionDescription = etDescription.getText().toString();
 
-        idList = new ArrayList<String>();
-
         int minTrials;
 
         if (experimentTitle.length() == 0 || experimentTitle.length() > 25){
@@ -196,65 +190,6 @@ public class CreateExperimentActivity extends AppCompatActivity implements Exper
         }
         ExperimentManager eMgr = ExperimentManager.getInstance();
         eMgr.createExperiment(experimentTitle, experimentDescription, experimentIntType, minTrials, region, requiresLocation, publishExperimentCheck.isChecked(), this);
-
-        //TODO Location Dialog will be implemented here later...
-        /*
-        fireStoreController = new FireStoreController();
-        experimentList = new ArrayList<Experiment>();
-        fireStoreController.createExperimentReader(experimentList, new FireStoreController.FireStoreCreateExperimentReadCallback() {
-            @Override
-            public void onCallback(ArrayList<Experiment> experiments) {
-
-                valid = true;
-
-                for (Experiment existedExperiment : experiments) {
-                    if (existedExperiment.getTitle().equals(experimentTitle)) {
-                        valid = false;
-                    }
-                }
-
-                if (valid) {
-
-                    if (requireLocationCheck.isChecked()){
-                        String label = "Cinnamon & Toast";
-                        String uriBegin = "geo:43.651070,79.347015";
-                        String query = "43.651070,-79.347015(" + label + ")";
-                        String encodedQuery = Uri.encode(query);
-                        String uriString = uriBegin + "?q=" + encodedQuery;
-                        Uri uri = Uri.parse(uriString);
-                        Intent intent = new Intent (Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
-                    }
-
-                    Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked(), idList, new ArrayList<Trial>());
-                    fireStoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
-                        @Override
-                        public void onCallback() {
-                            finish();
-                        }
-                    }, new FireStoreController.FireStoreExperimentFailCallback() {
-                        @Override
-                        public void onCallback() {
-                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "The title is already used, please try another one. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new FireStoreController.FireStoreCreateExperimentReadFailCallback(){
-            @Override
-            public void onCallback() {
-                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-        /*
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("Action", "create"); //This tells the parent activity that it is receiving a created experiment allows the parent to tell the difference between different children when they return
-        returnIntent.putExtra("newExperiment", createdExperiment);
-        setResult(1, returnIntent);
-         */
     }
 
     public void cancelCreation(View view) {

@@ -1,5 +1,8 @@
 package com.example.nerdherd.Model;
 
+/**
+ * Object representing the details associated with a User who uses the application
+ */
 public class UserProfile {
     private String userName;
     private String userId;
@@ -10,6 +13,15 @@ public class UserProfile {
         // Empty constructor for serialization
     }
 
+    /**
+     * UserProfile constructor
+     * @param userId
+     *      String - unique Id of this specific user - stored in LocalUser
+     * @param userName
+     *      String - unique username of the user - can be set
+     * @param contactInfo
+     *      String - contact information of the user, perhaps an email
+     */
     public UserProfile(String userId, String userName, String contactInfo) {
         this.userId=userId;
         this.userName=userName;

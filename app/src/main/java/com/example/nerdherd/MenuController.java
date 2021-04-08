@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.nerdherd.Database.DatabaseAdapter;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;

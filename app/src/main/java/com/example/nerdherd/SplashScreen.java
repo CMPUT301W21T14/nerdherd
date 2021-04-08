@@ -29,7 +29,7 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        InitializeData(true);
+        InitializeData(false);
 
         new Handler().postDelayed(new Runnable() {
             @Override

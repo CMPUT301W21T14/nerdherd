@@ -7,6 +7,11 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
+/**
+ * Singleton class that manages all Profiles
+ * Potentially overkill as we only deal with our own profile
+ * But too late to take out now.
+ */
 public class ProfileManager implements DatabaseListener {
 
     private static ProfileManager instance = null;
@@ -44,6 +49,11 @@ public class ProfileManager implements DatabaseListener {
         return instance;
     }
 
+    /**
+     * Sets listening database adapter to get data from
+     * @param adapter
+     *      DatabaseAdapter - adapter to get data from
+     */
     public void setDatabaseAdapter(DatabaseAdapter adapter) {
         databaseAdapter = adapter;
         adapter.addListener("UserProfile", instance);
@@ -86,34 +96,54 @@ public class ProfileManager implements DatabaseListener {
         listeningViewsOnCreate.remove(listener);
     }
 
+    /**
+     * notiify listeners of create profile failure
+     */
     private void notifyListenerCreateProfileFailure(UserProfile failedProfile) {
         for(ProfileCreateEventListener listener : listeningViewsOnCreate) {
             listener.onCreateProfileFailed(failedProfile);
         }
     }
 
+    /**
+     * notiify listeners of profile creation success
+     */
     private void notifyListenerCreateProfileSuccess(UserProfile createdProfile) {
         for(ProfileCreateEventListener listener : listeningViewsOnCreate) {
             listener.onCreateProfileSuccess(createdProfile);
         }
     }
 
+    /**
+     * notiify listeners of data change
+     */
     private void notifyListenerProfileDataChanged() {
         for(ProfileOnChangeEventListener listener : listeningViewsOnChange) {
             listener.onProfileDataChanged();
         }
     }
 
+    /**
+     * notiify listeners of initial load
+     */
     private void notifyListenerProfilesLoaded() {
         for(ProfileDataLoadedEventListener listener : listeningViewsOnLoad) {
             listener.onProfileDataLoaded();
         }
     }
 
+    /**
+     * Init function to load everything
+     */
     public void init() {
         databaseAdapter.loadProfiles();
     }
 
+    /**
+     * Called when creating a new userProfile
+     * @return
+     *      String - returns the new UserId generated to store locallyy
+     */
     public String createNewProfile() {
         // This check should be done earlier, just in case.
         String newid = databaseAdapter.getNewProfileId();
@@ -123,18 +153,35 @@ public class ProfileManager implements DatabaseListener {
         return newid;
     }
 
+    /**
+     * Edit the contact information of the current user
+     * @param newInformation
+     *      String - new contact info
+     */
     public static void editContactInformation(String newInformation) {
         UserProfile p = getProfile(LocalUser.getUserId());
         p.setContactInfo(newInformation);
         databaseAdapter.updateProfile(p);
     }
 
+    /**
+     * Potential future use
+     * @param newUsername
+     *      String - new username
+     */
     public static void setupFirstUsername(String newUsername) {
         UserProfile p = getProfile(LocalUser.getUserId());
         p.setUserName(newUsername);
         databaseAdapter.updateProfile(p);
     }
 
+    /**
+     * Fetch the profile by a unique userId
+     * @param userId
+     *      String - userId of to find
+     * @return
+     *      UserProfile - profile object associated with userId
+     */
     public static UserProfile getProfile(String userId) {
         for( UserProfile p : profileList ) {
             if( p.getUserId().equals(userId) ) {
@@ -144,6 +191,13 @@ public class ProfileManager implements DatabaseListener {
         return null;
     }
 
+    /**
+     * Fetch the profile by a unique username instead of userId
+     * @param userName
+     *      String - username of to find
+     * @return
+     *      UserProfile - profile object associated with username
+     */
     public static UserProfile getProfileByUsername(String userName) {
         for( UserProfile p : profileList ) {
             if( p.getUserName().equals(userName) ) {
@@ -153,6 +207,13 @@ public class ProfileManager implements DatabaseListener {
         return null;
     }
 
+    /**
+     * Search for a profile by a keyword; aka search by username
+     * @param keyword
+     *      String - keyword to search for whitn a users profile
+     * @return
+     *      ArrayList<UserProfile> list of userprofiles that match critera
+     */
     public ArrayList<UserProfile> searchProfileByKeyword(String keyword) {
         ArrayList<UserProfile> list = new ArrayList<>();
         for( UserProfile p : profileList ) {
@@ -172,6 +233,13 @@ public class ProfileManager implements DatabaseListener {
         return list;
     }
 
+    /**
+     * Check if valid username. Cannot have duplicates!
+     * @param userName
+     *      String - username that is hopefully unique
+     * @return
+     *      Boolean - true if username exists, false otherwise
+     */
     public boolean isValidUsername(String userName) {
         // Check if duplicate usernames
         for( UserProfile p : profileList ) {
@@ -185,6 +253,15 @@ public class ProfileManager implements DatabaseListener {
         return true;
     }
 
+    /**
+     * Updates a single profile in the database
+     * @param userName
+     *      String - new userName
+     * @param contactInfo
+     *      String - new contactInfo
+     * @param avatarId
+     *      String - index of avatar picture list
+     */
     public void updateProfile(String userName, String contactInfo, int avatarId) {
         UserProfile up = getProfile(LocalUser.getUserId());
         up.setContactInfo(contactInfo);
@@ -192,7 +269,11 @@ public class ProfileManager implements DatabaseListener {
         up.setAvatarId(avatarId);
         databaseAdapter.updateProfile(up);
     }
-
+    /**
+     * Triggered by databaseAdapter when db changes
+     * @param newData
+     *      ArrayList<UserProfile> - list of profiles containing altered data
+     */
     private void checkProfileDataChange(ArrayList<UserProfile> newData) {
         /*
          * Might just be easier to load everything again instead of checking for changes
@@ -201,6 +282,11 @@ public class ProfileManager implements DatabaseListener {
         notifyListenerProfileDataChanged();
     }
 
+    /**
+     * Triggered by databaseAdapter when db is initally loaded in
+     * @param data
+     *      ArrayList<UserProfile> - list of profiles loaded in
+     */
     public void loadInitialExperimentData(ArrayList<UserProfile> data) {
         profileList = data;
         notifyListenerProfilesLoaded();
@@ -211,6 +297,13 @@ public class ProfileManager implements DatabaseListener {
         return profileList;
     }
 
+    /**
+     * Triggered when a database event occurs (Indicating we should alter our data)
+     * @param eventCode
+     *      int - Database event code (found in DatabaseListener interface)
+     * @param data
+     *      Object - data associated with event (must Cast to appropriate data type)
+     */
     @Override
     public void onDatabaseEvent(int eventCode, Object data) {
         switch(eventCode) {

@@ -19,6 +19,10 @@ import java.util.HashMap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * This class interacts with firebase and acts as an intermediary between the database
+ * and any ObjectManagers that listen to it for updates.
+ */
 public class FirestoreAdapter extends DatabaseAdapter {
     public final static String COLLECTION_EXPERIMENT = "ExperimentE";
     public final static String COLLECTION_PROFILE = "UserProfile";
@@ -35,13 +39,16 @@ public class FirestoreAdapter extends DatabaseAdapter {
         dbInstance = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Initialize all databases required for the adapter. Must be done manually
+     */
     public void init() {
         loadExperiments();
         loadProfiles();
     }
 
     /**
-     * Add a class which will listen for database changes on a certain collection
+     * Add a class which implements DatabaseListener to listen for database changes on a certain collection
      * @param collectionName
      *      String - name of the collection
      * @param databaseListener
@@ -128,7 +135,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
 
 
     /**
-     * Add Snapshot Listeners for Profile collection
+     * Begin listening to Profile collection for changes
      */
     public void startListeningForProfileChanges() {
         CollectionReference ref = dbInstance.collection(COLLECTION_PROFILE);
@@ -145,12 +152,18 @@ public class FirestoreAdapter extends DatabaseAdapter {
         });
     }
 
+    /**
+     * Stop listening to profile collection for changes
+     */
     public void stopListeningForProfileChanges() {
         if (profileSnapshotListener != null) {
             profileSnapshotListener.remove();
         }
     }
 
+    /**
+     * Stop listening to experiment collection for changes
+     */
     public void stopListeningForExperimentChanges() {
         if (experimentSnapshotListener != null) {
             experimentSnapshotListener.remove();
@@ -219,7 +232,9 @@ public class FirestoreAdapter extends DatabaseAdapter {
 
     /**
      * Update a single experiment in the database.
+     * Triggers DB_EVENT_UPDATE_EXPERIMENT_SUCCESS and DB_EVENT_UPDATE_EXPERIMENT_FAILURE
      * @param experiment
+     * @see ExperimentE - altered experiment to overwrite in the database
      */
     @Override
     public void updateExperiment(ExperimentE experiment) {
@@ -238,8 +253,10 @@ public class FirestoreAdapter extends DatabaseAdapter {
     }
 
     /**
-     *
+     * Update a single profile in the database
+     * Triggers DB_EVENT_UPDATE_EXPERIMENT_SUCCESS and DB_EVENT_UPDATE_EXPERIMENT_FAILURE
      * @param profile
+     *      @see UserProfile - adds the (hopefully edited) profile to the database, which will overwrite old data
      */
     @Override
     public void updateProfile(UserProfile profile) {
@@ -259,6 +276,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
 
     /**
      * Load all experiments in the database (At startup)
+     * Triggers DB_EVENT_EXPERIMENT_LOADED_ON_START and DB_EVENT_EXPERIMENT_ON_START_LOAD_FAILURE
      */
     @Override
     public void loadExperiments() {
@@ -285,6 +303,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
 
     /**
      * Load all profiles in the database (At startup)
+     * Triggers DB_EVENT_PROFILE_LOADED_ON_START and DB_EVENT_PROFILE_ON_START_LOAD_FAILURE
      */
     @Override
     public void loadProfiles() {
@@ -308,7 +327,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
     }
 
     /**
-     * Generate a new experiment Id from firebase (avoids collisions, always unnique - based on timestamp)
+     * Generate a new experiment Id from firebase (avoids collisions, always unique - based on timestamp)
      * @return
      *      String - the Id which can be used for a new experiment
      */
@@ -319,7 +338,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
     }
 
     /**
-     * Generate a new profile Id from firebase (avoids collisions, always unnique - based on timestamp)
+     * Generate a new profile Id from firebase (avoids collisions, always unique - based on timestamp)
      * @return
      *      String - the Id which can be used for a new profile
      */

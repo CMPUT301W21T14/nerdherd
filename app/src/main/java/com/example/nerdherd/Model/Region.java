@@ -4,11 +4,13 @@ import android.location.Location;
 
 import com.google.firebase.firestore.GeoPoint;
 
+/**
+ * Reprents a region. A single point with a range around it, and a small description.
+ */
 public class Region {
     private int range;
     private GeoPoint coordinates;
     private String description;
-    private Location l;
 
     public Region() {
 

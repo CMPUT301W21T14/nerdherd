@@ -18,6 +18,11 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 
+/**
+ * Singleton ExperimentManager object
+ * All Experiment alterations must be done through this control class to maintain consistency
+ * Between database and client
+ */
 public class ExperimentManager implements DatabaseListener {
     private static ExperimentManager instance = null;
     private static DatabaseAdapter databaseAdapter = null;
@@ -30,11 +35,20 @@ public class ExperimentManager implements DatabaseListener {
      ********* INITIALIZATION
      ********************************************************************************************/
 
+    /**
+     * Sets the source of data to draw from. Must be compatible with the model
+     * @param adapter
+     *      DatabaseAdapter - interface allowing for listening in on the datbase for things we care about
+     */
     public void setDatabaseAdapter(DatabaseAdapter adapter) {
         databaseAdapter = adapter;
         adapter.addListener("ExperimentE", instance);
     }
 
+    /**
+     * ExperimentManager constructore
+     *      initialize all the listening vies, and the datasource
+     */
     private ExperimentManager() {
         listeningViewsOnChange = new ArrayList<>();
         listeningViewsOnCreate = new ArrayList<>();
@@ -42,6 +56,11 @@ public class ExperimentManager implements DatabaseListener {
         experimentList = new ArrayList<>();
     }
 
+    /**
+     * Gets the single instance of ExperimentManager to be used within the application
+     * @return
+     *      ExperimentManager - instance of this object
+     */
     public static ExperimentManager getInstance() {
         if( instance == null ) {
             instance = new ExperimentManager();
@@ -64,10 +83,19 @@ public class ExperimentManager implements DatabaseListener {
         listeningViewsOnCreate.add(listener);
     }
 
+    /**
+     * removes an 'OnCreate' experiment listener.
+     * @param listener
+     */
     public void removeOnCreateListener(ExperimentCreateEventListener listener) {
         listeningViewsOnCreate.remove(listener);
     }
 
+    /**
+     * Adds an 'OnDataChanged' listener to experiments. This triggers on any small change
+     * @param listener
+     *      ExperimentOnChangeEventListener - listener to callback to
+     */
     public void addOnChangeListener(ExperimentOnChangeEventListener listener) {
         if(listeningViewsOnChange.add(listener)) {
             return;
@@ -75,10 +103,20 @@ public class ExperimentManager implements DatabaseListener {
         listeningViewsOnChange.add(listener);
     }
 
+    /**
+     * Removes the 'OnDataChanged' listener from experiments.
+     * @param listener
+     *      ExperimentOnChangeEventListener - listener to remove
+     */
     public void removeOnChangeListener(ExperimentOnChangeEventListener listener) {
         listeningViewsOnChange.remove(listener);
     }
 
+    /**
+     * Adds an 'OnLoadListeer' listener to experiments. This triggers on the initial load of the database
+     * @param listener
+     *      ExperimentOnChangeEventListener - listener to callback to
+     */
     public void addOnLoadListener(ExperimentDataLoadedEventListener listener) {
         if(listeningViewsOnLoad.contains(listener)) {
             return;
@@ -86,10 +124,20 @@ public class ExperimentManager implements DatabaseListener {
         listeningViewsOnLoad.add(listener);
     }
 
+    /**
+     * Removes the 'OnLoad' listener from experiments.
+     * @param listener
+     *      ExperimentOnChangeEventListener - listener to remove
+     */
     public void removeOnLoadListener(ExperimentDataLoadedEventListener listener) {
         listeningViewsOnLoad.remove(listener);
     }
 
+    /**
+     * Notifies all listeners that 'failedExperiment' was not writte successfully to database.
+     * @param failedExperiment
+     *      Experiment - object that failed to write
+     */
     private void notifyListenerCreateExperimentFailure(ExperimentE failedExperiment) {
         for(ExperimentCreateEventListener listener : listeningViewsOnCreate) {
             if(listener != null) {
@@ -98,6 +146,11 @@ public class ExperimentManager implements DatabaseListener {
         }
     }
 
+    /**
+     * Notifies all listeners that 'failedExperiment' wrote successfully to database.
+     * @param createdExperiment
+     *      Experiment - object that was written to database
+     */
     private void notifyListenerCreateExperimentSuccess(ExperimentE createdExperiment) {
         for(ExperimentCreateEventListener listener : listeningViewsOnCreate) {
             if(listener != null) {
@@ -106,6 +159,9 @@ public class ExperimentManager implements DatabaseListener {
         }
     }
 
+    /**
+     * Notifies all listeners that something in the database changed and to verify their data
+     */
     private void notifyListenerExperimentDataChanged() {
         for(ExperimentOnChangeEventListener listener : listeningViewsOnChange) {
             if(listener != null) {
@@ -114,6 +170,9 @@ public class ExperimentManager implements DatabaseListener {
         }
     }
 
+    /**
+     * Notifies all listeners when the database initially loads
+     */
     private void notifyListenerExperimentsLoaded() {
         for(ExperimentDataLoadedEventListener listener : listeningViewsOnLoad) {
             if(listener != null) {
@@ -123,17 +182,17 @@ public class ExperimentManager implements DatabaseListener {
     }
 
     /********************************************************************************************
-     ********* REGION
-     ********************************************************************************************/
-
-    public Region createRegion(String description, GeoPoint location, int range) {
-        return new Region(description, location, range);
-    }
-
-    /********************************************************************************************
      ********* TRIALS
      ********************************************************************************************/
 
+    /**
+     * Generates a trial with a location and outcome. Will be associated with proper experiment afterwards
+     * @param outcome
+     *      float - outcome of the trial
+     * @param location
+     *      Location - android GPS class, converted to GeoPoint for firebase.
+     * @return
+     */
     public TrialT generateTrial(float outcome, Location location) {
         GeoPoint geoPoint = null;
         if(location != null) {
@@ -142,6 +201,15 @@ public class ExperimentManager implements DatabaseListener {
         return new TrialT(LocalUser.getUserId(), outcome, geoPoint, Timestamp.now());
     }
 
+    /**
+     * Adds a new trial to a given experiment. Will be reflected in the database
+     * @param experimentId
+     *      String - experimentId of the experiment
+     * @param trial
+     *      Trial - object of the trial to add to experiment.
+     * @return
+     *      Returns true if successfully added + attempt to save
+     */
     public boolean addTrialToExperiment(String experimentId, TrialT trial) {
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
@@ -156,6 +224,25 @@ public class ExperimentManager implements DatabaseListener {
      ********* EXPERIMENT FUNCTIONS
      ********************************************************************************************/
 
+    /**
+     * Creates a new experiment in the database with the following
+     * @param title
+     *      String - title of experiment
+     * @param description
+     *      String - description of experiment
+     * @param type
+     *      int - type of experiment(0=binomial,1=count,2=measurement,3=non-negative)
+     * @param minTrials
+     *      int - minimum trials required to complete an experiment
+     * @param region
+     *      Region - Region object with a point location, range, and description
+     * @param locationRequired
+     *      Boolean - indication whether or not location data must be included with trials
+     * @param publish
+     *      Boolean - whether or not the experiment is currently published and available for view/participation
+     * @param listener
+     *      ExperimentCreateEventListener - listener to call back to on successful creation of the experiment.
+     */
     public void createExperiment(String title, String description, int type, int minTrials, Region region, boolean locationRequired, boolean publish, ExperimentCreateEventListener listener) {
         // US 01.01.01
         // As an owner, I want to publish an experiment with a description, a region, and a minimum number of trials.
@@ -166,14 +253,28 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.saveNewExperiment(experiment);
     }
 
+    /**
+     * Subscribe to an experiment
+     * @param experimentId
+     *      String - experiment Id to subscribe to
+     */
     public void subscribeToExperiment(String experimentId) {
         LocalUser.addSubscribedExperiment(experimentId);
     }
-
+    /**
+     * Unsubscribe to an experiment
+     * @param experimentId
+     *      String - experiment Id to unsubscribe to
+     */
     public void unsubscribeToExperiment(String experimentId) {
         LocalUser.removeSubscribedExperiment(experimentId);
     }
 
+    /**
+     * Publish an experiment for public view
+     * @param experimentId
+     *      String - experimentId of experiment to publish
+     */
     public void publishExperiment(String experimentId) {
         // US 01.02.01
         // As an owner, I want to unpublish an experiment.
@@ -186,6 +287,11 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
+    /**
+     * unpblish an experiment + remove public view
+     * @param experimentId
+     *      String - experimentId of experiment to unpublish
+     */
     public void unpublishExperiment(String experimentId) {
         // US 01.02.01
         // As an owner, I want to unpublish an experiment.
@@ -198,6 +304,14 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
+    /**
+     * Add a given username to the blacklist for a given experiment. There trials will not be counted
+     * @param userName
+     *      String - userame to blacklist
+     * @param experimentId
+     *      String - experimentId to blacklist user from
+     * @return
+     */
     public boolean addUserToExperimentBlacklist(String userName, String experimentId) {
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
@@ -214,6 +328,13 @@ public class ExperimentManager implements DatabaseListener {
         return true;
     }
 
+    /**
+     * Add a question to the associated experimentId
+     * @param experimentId
+     *      String - experimentId
+     * @param question
+     *      String - string representation of the question to ask
+     */
     public void addQuestionToExperiment(String experimentId, String question) {
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
@@ -225,6 +346,15 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
+    /**
+     * Add a reply to a given question for an experiment
+     * @param experimentId
+     *      String - experimentId
+     * @param questionIdx
+     *      int - idnex of the question in the arraylist of given experimentId
+     * @param reply
+     *      String - string representation of the reply to give to the question
+     */
     public void addReplyToExperimentQuestion(String experimentId, int questionIdx, String reply) {
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
@@ -244,6 +374,11 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
+    /**
+     * End an experiment + allows to show results
+     * @param experimentId
+     *      String - experimentId
+     */
     public void endExperiment(String experimentId) {
         // US 01.03.01
         // As an owner, I want to end an experiment. This leaves the results available and public but does not allow new results to be added.
@@ -255,23 +390,48 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
+    /**
+     * Check whether or not an experiment contains a keyword in the description, owner username, or status
+     * @param e
+     *      Experiment - experiment to check against
+     * @param keyword
+     *      String - keyword to run against experiment data
+     * @return
+     *      Boolean - true if contains keyword, false otherwise
+     */
     public boolean experimentContainsKeyword(ExperimentE e, String keyword) {
         String ownerUserName = ProfileManager.getProfile(e.getOwnerId()).getUserName();
 
-        if( ownerUserName.contains(keyword) ) {
+        if( ownerUserName.toLowerCase().contains(keyword.toLowerCase()) ) {
             return true;
         }
 
-        if( e.getDescription().contains(keyword) ) {
+        if( e.getDescription().toLowerCase().contains(keyword.toLowerCase()) ) {
             return true;
         }
 
-        if( e.getStatus().contains(keyword) ) {
+        if( e.getStatus().toLowerCase().contains(keyword.toLowerCase()) ) {
             return true;
         }
+
+        if( e.typeToString().toLowerCase().contains(keyword.toLowerCase()) ) {
+            return true;
+        }
+
+        if( e.getTitle().toLowerCase().contains(keyword.toLowerCase()) ) {
+            return true;
+        }
+
         return false;
     }
 
+    /**
+     * Returns a list of experiments that contain a keyword
+     * @param keyword
+     *      String - keyword that must be contained by experiments to make it into the list
+     * @return
+     *      ArrayList<Experiment> arraylist of experiments containing keyword
+     */
     public ArrayList<ExperimentE> searchForExperimentsByKeyword(String keyword) {
         //  US 05.01.01
         //  As an experimenter, I want to specify a keyword, and search for all experiments that are available.
@@ -293,6 +453,12 @@ public class ExperimentManager implements DatabaseListener {
      ********* HELPER FUCTIONS
      ********************************************************************************************/
 
+    /**
+     * Small helper function to get total trial count of a given experiment
+     * @param experimentId
+     *      String - experimentId to get trial count of
+     * @return
+     */
     public int getTrialCount(String experimentId) {
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
@@ -305,6 +471,13 @@ public class ExperimentManager implements DatabaseListener {
         return 0;
     }
 
+    /**
+     * Gets a list of all trials for a given experiment, excluding those added by users who are blacklisted.
+     * @param experimentId
+     *      String - experimentId to get trial list for
+     * @return
+     *      ArrayList<Trial> list of trials excluding those made by blacklisted users
+     */
     public ArrayList<TrialT> getTrialsExcludeBlacklist(String experimentId) {
         // US 01.08.01
         // As an owner, I want to ignore certain experimenters results.
@@ -323,6 +496,13 @@ public class ExperimentManager implements DatabaseListener {
         return list;
     }
 
+    /**
+     * Helper function, check if ExperimentManager contains the experimentId
+     * @param experimentId
+     *      String - experimentId to check for
+     * @return
+     *      Boolean - true if contains, false if not
+     */
     private boolean containsExperiment(String experimentId) {
         for( ExperimentE e : experimentList ) {
             if (e.getExperimentId().equals(experimentId) ) {
@@ -332,6 +512,14 @@ public class ExperimentManager implements DatabaseListener {
         return false;
     }
 
+    /**
+     * Helper function to get Experiment object of a given experimentId
+     * Can be null, double check on call
+     * @param experimentId
+     *      String - experimentId to get object of
+     * @return
+     *      Experiment - experiment object associated with experimentId
+     */
     public ExperimentE getExperiment(String experimentId) {
         for( ExperimentE e : experimentList ) {
             if( e.getExperimentId().equals(experimentId) ) {
@@ -341,6 +529,11 @@ public class ExperimentManager implements DatabaseListener {
         return null;
     }
 
+    /**
+     * Get a list of all experiments the current user owns/created
+     * @return
+     *      ArrayList<Experiment> - list of experiments owned by user
+     */
     public ArrayList<ExperimentE> getOwnedExperiments() {
         ArrayList<ExperimentE> list = new ArrayList<>();
         for(ExperimentE e : experimentList ) {
@@ -351,6 +544,11 @@ public class ExperimentManager implements DatabaseListener {
         return list;
     }
 
+    /**
+     * Called by databaseAdapter callbacks indicating data was changed.
+     * @param newData
+     *      ArrayList of experiments that contain altered data from what we have
+     */
     private void checkExperimentDataChange(ArrayList<ExperimentE> newData) {
         /*
          * Might just be easier to load everything again instead of checking for changes
@@ -360,11 +558,19 @@ public class ExperimentManager implements DatabaseListener {
         notifyListenerExperimentDataChanged();
     }
 
+    /**
+     * Called by databaseAdapter when the database is intially loaded
+     * @param data
+     *      ArrayList of experiments loaded from database
+     */
     public void loadInitialExperimentData(ArrayList<ExperimentE> data) {
         experimentList = data;
         notifyListenerExperimentsLoaded();
     }
 
+    /**
+     * Init function of ExperimentFunction to load everything needed
+     */
     public void init() {
         databaseAdapter.loadExperiments();
     }
@@ -408,14 +614,22 @@ public class ExperimentManager implements DatabaseListener {
         }
     }
 
+    /**
+     * Listeners for other objects (mostly views) to implement for calls from ExperimentManager
+     */
     public interface ExperimentCreateEventListener {
         void onCreateExperimentFailed(ExperimentE failedToCreate);
         void onCreateExperimentSuccess(ExperimentE createdExperiment);
     }
+    /**
+     * Listeners for other objects (mostly views) to implement for calls from ExperimentManager
+     */
     public interface ExperimentDataLoadedEventListener {
         void onExperimentDataLoaded();
     }
-
+    /**
+     * Listeners for other objects (mostly views) to implement for calls from ExperimentManager
+     */
     public interface ExperimentOnChangeEventListener {
         void onExperimentDataChanged();
     }

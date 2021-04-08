@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
-import com.example.nerdherd.GPSTracker;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.ProfileManager;
-import com.example.nerdherd.QRResult;
 import com.example.nerdherd.R;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -20,8 +18,11 @@ import java.util.Set;
 
 /**
  * This stores all local data needed by the user along with some convenience data
+ * Contains the userId of the phone, custom barcode mappings, and subscribed experiments
  */
 public class LocalUser implements ProfileManager.ProfileCreateEventListener {
+
+    // Forgive me for this, there's a better place to store this but I got lazy.
     public static Integer[] imageList= {R.drawable.zelda, R.drawable.link, R.drawable.mipha, R.drawable.urbosa, R.drawable.riju, R.drawable.revali, R.drawable.daruk, R.drawable.impa, R.drawable.purah, R.drawable.purah_6_years_old, R.drawable.yunobo, R.drawable.king_rhoam, R.drawable.sidon};
     public static ArrayList<Integer> imageArray = new ArrayList(Arrays.asList(imageList));
     private static Set<String> custom_barcodes;
@@ -37,6 +38,11 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
 
     }
 
+    /**
+     * Get instance of the singleton
+     * @return
+     *      LocalUser - instance of singleton
+     */
     public static LocalUser getInstance() {
         if( instance == null ) {
             instance = new LocalUser();
@@ -44,20 +50,41 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         return instance;
     }
 
+    /**
+     * Set the context of the application, needed for saving shared preferences (Local storage)
+     * @param context
+     *  Context - Context class - usually from MainActivity
+     */
     public static void setContext(Context context) {
         appContext = context;
     }
 
+    /**
+     * Add an experiment to subscribe to + save it locally
+     * @param experimentId
+     *      String - experimentId to save to subscription list
+     */
     public static void addSubscribedExperiment(String experimentId) {
         subscribed_experiments.add(experimentId);
         saveLocalData();
     }
 
+    /**
+     * Remove an experiment to subscribe to + save it locally
+     * @param experimentId
+     *      String - experimentId to remove from  subscription list
+     */
     public static void removeSubscribedExperiment(String experimentId) {
         subscribed_experiments.remove(experimentId);
         saveLocalData();
     }
 
+    /**
+     * When location is needed, use the users last known location to avoid issues.
+     * Potentially inaccurate.
+     * @return
+     *      GeoPoint - Firebase.GeoPoint object containing the Longitude and Lattitude of the last location.
+     */
     public static GeoPoint getLastLocationGeo() {
         if(lastLocation == null) {
             return null;
@@ -65,14 +92,29 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         return new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude());
     }
 
+    /**
+     * Returns the String set of subscribed Experiment Id's
+     * @return
+     *      Set<String> - HashSet of Strings containing experiment Id's user is subscribed to
+     */
     public static Set<String> getSubscribedExperiments() {
         return subscribed_experiments;
     }
 
+    /**
+     * Checks whether or not the user is subscribed to the given experimentId
+     * @param experimentId
+     *  String - experimentId from Experiment to check
+     * @return
+     *  Boolean - True if subscribed, False if unsubscribed
+     */
     public static boolean isSubscribed(String experimentId) {
         return subscribed_experiments.contains(experimentId);
     }
 
+    /**
+     * Loads mock data for testing/offline development
+     */
     private static void loadMockData() {
         custom_barcodes = new HashSet<>();
         subscribed_experiments = new HashSet<>();
@@ -80,6 +122,9 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         userId = "0";
     }
 
+    /**
+     * Loads/Initializes all local data in shared preferences unless mockDBUsed=True
+     */
     public static void loadLocalData() {
         if(mockDBUsed) {
             loadMockData();
@@ -112,6 +157,9 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         generateBarcodeMap();
     }
 
+    /**
+     * Saves all local data back to the shared preferences files unless mockDBUsed==True
+     */
     public static void saveLocalData() {
         if(mockDBUsed) {
             return;
@@ -130,8 +178,14 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         edit.commit();
     }
 
-    ///////////////////////////////
+    /* *********************************************************
+     ******** Helper functions
+     ***********************************************************/
 
+    /**
+     * Helper function to get stored String set from the format
+     * barcodeData:experimentId:outcome to HashMap<barcodeData, "experimentId:outcome">
+     */
     private static void generateBarcodeMap() {
         for(String b : custom_barcodes) {
             String[] components = b.split(":");
@@ -143,6 +197,14 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         }
     }
 
+    /**
+     * Helper function to get the QR code equivalant data from a barcode we have mapped
+     * to a specific trial:outcome
+     * @param barcodeData
+     *      String - data from a barcode from a book from home
+     * @return
+     *      String - string value of the QR code data we associate it with "experimentId:outcome"
+     */
     private static String getAssociatedDataForBarcode(String barcodeData) {
         for(String b : custom_barcodes) {
             String[] components = b.split(":");
@@ -157,6 +219,15 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         return null;
     }
 
+    /**
+     * Adds a custom barcode to our local storage
+     * @param barcodeData
+     *      String - barcode of the book/object scanned
+     * @param experimentId
+     *      String - experimentId to associate the barcode with
+     * @param trialResult
+     *      String - trial outcome to associate the barcode with
+     */
     public static void addCustomBarcode(String barcodeData, String experimentId, String trialResult) {
         String data = barcodeData+":"+experimentId+":"+trialResult;
         if(addRegisteredBarcode(barcodeData, experimentId+":"+trialResult)) {
@@ -164,10 +235,26 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         }
     }
 
+    /**
+     * Generic function to get the experimentId:outcome from a specific barcodeData
+     * @param barcodeData
+     *      String - barcode data retreived from codescanner
+     * @return
+     *      String - data we want to map the barcode to
+     */
     public static String getBarcodeMapping(String barcodeData) {
         return registeredBarcodeMap.get(barcodeData);
     }
 
+    /**
+     * Adds a barcode to our local storage which we will now associate with a certain experiment+outcome
+     * @param barcodeData
+     *      String - barcode data retreieved from the codescanner
+     * @param codeData
+     *      String - new code data in the format "experimentId:outcome"
+     * @return
+     *      Boolean - returns true if barcode doesn't already exist. Can't have a barcode trigger multiple trial outcomes
+     */
     public static boolean addRegisteredBarcode(String barcodeData, String codeData) {
         if(registeredBarcodeMap.containsKey(barcodeData)) {
             return false;
@@ -178,28 +265,55 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
 
     ///////////////////////////////////////
 
+    /**
+     * sets the last location whenever we get a location update - for use with trials
+     * @param location
+     */
     public static void setLastLocation(Location location) {
         lastLocation = location;
     }
 
+    /**
+     * gets the last known location of our user
+     * @return
+     */
     public static Location getLastLocation() {
         return lastLocation;
     }
 
+    /**
+     * Gets the UserId which will be associated with a UserProfile in the database
+     * @return
+     *      String - UserId of the application user
+     */
     public static String getUserId() {
         return userId;
     }
 
+    /**
+     * When set to true, does not save any data, and loads all empty maps for subscribed experiments
+     * custom barcode maps, and userId=0
+     */
     public static void setMockDBUsed() {
         mockDBUsed = true;
     }
 
+    /**
+     * Called when a profile fails to be created on the first run of the application
+     * @param failedToCreate
+     *      UserProfile - this is the UserProfile object we attempted to create
+     */
     @Override
     public void onCreateProfileFailed(UserProfile failedToCreate) {
         // ?? Nothing we can really do except try again
         Log.d("LocalUser", "New Profile Failed!! IMPORTANT!!");
     }
 
+    /**
+     * Called when a profile is successfully created on the first run of the application
+     * @param createdProfile
+     *      UserProfile - object that was successfully written to the database
+     */
     @Override
     public void onCreateProfileSuccess(UserProfile createdProfile) {
         saveLocalData();

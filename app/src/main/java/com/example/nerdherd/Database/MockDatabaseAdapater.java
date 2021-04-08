@@ -49,6 +49,9 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         listeners = new HashMap<>();
     }
 
+    /**
+     * Generate 10 mock Experiments with 3 Questions, each with one reply
+     */
     public void generateMockExperiments() {
         for(int i=0;i<10;++i) {
             Region r = new Region("Region "+i, new GeoPoint(i*2, i), i*50);
@@ -64,6 +67,9 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         nextIdExperiment = 10;
     }
 
+    /**
+     * Generate mock profiles, Id's 0-5
+     */
     public void generateMockProfiles() {
         for(int i=0;i<5;++i) {
             UserProfile profile = new UserProfile(String.valueOf(i), "Username"+i, "ContactInfo"+i);
@@ -72,6 +78,9 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         nextIdProfile=5;
     }
 
+    /**
+     * Init all the database needed
+     */
     public void init() {
         loadExperiments();
         loadProfiles();
@@ -96,7 +105,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     /**
-     * Remove a class which will listen for database changes on a certain collection
+     * Remove a class which will listen for database changes on a certain table/collection
      * @param collectionName
      *      String - name of the collection
      * @param databaseListener
@@ -127,18 +136,31 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         }
     }
 
+    /**
+     * Stops listening to profile database (array)
+     * Never used in mock database but keep in case
+     */
     public void stopListeningForProfileChanges() {
         if (profileSnapshotListener != null) {
             profileSnapshotListener.remove();
         }
     }
 
+    /**
+     * Stops listening to experiment database (array)
+     * Never used in mock database, but will keep in case
+     */
     public void stopListeningForExperimentChanges() {
         if (experimentSnapshotListener != null) {
             experimentSnapshotListener.remove();
         }
     }
 
+    /**
+     * Helper function for mock database
+     * @param userId
+     * @return
+     */
     public UserProfile containsProfile(String userId) {
         for( UserProfile e : profiles ) {
             if(e.getUserId().equals(userId)) {
@@ -148,6 +170,11 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         return null;
     }
 
+    /**
+     * Helper function for mock database
+     * @param experimentId
+     * @return
+     */
     public ExperimentE containsExperiment(String experimentId) {
         for( ExperimentE e : experiments ) {
             if(e.getExperimentId().equals(experimentId)) {
@@ -173,7 +200,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     /**
-     * Save a brand new profile in the database
+     * Save a brand new profile in the mock database
      * @param profile
      *      Profile - profile object
      */
@@ -199,7 +226,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     /**
-     * Update a single experiment in the database.
+     * Update a single experiment in the mock database.
      * @param experiment
      */
     @Override
@@ -225,8 +252,9 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         }
     }
 
+
     /**
-     *
+     * updates single profile
      * @param profile
      */
     @Override
@@ -261,7 +289,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     /**
-     * Generate a new experiment Id from firebase (avoids collisions, always unnique - based on timestamp)
+     * Generate a new experiment Id from our mock database
      * @return
      *      String - the Id which can be used for a new experiment
      */
@@ -272,7 +300,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     /**
-     * Generate a new profile Id from firebase (avoids collisions, always unnique - based on timestamp)
+     * Generate a new profile Id from mock database
      * @return
      *      String - the Id which can be used for a new profile
      */
