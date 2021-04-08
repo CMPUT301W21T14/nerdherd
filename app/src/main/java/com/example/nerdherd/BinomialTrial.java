@@ -30,11 +30,11 @@ public class BinomialTrial extends Trial {
      */
 
 
-    BinomialTrial (Integer success, Integer failure)
+    BinomialTrial (Integer success, Integer failure, String timestamp)
     {
         this.success = success;
         this.failure = failure;
-        this.timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date());
+        this.timestamp = timestamp;
     }
 
     public String getTimestamp() {

@@ -20,7 +20,9 @@ import com.google.firestore.v1.WriteResult;
 import org.w3c.dom.Document;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -314,7 +316,7 @@ public class FireStoreController {
                     trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
                         if (experimentType.equals("Binomial Trial")) {
-                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
+                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()), new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date()));
                             trials.add(binomialTrial);
                         }
                         if (experimentType.equals("Count")) {
@@ -366,7 +368,7 @@ public class FireStoreController {
                     if(doc.getId().equals(id)){
                         for(HashMap hashTrial : (ArrayList<HashMap>)(doc.getData().get("Trial List"))){
                             if (type.equals("Binomial")) {
-                                BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()));
+                                BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()), new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date()));
                                 itemList.add(binomialTrial);
                             }
                             if (type.equals("Count trial")) {

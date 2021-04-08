@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -295,7 +297,7 @@ public class TrialActivity extends AppCompatActivity {
 
     public void updateBinomialTrialView(int success, int failure, int minTrial){
 
-        Trial t1 = new BinomialTrial(success, failure);
+        Trial t1 = new BinomialTrial(success, failure, new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date()));
         //experiment has trials
         //creating new experiment - but i want access to
         Log.d("test binomial", String.valueOf(binomialtrialing.size()));
