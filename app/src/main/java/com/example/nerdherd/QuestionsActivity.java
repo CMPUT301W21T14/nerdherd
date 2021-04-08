@@ -42,6 +42,8 @@ public class QuestionsActivity extends AppCompatActivity implements ExperimentMa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // US 02.01.01
+        // As an experimenter, I want to ask a question about an experiment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 

@@ -73,7 +73,19 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
         return subscribed_experiments.contains(experimentId);
     }
 
+    private static void loadMockData() {
+        custom_barcodes = new HashSet<>();
+        subscribed_experiments = new HashSet<>();
+        registeredBarcodeMap = new HashMap<>();
+        userId = "0";
+    }
+
     public static void loadLocalData() {
+        if(mockDBUsed) {
+            loadMockData();
+            return;
+        }
+
         if(appContext == null) {
             // Cannot load data without settting appContext
             return;
@@ -101,6 +113,10 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
     }
 
     public static void saveLocalData() {
+        if(mockDBUsed) {
+            return;
+        }
+
         if(appContext == null) {
             // Cannot save data without settting appContext
             Log.d("appContext:", "isFucked");

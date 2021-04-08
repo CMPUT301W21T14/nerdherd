@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * @author Tas S. saiyera
  */
 
-public class ExperimentViewActivity extends AppCompatActivity {
+public class ExperimentViewActivity extends AppCompatActivity implements ExperimentManager.ExperimentOnChangeEventListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -42,6 +42,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private TextView experimentRegion;
     private TextView experimentContact;
     private TextView experimentDescription;
+    private TextView minTrialsTv;
     private Button experimentEnd;
     private Button experimentPublish;
     private Button experimentSubscribe;
@@ -52,15 +53,18 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private Button experimentStatistics;
     private Button experimentGeoMap;
 
+    private String experimentId;
+
+    private ExperimentManager eMgr = ExperimentManager.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
-        ExperimentManager eMgr = ExperimentManager.getInstance();
         ProfileManager pMgr = ProfileManager.getInstance();
         Intent intent = getIntent();
-        String experimentId = intent.getStringExtra("experimentId");
+        experimentId = intent.getStringExtra("experimentId");
         currentExperiment = eMgr.getExperiment(experimentId);
         if (currentExperiment == null) {
             // big uh oh
@@ -84,6 +88,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentEnd = findViewById(R.id.btn_end_experimentresults);
         experimentPublish = findViewById(R.id.btn_publish_experiment);
         experimentSubscribe = findViewById(R.id.btn_subscribe_experiment);
+        minTrialsTv = findViewById(R.id.tv_min_trials);
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_experiment_view);
@@ -217,6 +222,8 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 startActivity(nintent);
             }
         });
+
+        updateTrialGoal();
     }
 
     /*
@@ -382,5 +389,17 @@ public class ExperimentViewActivity extends AppCompatActivity {
         Intent myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
         startActivity(myExperimentIntent);
         finish();
+    }
+
+    private void updateTrialGoal() {
+        int target = currentExperiment.getMinimumTrials();
+        int current = eMgr.getTrialCount(experimentId);
+        String value = "Trial Count: "+current+"/"+target;
+        minTrialsTv.setText(value);
+    }
+
+    @Override
+    public void onExperimentDataChanged() {
+        updateTrialGoal();
     }
 }

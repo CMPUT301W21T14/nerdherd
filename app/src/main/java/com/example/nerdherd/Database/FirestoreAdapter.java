@@ -112,7 +112,6 @@ public class FirestoreAdapter extends DatabaseAdapter {
      * Begin listening to Firebase for changes to Experiment Collections
      */
     public void startListeningForExperimentChanges() {
-        // Todo finish experiment setup or changes
         CollectionReference ref = dbInstance.collection(COLLECTION_EXPERIMENT);
         experimentSnapshotListener = ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -164,16 +163,6 @@ public class FirestoreAdapter extends DatabaseAdapter {
      *      QueryDocumentSnapshot - potentially modified document
      */
     public ExperimentE processExperimentSnapshot(QueryDocumentSnapshot doc) {
-        /*String experimentId = doc.getId();
-        String ownerId = doc.get("ownerId").toString();
-        String description = doc.get("description").toString();
-        int minimumTrials = ((Long) doc.get("minimumTrials")).intValue();
-        int experimentType = ((Long) doc.get("experimentType")).intValue();
-        int status = ((Long) doc.get("status")).intValue();
-        Region region = (Region) doc.get("region");
-        ArrayList<Question> questionsList = (ArrayList<Question>) doc.get("questions");
-        ArrayList<Trial> trialList = (ArrayList<Trial>) doc.get("trials");*/
-
         ExperimentE experiment = doc.toObject(ExperimentE.class);
         return experiment;
     }
@@ -183,12 +172,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
      * @param doc
      */
     public UserProfile processProfileSnapshot(QueryDocumentSnapshot doc) {
-        // Todo: finish setup / structure
-        /*String userId = doc.getId();
-        String userName = doc.get("username").toString();
-        String contactInfo = doc.get("contactInfo").toString();*/
         UserProfile profile = doc.toObject(UserProfile.class);
-
         return profile;
     }
 

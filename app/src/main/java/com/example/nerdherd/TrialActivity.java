@@ -1,15 +1,12 @@
 package com.example.nerdherd;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -37,13 +33,8 @@ import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.auth.User;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Trial activity in the app
@@ -103,6 +94,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
     private Button ignoreUserBtn;
     private EditText ignoreUserEt;
     private TextView locRequiredTv;
+    private TextView ignoreUserTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +113,8 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         ignoreUserBtn = findViewById(R.id.btn_ignore_experimenter);
         ignoreUserEt = findViewById(R.id.et_ignore_experimenter);
         locRequiredTv = findViewById(R.id.tv_location_required);
+        ignoreUserTv = findViewById(R.id.tv_blacklist_label);
+
 
         eMgr.addOnChangeListener(this);
 
@@ -139,6 +133,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         if(!experiment.getOwnerId().equals(LocalUser.getUserId())) {
             ignoreUserBtn.setVisibility(View.GONE);
             ignoreUserEt.setVisibility(View.GONE);
+
         }
 
         if(experiment.isLocationRequired()) {
@@ -248,7 +243,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
     }
 
     private void showTrials(){
-        trialList = eMgr.getTrialsIncludeBlacklist(experimentId);
+        trialList = eMgr.getTrialsExcludeBlacklist(experimentId);
         RecyclerView recyclerView = findViewById(R.id.list_recyclerView);
         adapter = new TrialsAdapter(trialList, listener);
         adapterController = new AdapterController(TrialActivity.this, recyclerView, adapter);

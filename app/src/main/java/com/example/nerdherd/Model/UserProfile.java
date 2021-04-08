@@ -14,6 +14,7 @@ public class UserProfile {
         this.userId=userId;
         this.userName=userName;
         this.contactInfo=contactInfo;
+        this.avatarId=0;
     }
 
     public int getAvatarId() {

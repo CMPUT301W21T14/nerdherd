@@ -1,19 +1,43 @@
 package com.example.nerdherd.Database;
 
+import com.example.nerdherd.Experiment;
 import com.example.nerdherd.Model.ExperimentE;
 import com.example.nerdherd.Model.Region;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.DatabaseListener;
+import com.example.nerdherd.Question;
+import com.example.nerdherd.Reply;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Use this Database adapter for Testing where we don't want to mess with Firebase.
  */
 public class MockDatabaseAdapater extends DatabaseAdapter {
+
+    public final static String COLLECTION_EXPERIMENT = "ExperimentE";
+    public final static String COLLECTION_PROFILE = "UserProfile";
+
+    private int nextIdProfile;
+    private int nextIdExperiment;
+
+    private ListenerRegistration profileSnapshotListener = null;
+    private ListenerRegistration experimentSnapshotListener = null;
 
     private ArrayList<ExperimentE> experiments;
     private ArrayList<UserProfile> profiles;
@@ -25,36 +49,59 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         listeners = new HashMap<>();
     }
 
-    public void generateMockTrials() {
-
-    }
-
-    public void generateMockDatabase() {
-        // Experiments
+    public void generateMockExperiments() {
         for(int i=0;i<10;++i) {
-            Region r = new Region("Region "+i, new GeoPoint(0, 0), i*50);
+            Region r = new Region("Region "+i, new GeoPoint(i*2, i), i*50);
             //String experimentId, String description, String ownerId, Region region, int minimumTrials, int type, Timestamp date)
-            ExperimentE e = new ExperimentE(String.valueOf(i), "GenericTitle"+i,"Description"+i, String.valueOf(i%10), r, i*2, i%4, Timestamp.now(), false, true);
+            ExperimentE e = new ExperimentE(String.valueOf(i), "GenericTitle"+i,"Description"+i, String.valueOf(i%5), r, i*2, i%4, Timestamp.now(), false, true);
+            for(int j=0;j<3;++j) {
+                Question q = new Question("QuestionExp" + i + "Question"+j);
+                q.addReply(new Reply("Single Reply"));
+                e.addQuestion(q);
+            }
             experiments.add(e);
         }
+        nextIdExperiment = 10;
     }
 
-    @Override
-    public void sendListenerNotification(String tableName, int eventCode, Object data) {
-
+    public void generateMockProfiles() {
+        for(int i=0;i<5;++i) {
+            UserProfile profile = new UserProfile(String.valueOf(i), "Username"+i, "ContactInfo"+i);
+            profiles.add(profile);
+        }
+        nextIdProfile=5;
     }
 
-    @Override
+    public void init() {
+        loadExperiments();
+        loadProfiles();
+    }
+
+    /**
+     * Add a class which will listen for database changes on a certain collection
+     * @param collectionName
+     *      String - name of the collection
+     * @param databaseListener
+     *      DatabaseListener - object to give callbacks to
+     */
     public void addListener(String collectionName, DatabaseListener databaseListener) {
+
         ArrayList<DatabaseListener> collectionListener = listeners.get(collectionName);
         if(collectionListener == null) {
             collectionListener = new ArrayList<>();
             listeners.put(collectionName, collectionListener);
         }
+
         collectionListener.add(databaseListener);
     }
 
-    @Override
+    /**
+     * Remove a class which will listen for database changes on a certain collection
+     * @param collectionName
+     *      String - name of the collection
+     * @param databaseListener
+     *      DatabaseListener - object to remove
+     */
     public void removeListener(String collectionName, DatabaseListener databaseListener) {
         if(listeners.get(collectionName) == null) {
             return;
@@ -62,43 +109,176 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         listeners.get(collectionName).remove(databaseListener);
     }
 
+    /**
+     * notify Listeners of a specific database collection/table about certain events as indicated by the eventCode
+     * @param collectionName
+     *      String - name of the collection/table associated with the event
+     * @param eventCode
+     *      int - code associated with the event that happened
+     * @param data
+     *      data - any relevant data to update the listener with
+     */
+    public void sendListenerNotification(String collectionName, int eventCode, Object data) {
+        if( listeners.get(collectionName) == null ) {
+            return;
+        }
+        for( DatabaseListener listener : listeners.get(collectionName) ) {
+            listener.onDatabaseEvent(eventCode, data);
+        }
+    }
+
+    public void stopListeningForProfileChanges() {
+        if (profileSnapshotListener != null) {
+            profileSnapshotListener.remove();
+        }
+    }
+
+    public void stopListeningForExperimentChanges() {
+        if (experimentSnapshotListener != null) {
+            experimentSnapshotListener.remove();
+        }
+    }
+
+    public UserProfile containsProfile(String userId) {
+        for( UserProfile e : profiles ) {
+            if(e.getUserId().equals(userId)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public ExperimentE containsExperiment(String experimentId) {
+        for( ExperimentE e : experiments ) {
+            if(e.getExperimentId().equals(experimentId)) {
+                return e;
+            }
+        }
+        return null;
+    }
+    /**
+     * Save a brand new experiment to database
+     * @param experiment
+     */
     @Override
     public void saveNewExperiment(ExperimentE experiment) {
-
+        ExperimentE e = containsExperiment(experiment.getExperimentId());
+        if(e == null) {
+            experiments.add(experiment);
+            sendListenerNotification(COLLECTION_EXPERIMENT,  DatabaseListener.DB_EVENT_EXPERIMENT_SAVE_SUCCESS, experiment);
+            sendListenerNotification(COLLECTION_EXPERIMENT, DatabaseListener.DB_EVENT_EXPERIMENT_CHECK_DATA_CHANGED, experiments);
+        } else {
+            sendListenerNotification(COLLECTION_EXPERIMENT,  DatabaseListener.DB_EVENT_EXPERIMENT_SAVE_FAILURE, experiment);
+        }
     }
 
-    @Override
-    public void updateExperiment(ExperimentE experiment) {
-
-    }
-
+    /**
+     * Save a brand new profile in the database
+     * @param profile
+     *      Profile - profile object
+     */
     @Override
     public void saveNewProfile(UserProfile profile) {
-
+        UserProfile e = containsProfile(profile.getUserId());
+        if(e == null) {
+            profiles.add(profile);
+            sendListenerNotification(COLLECTION_PROFILE,  DatabaseListener.DB_EVENT_PROFILE_SAVE_NEW_SUCCESS, profile);
+            sendListenerNotification(COLLECTION_PROFILE, DatabaseListener.DB_EVENT_PROFILE_CHECK_DATA_CHANGED, profiles);
+        } else {
+            sendListenerNotification(COLLECTION_PROFILE,  DatabaseListener.DB_EVENT_PROFILE_SAVE_NEW_FAILURE, profile);
+        }
     }
 
+    private void removeOldExperiment(String experimentId) {
+        for ( ExperimentE e : experiments ) {
+            if(e.getExperimentId().equals(experimentId)) {
+                experiments.remove(e);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Update a single experiment in the database.
+     * @param experiment
+     */
+    @Override
+    public void updateExperiment(ExperimentE experiment) {
+        ExperimentE e = containsExperiment(experiment.getExperimentId());
+        if(e != null) {
+            removeOldExperiment(experiment.getExperimentId());
+            experiments.add(experiment);
+            sendListenerNotification(COLLECTION_EXPERIMENT, DatabaseListener.DB_EVENT_UPDATE_EXPERIMENT_SUCCESS, experiment);
+            sendListenerNotification(COLLECTION_EXPERIMENT, DatabaseListener.DB_EVENT_EXPERIMENT_CHECK_DATA_CHANGED, experiments);
+        } else {
+            sendListenerNotification(COLLECTION_EXPERIMENT, DatabaseListener.DB_EVENT_UPDATE_EXPERIMENT_FAILURE, experiment);
+        }
+    }
+
+
+    private void removeOldProfile(String userId) {
+        for ( UserProfile e : profiles ) {
+            if(e.getUserId().equals(userId)) {
+                profiles.remove(e);
+                return;
+            }
+        }
+    }
+
+    /**
+     *
+     * @param profile
+     */
     @Override
     public void updateProfile(UserProfile profile) {
-
+        UserProfile e = containsProfile(profile.getUserId());
+        if(e != null) {
+            removeOldProfile(profile.getUserId());
+            profiles.add(profile);
+            sendListenerNotification(COLLECTION_PROFILE, DatabaseListener.DB_EVENT_UPDATE_PROFILE_SUCCESS, profile);
+            sendListenerNotification(COLLECTION_PROFILE, DatabaseListener.DB_EVENT_PROFILE_CHECK_DATA_CHANGED, profiles);
+        } else {
+            sendListenerNotification(COLLECTION_PROFILE, DatabaseListener.DB_EVENT_UPDATE_PROFILE_FAILURE, profile);
+        }
     }
 
+    /**
+     * Load all experiments in the database (At startup)
+     */
     @Override
     public void loadExperiments() {
-
+        generateMockExperiments();
+        sendListenerNotification(COLLECTION_EXPERIMENT, DatabaseListener.DB_EVENT_EXPERIMENT_LOADED_ON_START, experiments);
     }
 
+    /**
+     * Load all profiles in the database (At startup)
+     */
     @Override
     public void loadProfiles() {
-
+        generateMockProfiles();
+        sendListenerNotification(COLLECTION_PROFILE, DatabaseListener.DB_EVENT_PROFILE_LOADED_ON_START, profiles);
     }
 
+    /**
+     * Generate a new experiment Id from firebase (avoids collisions, always unnique - based on timestamp)
+     * @return
+     *      String - the Id which can be used for a new experiment
+     */
     @Override
     public String getNewExperimentId() {
-        return null;
+        nextIdExperiment+=1;
+        return String.valueOf(nextIdExperiment-1);
     }
 
+    /**
+     * Generate a new profile Id from firebase (avoids collisions, always unnique - based on timestamp)
+     * @return
+     *      String - the Id which can be used for a new profile
+     */
     @Override
     public String getNewProfileId() {
-        return null;
+        nextIdProfile+=1;
+        return String.valueOf(nextIdProfile-1);
     }
 }

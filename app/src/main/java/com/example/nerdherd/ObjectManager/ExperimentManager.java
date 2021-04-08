@@ -159,7 +159,7 @@ public class ExperimentManager implements DatabaseListener {
     public void createExperiment(String title, String description, int type, int minTrials, Region region, boolean locationRequired, boolean publish, ExperimentCreateEventListener listener) {
         // US 01.01.01
         // As an owner, I want to publish an experiment with a description, a region, and a minimum number of trials.
-        addOnCreateListener(listener); // TODO Maybe do this differently
+        addOnCreateListener(listener);
         String newId = databaseAdapter.getNewExperimentId();
         ExperimentE experiment = new ExperimentE(newId, title, description, LocalUser.getUserId(), region, minTrials, type, Timestamp.now(), locationRequired, publish);
         experimentList.add(experiment);
@@ -305,7 +305,9 @@ public class ExperimentManager implements DatabaseListener {
         return 0;
     }
 
-    public ArrayList<TrialT> getTrialsIncludeBlacklist(String experimentId) {
+    public ArrayList<TrialT> getTrialsExcludeBlacklist(String experimentId) {
+        // US 01.08.01
+        // As an owner, I want to ignore certain experimenters results.
         ArrayList<TrialT> list = new ArrayList<>();
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
