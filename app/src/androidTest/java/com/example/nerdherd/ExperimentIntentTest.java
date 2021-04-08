@@ -1,15 +1,9 @@
 package com.example.nerdherd;
 
-import android.app.Activity;
-
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.LocalUser;
@@ -25,11 +19,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Test class for MainActivity. All the UI tests are written here. Robotium test framework is used
+ * Test class for Experiment features
  */
 @RunWith(AndroidJUnit4.class)
 public class ExperimentIntentTest{
@@ -83,6 +76,9 @@ public class ExperimentIntentTest{
         assertTrue(solo.waitForText("Intent Test", 1, 1000));
     }
 
+    /**
+     * Test Asking Questions and Replying
+     */
     @Test
     public void askQuestionsAndReply() {
         solo.assertCurrentActivity("Wrong Activity", SearchExperimentActivity.class);
