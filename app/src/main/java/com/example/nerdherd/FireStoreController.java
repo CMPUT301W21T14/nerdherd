@@ -316,7 +316,7 @@ public class FireStoreController {
                     trials = new ArrayList<Trial>();
                     for(HashMap hashTrial : harshTrials){
                         if (experimentType.equals("Binomial Trial")) {
-                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()), new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date()));
+                            BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()), hashTrial.get("timestamp").toString());
                             trials.add(binomialTrial);
                         }
                         if (experimentType.equals("Count")) {
@@ -368,7 +368,7 @@ public class FireStoreController {
                     if(doc.getId().equals(id)){
                         for(HashMap hashTrial : (ArrayList<HashMap>)(doc.getData().get("Trial List"))){
                             if (type.equals("Binomial")) {
-                                BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()), new SimpleDateFormat("yyyy.MM.dd.HH.ss").format(new Date()));
+                                BinomialTrial binomialTrial = new BinomialTrial(Integer.valueOf(hashTrial.get("success").toString()), Integer.valueOf(hashTrial.get("failure").toString()), hashTrial.get("timestamp").toString());
                                 itemList.add(binomialTrial);
                             }
                             if (type.equals("Count trial")) {
