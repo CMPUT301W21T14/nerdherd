@@ -22,7 +22,12 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * Base activity for viewing the replies on a particular Question
+ */
 public class QuestionViewActivity extends AppCompatActivity implements ExperimentManager.ExperimentOnChangeEventListener {
+
 
     private RecyclerView replyListView;
     private Button replyButton;

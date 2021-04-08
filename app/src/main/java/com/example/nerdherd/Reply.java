@@ -1,5 +1,8 @@
 package com.example.nerdherd;
 
+/**
+ * Reply object, consisting of a string field for its contents
+ */
 public class Reply {
 
     private String content;

@@ -79,7 +79,6 @@ public class QuestionsActivity extends AppCompatActivity implements ExperimentMa
         listener = new QuestionsAdapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
-                // TODO: Open Question specific Activity
                 Intent questionIntent = new Intent(QuestionsActivity.this, QuestionViewActivity.class);
                 questionIntent.putExtra("experimentId", experimentId);
                 questionIntent.putExtra("questionIdx", index);

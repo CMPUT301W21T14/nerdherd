@@ -508,11 +508,11 @@ public class statsactivity_checking extends AppCompatActivity {
     //convert to single array of binomial trials
     public ArrayList<Integer> ConvertBinomial_val(){
         trials_1 = new ArrayList<Integer>();
-        Log.d("------------------","---------------------------------");
+//        Log.d("------------------","---------------------------------");
 //        Log.d("binomial trial", String.valueOf(binomialtrialing.get(0).getSuccess()));
         for (int y = 0; y < binomialtrialing.size(); y++){
             trials_1.add(binomialtrialing.get(y).getSuccess());
-            Log.d("bsuccess_count", binomialtrialing.get(y).getSuccess().toString());
+//            Log.d("bsuccess_count", binomialtrialing.get(y).getSuccess().toString());
             trials_1.add(binomialtrialing.get(y).getFailure());
         }
 
