@@ -27,12 +27,12 @@ public class NonnegativeTrialFragment extends DialogFragment {
     private TextView Nonnegative_val;
     private String recorded_vals;
 
-    private int minTrials;
+    private String experimentId;
     private boolean isInt;
     private int user_recordedVal;
 
-    public NonnegativeTrialFragment(){
-
+    public NonnegativeTrialFragment(String experimentId){
+        this.experimentId=experimentId;
     }
 
     @NonNull

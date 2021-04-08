@@ -156,13 +156,13 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
                         new BinomialTrialDialogFragment(experimentId).show(getSupportFragmentManager(), "EDIT_TEXT");
                         break;
                     case ExperimentE.EXPERIMENT_TYPE_COUNT:
-                        new CountTrialDialogFragment().show(getSupportFragmentManager(), "EDIT_TEXT2");
+                        new CountTrialDialogFragment(experimentId).show(getSupportFragmentManager(), "EDIT_TEXT2");
                         break;
                     case ExperimentE.EXPERIMENT_TYPE_NON_NEGATIVE:
-                        new NonnegativeTrialFragment().show(getSupportFragmentManager(), "EDIT_TEXT2");
+                        new NonnegativeTrialFragment(experimentId).show(getSupportFragmentManager(), "EDIT_TEXT2");
                         break;
                     case ExperimentE.EXPERIMENT_TYPE_MEASUREMENT:
-                        new MeaurementTrialFragment().show(getSupportFragmentManager(), "EDIT_TEXT3");
+                        new MeaurementTrialFragment(experimentId).show(getSupportFragmentManager(), "EDIT_TEXT3");
                         break;
                 }
             }
@@ -203,11 +203,15 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         Toast.makeText(this, "Invalid Username", Toast.LENGTH_LONG).show();
     }
 
-    public void addSuccessfulTrial() {
+    public void addMeasurementTrial(float outcome) {
+        eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), outcome, LocalUser.getLastLocationGeo(), Timestamp.now()));
+    }
+
+    public void addSuccessfulBinomialTrial() {
         eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), 1, LocalUser.getLastLocationGeo(), Timestamp.now()));
     }
 
-    public void addUnsuccessfulTrial() {
+    public void addUnsuccessfulBinomialTrial() {
         eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), 0, LocalUser.getLastLocationGeo(), Timestamp.now()));
     }
 

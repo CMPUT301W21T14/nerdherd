@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.Region;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.ObjectManager.ProfileManager;
@@ -100,7 +101,13 @@ public class ExperimentViewActivity extends AppCompatActivity {
             experimentOwner.setText(ownerProfile.getUserName());
             experimentStatus.setText(currentExperiment.getStatus());
             experimentType.setText(currentExperiment.typeToString());
-            experimentRegion.setText(currentExperiment.getRegion().getDescription());
+            Region region = currentExperiment.getRegion();
+            if(region == null) {
+                experimentRegion.setText("N/A");
+            } else {
+                experimentRegion.setText(region.getDescription());
+            }
+
             experimentContact.setText(ownerProfile.getContactInfo());
         }
 

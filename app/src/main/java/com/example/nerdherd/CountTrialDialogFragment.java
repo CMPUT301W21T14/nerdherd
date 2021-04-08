@@ -26,11 +26,11 @@ public class CountTrialDialogFragment extends DialogFragment {
 
     private TextView Counter;
 
-    private int minTrials;
+    private String experimentId;
 
 
-    public CountTrialDialogFragment(){
-
+    public CountTrialDialogFragment(String experimentId){
+        this.experimentId=experimentId;
     }
     @NonNull
     @Override

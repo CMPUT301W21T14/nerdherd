@@ -63,7 +63,7 @@ public class BinomialTrialDialogFragment extends DialogFragment {
                 qrcontainstv.setText(getQRActionDescription("Successful"));
                 generateQRiv.setImageBitmap(image);
                 saveQRBtn.setVisibility(View.VISIBLE);
-                ((TrialActivity)getActivity()).addSuccessfulTrial();
+                ((TrialActivity)getActivity()).addSuccessfulBinomialTrial();
             }
         });
 
@@ -75,7 +75,7 @@ public class BinomialTrialDialogFragment extends DialogFragment {
                 qrcontainstv.setText(getQRActionDescription("Unsuccessful"));
                 generateQRiv.setImageBitmap(image);
                 saveQRBtn.setVisibility(View.VISIBLE);
-                ((TrialActivity)getActivity()).addUnsuccessfulTrial();
+                ((TrialActivity)getActivity()).addUnsuccessfulBinomialTrial();
             }
         });
 
