@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 import org.junit.Test;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -14,14 +15,14 @@ public class testStats {
         if (type == CountTrial.class) {
             ArrayList<CountTrial> trials = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                trials.add(new CountTrial(i));
+                trials.add(new CountTrial(i, LocalTime.now().toString()));
             }
             return (ArrayList<T>)trials;
         }
         else if (type == BinomialTrial.class) {
             ArrayList<BinomialTrial> trials = new ArrayList<>();
-            trials.add(new BinomialTrial(1, 4));
-            trials.add(new BinomialTrial(10, 0));
+            trials.add(new BinomialTrial(1, 4, LocalTime.now().toString()));
+            trials.add(new BinomialTrial(10, 0, LocalTime.now().toString()));
             return (ArrayList<T>)trials;
         }
         else if (type == NonnegativeTrial.class) {
@@ -29,7 +30,7 @@ public class testStats {
             for (int i = 0; i < 10; i++) {
                 ArrayList<Long> mockTrial = new ArrayList<>();
                 mockTrial.add(Long.valueOf(i));
-                trials.add(new NonnegativeTrial(mockTrial));
+                trials.add(new NonnegativeTrial(mockTrial, LocalTime.now().toString()));
             }
             return (ArrayList<T>)trials;
         }
