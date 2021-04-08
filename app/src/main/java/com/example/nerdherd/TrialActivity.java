@@ -309,6 +309,7 @@ public class TrialActivity extends AppCompatActivity {
         int fullSize = sum + (success + failure);
         Log.d("fullSize", String.valueOf(fullSize));
 
+
         //send email per instance of application - to remind the owner
         if (fullSize >= minTrial && GlobalVariable.success.equals("No")){
             Log.d("Exp is successfull", "Successful");
@@ -362,6 +363,7 @@ public class TrialActivity extends AppCompatActivity {
                     + " "+ "("+ExperimentName+")"+ " "+"is a success!", OwnerEmail);
             GlobalVariable.success = "yes";
         }
+
         targetexp.getTrials().add(t1);
 
         fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
