@@ -206,6 +206,11 @@ public class ProfileManager implements DatabaseListener {
         notifyListenerProfilesLoaded();
     }
 
+    // For testing only
+    public ArrayList<UserProfile> getProfileList() {
+        return profileList;
+    }
+
     @Override
     public void onDatabaseEvent(int eventCode, Object data) {
         switch(eventCode) {
