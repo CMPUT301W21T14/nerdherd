@@ -7,10 +7,10 @@ public class Reply {
 
     private String content;
 
-    /**
-     * Constructor for Reply
-     * @param content Content of the reply as a String
-     */
+    public Reply() {
+
+    }
+
     public Reply(String content) {
         this.content = content;
     }

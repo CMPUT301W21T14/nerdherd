@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
  * @author Harjot S. harjotsi
  */
 
-public class SearchExperimentActivity extends AppCompatActivity{
+public class SearchExperimentActivity extends AppCompatActivity implements ExperimentManager.ExperimentOnChangeEventListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -42,22 +44,55 @@ public class SearchExperimentActivity extends AppCompatActivity{
     private MenuController menuController;
     private AdapterController adapterController;
     private ExperimentAdapter adapter;
-    private FireStoreController fireStoreController;
-    private ArrayList<Experiment> savedList;
-    private ArrayList<Experiment> showList;
     private Intent experimentView;
-    private SearchController searchController;
     private TextView keywordView;
     private Button searchButton;
-    private String keyword;
-    private ArrayList<Experiment> resultList;
     private long backPressedTime;
     private Toast backToast;
+    private ExperimentManager eMgr = ExperimentManager.getInstance();
+
+    private ArrayList<ExperimentE> searchResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_experiment);
+
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.draw_layout);
+        navigationView = findViewById(R.id.navigator);
+        keywordView = findViewById(R.id.keyword_edit);
+        searchButton = findViewById(R.id.search_button);
+
+        eMgr.addOnChangeListener(this);
+
+        setSupportActionBar(toolbar);
+
+        menuController = new MenuController(SearchExperimentActivity.this, toolbar, navigationView, drawerLayout);
+        menuController.useMenu(false);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showExperiments();
+            }
+        });
+
+        RecyclerView recyclerView = findViewById(R.id.experiment_recyclerView);
+        listener = new ExperimentAdapter.onClickListener() {
+            @Override
+            public void onClick(View view, int index) {
+                experimentView = new Intent(SearchExperimentActivity.this, ExperimentViewActivity.class);
+                ExperimentE e = searchResult.get(index);
+                String experimentId = e.getExperimentId();
+                experimentView.putExtra("experimentId", experimentId);
+                Log.d("Clicked Exp: ", e.getDescription());
+                startActivity(experimentView);
+                //finish(); //clicking on back after selecting an experiment doesn't exit the app
+            }
+        };
+
+        /*
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout);
@@ -138,7 +173,13 @@ public class SearchExperimentActivity extends AppCompatActivity{
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
+    }
+
+    @Override
+    protected void onDestroy() {
+        eMgr.removeOnChangeListener(this);
+        super.onDestroy();
     }
 
     // this sees if the user has pressed back button twice within 2 seconds to exit the app
@@ -162,11 +203,17 @@ public class SearchExperimentActivity extends AppCompatActivity{
         startActivity(createExpIntent);
     }
 
-    private void showExperiments(RecyclerView recyclerView, ArrayList<Experiment> experiments){
-        GlobalVariable.experimentArrayList = experiments;
-        adapter = new ExperimentAdapter(experiments, listener);
+    private void showExperiments(){
+        String keyword = keywordView.getText().toString();
+        searchResult = eMgr.searchForExperimentsByKeyword(keyword);
+        RecyclerView recyclerView = findViewById(R.id.experiment_recyclerView);
+        adapter = new ExperimentAdapter(searchResult, listener);
         adapterController = new AdapterController(SearchExperimentActivity.this, recyclerView, adapter);
         adapterController.useAdapter();
     }
 
+    @Override
+    public void onExperimentDataChanged() {
+        showExperiments();
+    }
 }

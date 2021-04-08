@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.firebase.Timestamp;
 import com.google.zxing.WriterException;
 
@@ -15,31 +16,9 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class QRHelper {
-    public static HashMap<String, String> registeredBarcodeMap = new HashMap<>();
 
     public QRHelper() {
 
-    }
-
-    public static String getBarcodeMapping(String barcodeData) {
-        return registeredBarcodeMap.get(barcodeData);
-    }
-
-    /**
-     * Barcode will be associated with a certain experiment / outcome. in barcode data format experimentid:outcome
-     * @param barcodeData
-     *      String - data you get when you scan the specific barcode
-     * @param codeData
-     *      String - data you want to associate with that barcode instead
-     * @return
-     *      Boolean - True if register success (no previous mapping), False if previous mapping exists
-     */
-    public static boolean addRegisteredBarcode(String barcodeData, String codeData) {
-        if(registeredBarcodeMap.containsKey(barcodeData)) {
-            return false;
-        }
-        registeredBarcodeMap.put(barcodeData, codeData);
-        return true;
     }
 
     /**
@@ -54,7 +33,7 @@ public class QRHelper {
             QRGEncoder qrgEncoder = new QRGEncoder(
                     qrData, null,
                     QRGContents.Type.TEXT,
-                    250);
+                    400);
             try {
                 bitmap = qrgEncoder.encodeAsBitmap();
             } catch (WriterException e) {
@@ -119,7 +98,8 @@ public class QRHelper {
             String experimentId = parts[0];
             String trialResult = parts[1];
 
-            if(!isValidExperimentTrial(experimentId, trialResult)) {
+            ExperimentManager eMgr = ExperimentManager.getInstance();
+            if(eMgr.getExperiment(experimentId) == null) {
                 return null;
             }
             return new QRResult(experimentId, trialResult);

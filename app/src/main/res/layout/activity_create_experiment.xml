@@ -22,13 +22,13 @@
         android:id="@+id/experiment_description_editText"
         android:layout_width="379dp"
         android:layout_height="91dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
         android:hint="Enter the Experiment Description"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -162,8 +162,8 @@
         android:id="@+id/exp_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Name your experiment."
         android:inputType="textPersonName"
@@ -171,5 +171,83 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/set_title_prompt" />
+
+    <LinearLayout
+        android:id="@+id/region_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/create_experiment_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/publish_box">
+
+        <TextView
+            android:id="@+id/tv_region_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Region Description" />
+
+        <EditText
+            android:id="@+id/et_region_descriptio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="e.g. Edmonton Area"
+            android:inputType="textPersonName"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_region_coordinates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Region Coordinates" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_region_lattitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Lattitude"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_region_longitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Longitude"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_region_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Range" />
+
+        <EditText
+            android:id="@+id/et_region_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="e.g. 150 (in kilometers)"
+            android:inputType="textPersonName"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

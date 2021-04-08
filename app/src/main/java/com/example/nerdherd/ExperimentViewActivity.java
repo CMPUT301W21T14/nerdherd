@@ -12,6 +12,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.Region;
+import com.example.nerdherd.Model.UserProfile;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
+import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -29,9 +35,6 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
     private MenuController menuController;
-    private Intent previousIntent;
-    private Integer index;
-    private Experiment experiment;
     private TextView experimentTitle;
     private TextView experimentOwner;
     private TextView experimentStatus;
@@ -40,25 +43,37 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private TextView experimentContact;
     private TextView experimentDescription;
     private Button experimentEnd;
-    private Button unpublishedSubscribe;
-    private FireStoreController fireStoreController;
-    private Intent myExperimentIntent;
-    private String experimentIndicator = "Experiment";
-    private String publishIndicator = "Published";
-    private ArrayList<String> idList;
-    private Intent publicuser;
-    private String val;
+    private Button experimentPublish;
+    private Button experimentSubscribe;
+    private ExperimentE currentExperiment;
+
+    private Button experimentQuestions;
+    private Button experimentTrials;
+    private Button experimentStatistics;
+    private Button experimentGeoMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
-//        Bundle pUser = publicuser.getExtras();
-//        if (pUser != null){
-//            Intent intent = getIntent();
-//            val = intent.getStringExtra("I Subscribed");
-//
-//        }
+        ExperimentManager eMgr = ExperimentManager.getInstance();
+        ProfileManager pMgr = ProfileManager.getInstance();
+        Intent intent = getIntent();
+        String experimentId = intent.getStringExtra("experimentId");
+        currentExperiment = eMgr.getExperiment(experimentId);
+        if (currentExperiment == null) {
+            // big uh oh
+            Log.d("ExperimentView", "NULL EXPERIMENT");
+            finish();
+            return;
+        }
+
+        experimentQuestions = findViewById(R.id.btn_view_questions);
+        experimentTrials = findViewById(R.id.btn_add_trials);
+        experimentStatistics = findViewById(R.id.btn_view_stats);
+        experimentGeoMap = findViewById(R.id.btn_view_geomap);
+
         experimentTitle = findViewById(R.id.experiment_title);
         experimentOwner = findViewById(R.id.experiment_owner);
         experimentStatus = findViewById(R.id.experiment_status);
@@ -66,8 +81,9 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentRegion = findViewById(R.id.experiment_region);
         experimentContact = findViewById(R.id.experiment_contact);
         experimentDescription = findViewById(R.id.experiment_description);
-        experimentEnd = findViewById(R.id.experiment_end);
-        unpublishedSubscribe = findViewById(R.id.unpublish_subscribe_button);
+        experimentEnd = findViewById(R.id.btn_end_experimentresults);
+        experimentPublish = findViewById(R.id.btn_publish_experiment);
+        experimentSubscribe = findViewById(R.id.btn_subscribe_experiment);
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_experiment_view);
@@ -76,8 +92,161 @@ public class ExperimentViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
+        //menuController.useMenu(true);
 
-        index = GlobalVariable.indexForExperimentView;
+        UserProfile ownerProfile = pMgr.getProfile(currentExperiment.getOwnerId());
+        if (ownerProfile != null) {
+            experimentTitle.setText(currentExperiment.getTitle());
+            experimentDescription.setText(currentExperiment.getDescription());
+            experimentOwner.setText(ownerProfile.getUserName());
+            experimentStatus.setText(currentExperiment.getStatus());
+            experimentType.setText(currentExperiment.typeToString());
+            Region region = currentExperiment.getRegion();
+            if(region == null) {
+                experimentRegion.setText("N/A");
+            } else {
+                experimentRegion.setText(region.getDescription());
+            }
+
+            experimentContact.setText(ownerProfile.getContactInfo());
+        }
+
+        if (!LocalUser.getUserId().equals(ownerProfile.getUserId())) {
+            experimentPublish.setVisibility(View.GONE);
+            if(currentExperiment.getStatus().equals("Ended")) {
+                experimentEnd.setText("View Results");
+            } else {
+                experimentEnd.setVisibility(View.GONE);
+            }
+
+        }
+
+        if(LocalUser.isSubscribed(experimentId)) {
+            experimentSubscribe.setText("Unsubscribe");
+        } else {
+            experimentSubscribe.setText("Subscribe");
+        }
+
+        if(currentExperiment.isPublished()) {
+            experimentPublish.setText("Unpublish");
+        } else {
+            experimentPublish.setText("Unpublish");
+        }
+
+        if(currentExperiment.getStatus().equals("Ended")) {
+            experimentPublish.setVisibility(View.GONE);
+            experimentTrials.setVisibility(View.GONE);
+
+        }
+
+        experimentSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(LocalUser.isSubscribed(experimentId)) {
+                    eMgr.unsubscribeToExperiment(experimentId);
+                    experimentSubscribe.setText("Subscribe");
+                } else {
+                    eMgr.subscribeToExperiment(experimentId);
+                    experimentSubscribe.setText("Unsubscribe");
+                }
+            }
+        });
+
+        experimentEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentExperiment.getStatus().equals("Ended")) {
+                    //
+                    Intent nintent = new Intent(ExperimentViewActivity.this, ExperimentResultsActivity.class);
+                    nintent.putExtra("experimentId", experimentId);
+                    startActivity(nintent);
+                } else {
+                    eMgr.endExperiment(experimentId);
+                    experimentStatus.setText("Ended");
+                    experimentEnd.setText("View Results");
+                }
+            }
+        });
+
+        experimentPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentExperiment.isPublished()) {
+                    eMgr.unpublishExperiment(experimentId);
+                    experimentPublish.setText("Publish");
+                } else {
+                    eMgr.publishExperiment(experimentId);
+                    experimentPublish.setText("Unpublish");
+                }
+            }
+        });
+
+        experimentQuestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nintent = new Intent(ExperimentViewActivity.this, QuestionsActivity.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+
+        experimentStatistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nintent = new Intent(ExperimentViewActivity.this, statsactivity_checking.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+
+        experimentTrials.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nintent = new Intent(ExperimentViewActivity.this, TrialActivity.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+
+        experimentGeoMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Maps activity entry point
+                Intent nintent = new Intent(ExperimentViewActivity.this, MapsActivity.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+    }
+
+    /*
+            if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){
+            intent = new Intent(context, ExperimentViewActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.experiment_trails && !(context instanceof TrialActivity)){
+            intent = new Intent(context, TrialActivity.class);
+            intent.putExtra("Type of Trial",trialType);
+            intent.putExtra("Min of Trial", mintrial);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.experiment_stats && !(context instanceof statsactivity_checking)){
+            intent = new Intent(context, statsactivity_checking.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.experiment_questions && !(context instanceof QuestionsActivity)) {
+            intent = new Intent(context, QuestionsActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+     */
+        /*index = GlobalVariable.indexForExperimentView;
 
         if (index != -1){
             experiment = GlobalVariable.experimentArrayList.get(index);
@@ -207,10 +376,10 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 });
             }
         });
-    }
+    }*/
 
     private void switcher(){
-        myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
+        Intent myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
         startActivity(myExperimentIntent);
         finish();
     }

@@ -3,10 +3,15 @@ package com.example.nerdherd;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,21 +29,13 @@ import java.util.ArrayList;
  */
 
 public class NonnegativeTrialFragment extends DialogFragment {
-    private TextView Nonnegative_val;
-    private String recorded_vals;
+    private EditText inputEt;
 
-    private int minTrials;
-    private boolean isInt;
-    private int user_recordedVal;
+    private String experimentId;
+    private Bitmap image;
 
-    /**
-     * Constraint for the trial
-     * Getter/setter for the class
-     * @param minTrials for the trial to be successful
-     */
-
-    public NonnegativeTrialFragment(int minTrials){
-        this.minTrials = minTrials;
+    public NonnegativeTrialFragment(String experimentId){
+        this.experimentId=experimentId;
     }
 
     @NonNull
@@ -48,26 +45,66 @@ public class NonnegativeTrialFragment extends DialogFragment {
 
         //link to xml
         Button Recordtbn = view.findViewById(R.id.record_nonNegativeTrial);
+        inputEt = view.findViewById(R.id.nonNegative_input);
+        TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
+        Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
+        ImageView generateQRiv = view.findViewById(R.id.iv_binom_qr);
+        image = null;
+        qrcontainstv.setText("");
 
-        ArrayList<Long> Nonnegativetrials = new ArrayList<>();
+        inputEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        Nonnegative_val = view.findViewById(R.id.nonNegative_input);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(check_int(inputEt.getText().toString())) {
+                    String value = inputEt.getText().toString();
+                    image = QRHelper.generateQRCode(experimentId+":"+value);
+                    qrcontainstv.setText(getQRActionDescription(value));
+                    generateQRiv.setImageBitmap(image);
+                    saveQRBtn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         Recordtbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recorded_vals = (Nonnegative_val.getText().toString());
-                isInt = check_int(recorded_vals);
-                if (isInt){
-                    user_recordedVal = Integer.parseInt(recorded_vals);
-                    Nonnegativetrials.add((long) user_recordedVal);
+                String value = inputEt.getText().toString();
+                image = QRHelper.generateQRCode(experimentId+":"+value);
+                qrcontainstv.setText(getQRActionDescription(value));
+                generateQRiv.setImageBitmap(image);
+                saveQRBtn.setVisibility(View.VISIBLE);
+                int outcome;
+                if(check_int(value)) {
+                    outcome = Integer.parseInt(value);
+                    if(outcome < 0) {
+                        inputError();
+                    } else {
+                        ((TrialActivity) getActivity()).addNonNegativeTrial(outcome);
+                    }
+                } else {
+                    inputError();
                 }
-                else{
-                    Toast.makeText(getContext(), "Invalid Input: only Non-negative Integer Allowed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        saveQRBtn.setVisibility(View.GONE);
+
+        saveQRBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(image != null) {
+                    QRHelper.saveQRCode(image);
                 }
-
-                Nonnegative_val.setText("");
-
             }
         });
 
@@ -80,16 +117,15 @@ public class NonnegativeTrialFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        int count = Nonnegativetrials.size();
-//                        if (count < minTrials){
-//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-//                        }
-                        ((TrialActivity) getActivity()).updateNonnegativeTrialView(Nonnegativetrials, minTrials);
                     }
                 })
 
                 .setNegativeButton("Cancel", null)
                 .create();
+    }
+
+    public void inputError() {
+        Toast.makeText(this.getContext(), "Invalid entry!", Toast.LENGTH_LONG).show();
     }
 
     public boolean check_int(String val){
@@ -101,5 +137,9 @@ public class NonnegativeTrialFragment extends DialogFragment {
         {
             return false;
         }
+    }
+
+    private String getQRActionDescription(String outcome) {
+        return "QR to Add a Non-Negative trial of " + outcome + " to current experiment";
     }
 }
