@@ -31,11 +31,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Model.ExperimentE;
 import com.example.nerdherd.Model.TrialT;
+import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
+import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,6 +95,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
     ArrayAdapter<Experiment> experimentAdapter;
 
     private ExperimentManager eMgr = ExperimentManager.getInstance();
+    private ProfileManager pMgr = ProfileManager.getInstance();
     private String experimentId;
     private ExperimentE experiment;
     private ArrayList<TrialT> trialList;
@@ -172,8 +176,11 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
                     if(t == null) {
                         return;
                     }
-
-                    ignoreUserEt.setText(t.getExperimenterId());
+                    UserProfile up = pMgr.getProfile(t.getExperimenterId());
+                    if(up == null) {
+                        Log.d("TrialAct", "up=NULL");
+                    }
+                    ignoreUserEt.setText(up.getUserName());
                 }
             }
         };
@@ -182,12 +189,18 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
             @Override
             public void onClick(View v) {
                 if(eMgr.addUserToExperimentBlacklist(ignoreUserEt.getText().toString(), experimentId)) {
-                    ignoreUserEt.setText("Used Ignored!");
+                    ignoreUserEt.setText("User Ignored!");
+                } else {
+                    invalidBlacklistUser();
                 }
             }
         });
 
         showTrials();
+    }
+
+    public void invalidBlacklistUser() {
+        Toast.makeText(this, "Invalid Username", Toast.LENGTH_LONG).show();
     }
 
     public void addSuccessfulTrial() {

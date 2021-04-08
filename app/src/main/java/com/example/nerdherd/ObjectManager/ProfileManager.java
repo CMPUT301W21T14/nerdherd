@@ -144,6 +144,15 @@ public class ProfileManager implements DatabaseListener {
         return null;
     }
 
+    public static UserProfile getProfileByUsername(String userName) {
+        for( UserProfile p : profileList ) {
+            if( p.getUserName().equals(userName) ) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<UserProfile> searchProfileByKeyword(String keyword) {
         ArrayList<UserProfile> list = new ArrayList<>();
         for( UserProfile p : profileList ) {

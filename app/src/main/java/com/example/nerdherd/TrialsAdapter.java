@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.nerdherd.Model.TrialT;
+import com.example.nerdherd.Model.UserProfile;
+import com.example.nerdherd.ObjectManager.ProfileManager;
 
 import java.util.ArrayList;
 
@@ -60,9 +62,14 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        ProfileManager pMgr = ProfileManager.getInstance();
         TrialT t = trials.get(position);
+        UserProfile up = pMgr.getProfile(t.getExperimenterId());
+        if(up == null) {
+            Log.d("TrialAdapter", "up=NULL");
+        }
         holder.trials_executed.setText(String.valueOf(t.getOutcome()));
-        holder.user_trial.setText(t.getExperimenterId());
+        holder.user_trial.setText(up.getUserName());
     }
 
 

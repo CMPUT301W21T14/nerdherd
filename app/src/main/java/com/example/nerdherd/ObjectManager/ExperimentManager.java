@@ -198,18 +198,18 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
-    public boolean addUserToExperimentBlacklist(String userId, String experimentId) {
+    public boolean addUserToExperimentBlacklist(String userName, String experimentId) {
         ExperimentE e = getExperiment(experimentId);
         if(e == null) {
             Log.d("ExpBlacklist", "exp=NULL");
             return false;
         }
-        UserProfile up = ProfileManager.getProfile(userId);
+        UserProfile up = ProfileManager.getProfileByUsername(userName);
         if(up == null) {
             Log.d("ExpBlacklist", "usr=NULL");
             return false;
         }
-        e.addToBlacklist(userId);
+        e.addToBlacklist(up.getUserId());
         databaseAdapter.updateExperiment(e);
         return true;
     }
