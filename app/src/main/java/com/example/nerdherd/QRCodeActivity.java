@@ -3,16 +3,13 @@ package com.example.nerdherd;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,18 +18,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.google.zxing.WriterException;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 // https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
 public class QRCodeActivity extends AppCompatActivity {
@@ -46,62 +45,42 @@ public class QRCodeActivity extends AppCompatActivity {
 
     private TextView barcodeText;
     private String barcodeData;
+    private QRResult result;
 
-    private EditText generateQREditText;
-    private Button generateQRButton;
-    private ImageView generatedQRImageView;
+    private Button addTrialButton;
 
-    private String savePath = Environment.getExternalStorageDirectory().getPath() + "/QRCode/"; // If we want to save the image somewhere
-    private Bitmap bitmap;
-    private QRGEncoder qrgEncoder;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private MenuController menuController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_scan);
 
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.qr_layout);
+        navigationView = findViewById(R.id.navigator);
+
+        setSupportActionBar(toolbar);
+
+        menuController = new MenuController(QRCodeActivity.this, toolbar, navigationView, drawerLayout);
+        menuController.useMenu(false);
+
         surfaceView = findViewById(R.id.surface_view);
         barcodeText = findViewById(R.id.barcode_text);
 
-        generateQREditText = findViewById(R.id.et_qr_generate_data);
-        generateQRButton = findViewById(R.id.btn_generate_qr);
-        generatedQRImageView = findViewById(R.id.iv_generated_qr);
+        addTrialButton = findViewById(R.id.btn_add_trial);
+        addTrialButton.setVisibility(View.GONE);
 
-        generateQRButton.setOnClickListener(new View.OnClickListener() {
+        addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateQRCode(generateQREditText.getText().toString());
+                // Send this somewhere to add result to a trial result to an experiment;
             }
         });
-        initialiseDetectorsAndSources();
-    }
-
-    // This function generates a QR code and displays it in qrCodeImageView
-    // Then proceeds to write the data contained into qrCodeDataTextView
-    private void generateQRCode(String qrData) {
-        String inputValue = qrData;
-        if (inputValue.length() > 0) {
-            WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            Point point = new Point();
-            display.getSize(point);
-            int width = point.x;
-            int height = point.y;
-            int smallerDimension = width < height ? width : height;
-            smallerDimension = smallerDimension * 3 / 4;
-
-            qrgEncoder = new QRGEncoder(
-                    inputValue, null,
-                    QRGContents.Type.TEXT,
-                    smallerDimension);
-            try {
-                bitmap = qrgEncoder.encodeAsBitmap();
-
-                generatedQRImageView.setImageBitmap(bitmap);
-            } catch (WriterException e) {
-                Log.v("GenerateQRCode", e.toString());
-            }
-        }
+        requestCamera();
     }
 
     private void requestCamera() {
@@ -181,15 +160,37 @@ public class QRCodeActivity extends AppCompatActivity {
                         public void run() {
                             Barcode b = barcodes.valueAt(0);
                             barcodeData = b.displayValue;
-                            String format = "Barcode";
+
+                            result = null;
+                            // If it's a QR code, test to see if it contains valid data for experiment:trial format
+                            // result == null if not
                             if(b.format == Barcode.QR_CODE) {
-                                format = "QR Code";
+                                Log.d("Test:", barcodeData);
+                                result = QRHelper.processQRTextString(barcodeData);
+                            } else {
+                                // If it's not a QR, assume a barcode.
+                                // 1). See if barcode is mapped to a trial already
+                                // If it is, get result, otherwise ignore it (we can register them in trial activity)
+                                Log.d("Okay?: ", barcodeData);
+                                if(QRHelper.getBarcodeMapping(barcodeData) == null) {
+                                    // We have a new barcode, ask to register it? Or do this in Trials?
+                                    addTrialButton.setVisibility(View.GONE);
+                                } else {
+                                    result = QRHelper.processQRTextString(QRHelper.getBarcodeMapping(barcodeData));
+                                }
                             }
-                            barcodeText.setText(format+":"+barcodeData);
+                            if(result != null) {
+                                barcodeText.setText(result.trialOperationString());
+                                addTrialButton.setVisibility(View.VISIBLE);
+                            } else {
+                                barcodeText.setText("Barcode not associated with any experiment!");
+                                addTrialButton.setVisibility(View.GONE);
+                            }
                         }
                     }, 500);
                 } else {
                     barcodeText.setText("No Barcode Found");
+                    addTrialButton.setVisibility(View.GONE);
                 }
             }
         });
