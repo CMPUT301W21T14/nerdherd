@@ -293,6 +293,18 @@ public class ExperimentManager implements DatabaseListener {
      ********* HELPER FUCTIONS
      ********************************************************************************************/
 
+    public int getTrialCount(String experimentId) {
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("getTrialCount", "exp=NULL");
+            return 0;
+        }
+        if(e.getTrials() != null) {
+            return e.getTrials().size();
+        }
+        return 0;
+    }
+
     public ArrayList<TrialT> getTrialsIncludeBlacklist(String experimentId) {
         ArrayList<TrialT> list = new ArrayList<>();
         ExperimentE e = getExperiment(experimentId);

@@ -207,6 +207,14 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), outcome, LocalUser.getLastLocationGeo(), Timestamp.now()));
     }
 
+    public void addCountTrial() {
+        eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), 1, LocalUser.getLastLocationGeo(), Timestamp.now()));
+    }
+
+    public void addNonNegativeTrial(int outcome) {
+        eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), outcome, LocalUser.getLastLocationGeo(), Timestamp.now()));
+    }
+
     public void addSuccessfulBinomialTrial() {
         eMgr.addTrialToExperiment(experimentId, new TrialT(LocalUser.getUserId(), 1, LocalUser.getLastLocationGeo(), Timestamp.now()));
     }
