@@ -80,7 +80,10 @@ public class ProfileActivity extends AppCompatActivity {
     private Experiment experiment;
     private Button usersExpDetailed;
     private ArrayList<Experiment> savedList;
+
+    private ArrayList<Experiment> allExperiments;
     private ArrayList<Experiment> returneditems;
+    private ArrayList<Experiment> newExperiment;
 
     private int current_exp;
     private int publicUSer_exp;
@@ -368,7 +371,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
         if (!Password.isEmpty() | !Name.isEmpty() | !Email.isEmpty() | avatar != -1){
             Toast.makeText(getApplicationContext(), "User Profile Updated", Toast.LENGTH_SHORT).show();
-            updateFirestore(Name, Email,avatar);
+            updateFirestore(Name, Email, avatar);
+            ExperimentLinkage(Name, Email, avatar);
         }
     }
 
@@ -398,6 +402,34 @@ public class ProfileActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public void ExperimentLinkage(String Name, String email, Integer avatar){
+
+        newExperiment = new ArrayList<Experiment>();
+        useridval = profController.getId();
+        String passWord = profController.getPassword();
+        Profile profile = new Profile(Name, passWord, email, useridval, avatar);
+        allExperiments = GlobalVariable.experimentArrayList;
+        for (int y =0 ; y < allExperiments.size(); y++){
+            if (allExperiments.get(y).getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
+                fireStoreController.updater("Experiment", allExperiments.get(y).getTitle(), "Owner Profile", profile, new FireStoreController.FireStoreUpdateCallback() {
+                    @Override
+                    public void onCallback() {
+//                uname.setText(Name+"");
+//                usersname.setText(Name+"");
+//                Log.d("Experiments owned", String.valueOf(GlobalVariable.experimentArrayList.get(0).getTitle()));
+//                GlobalVariable.profile.setName(Name);
+
+                    }
+                }, new FireStoreController.FireStoreUpdateFailCallback() {
+                    @Override
+                    public void onCallback() {
+                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+
     }
 
 
