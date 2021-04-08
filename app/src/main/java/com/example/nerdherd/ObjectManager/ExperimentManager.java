@@ -304,6 +304,7 @@ public class ExperimentManager implements DatabaseListener {
             if( e.getUserIdBlacklist().contains(t.getExperimenterId()) ) {
                 continue;
             }
+            list.add(t);
         }
         return list;
     }
