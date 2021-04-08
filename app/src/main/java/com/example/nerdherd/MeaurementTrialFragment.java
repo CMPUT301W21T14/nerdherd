@@ -29,14 +29,9 @@ public class MeaurementTrialFragment extends DialogFragment {
 
     private int minTrials;
 
-    /**
-     * Constraint for the trial
-     * Getter/setter/constructor for the class
-     * @param minTrials for the trial to be successful
-     */
 
-    public MeaurementTrialFragment(int minTrials){
-        this.minTrials = minTrials;
+
+    public MeaurementTrialFragment(){
     }
 
     @NonNull
@@ -97,7 +92,7 @@ public class MeaurementTrialFragment extends DialogFragment {
 //                        if (count < minTrials){
 //                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
 //                        }
-                        ((TrialActivity) getActivity()).updateMeasurementTrialView(measurements, minTrials);
+                        //((TrialActivity) getActivity()).updateMeasurementTrialView(measurements, minTrials);
                     }
                 })
 

@@ -1,6 +1,7 @@
 package com.example.nerdherd.ObjectManager;
 
 import android.location.Location;
+import android.os.UserManager;
 import android.util.Log;
 
 import com.example.nerdherd.Database.DatabaseAdapter;
@@ -9,6 +10,7 @@ import com.example.nerdherd.Experiment;
 import com.example.nerdherd.Model.ExperimentE;
 import com.example.nerdherd.Model.Region;
 import com.example.nerdherd.Model.TrialT;
+import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.Question;
 import com.example.nerdherd.Reply;
 import com.google.firebase.Timestamp;
@@ -196,8 +198,20 @@ public class ExperimentManager implements DatabaseListener {
         databaseAdapter.updateExperiment(e);
     }
 
-    public void addUserToExperimentBlacklist(String userId, String experimentId) {
-
+    public boolean addUserToExperimentBlacklist(String userId, String experimentId) {
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("ExpBlacklist", "exp=NULL");
+            return false;
+        }
+        UserProfile up = ProfileManager.getProfile(userId);
+        if(up == null) {
+            Log.d("ExpBlacklist", "usr=NULL");
+            return false;
+        }
+        e.addToBlacklist(userId);
+        databaseAdapter.updateExperiment(e);
+        return true;
     }
 
     public void addQuestionToExperiment(String experimentId, String question) {
@@ -278,6 +292,21 @@ public class ExperimentManager implements DatabaseListener {
     /********************************************************************************************
      ********* HELPER FUCTIONS
      ********************************************************************************************/
+
+    public ArrayList<TrialT> getTrialsIncludeBlacklist(String experimentId) {
+        ArrayList<TrialT> list = new ArrayList<>();
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("getTrialBlklst", "exp=NULL");
+            return list;
+        }
+        for( TrialT t : e.getTrials() ) {
+            if( e.getUserIdBlacklist().contains(t.getExperimenterId()) ) {
+                continue;
+            }
+        }
+        return list;
+    }
 
     private boolean containsExperiment(String experimentId) {
         for( ExperimentE e : experimentList ) {

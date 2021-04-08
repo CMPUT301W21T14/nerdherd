@@ -31,14 +31,8 @@ public class NonnegativeTrialFragment extends DialogFragment {
     private boolean isInt;
     private int user_recordedVal;
 
-    /**
-     * Constraint for the trial
-     * Getter/setter for the class
-     * @param minTrials for the trial to be successful
-     */
+    public NonnegativeTrialFragment(){
 
-    public NonnegativeTrialFragment(int minTrials){
-        this.minTrials = minTrials;
     }
 
     @NonNull
@@ -84,7 +78,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
 //                        if (count < minTrials){
 //                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
 //                        }
-                        ((TrialActivity) getActivity()).updateNonnegativeTrialView(Nonnegativetrials, minTrials);
+                        //((TrialActivity) getActivity()).updateNonnegativeTrialView(Nonnegativetrials, minTrials);
                     }
                 })
 

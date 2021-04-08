@@ -33,7 +33,7 @@ public class QRHelper {
             QRGEncoder qrgEncoder = new QRGEncoder(
                     qrData, null,
                     QRGContents.Type.TEXT,
-                    250);
+                    400);
             try {
                 bitmap = qrgEncoder.encodeAsBitmap();
             } catch (WriterException e) {

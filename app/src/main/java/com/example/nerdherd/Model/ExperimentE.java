@@ -158,6 +158,9 @@ public class ExperimentE {
     }
 
     public ArrayList<TrialT> getTrials() {
+        if(trials == null) {
+            trials = new ArrayList<>();
+        }
         return trials;
     }
 
@@ -166,6 +169,9 @@ public class ExperimentE {
     }
 
     public ArrayList<String> getUserIdBlacklist() {
+        if(userIdBlacklist == null) {
+            userIdBlacklist = new ArrayList<>();
+        }
         return userIdBlacklist;
     }
 

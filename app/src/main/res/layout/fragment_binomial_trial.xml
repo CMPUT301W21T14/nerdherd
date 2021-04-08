@@ -5,21 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-
-        <TextView
-            android:id="@+id/txt_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="BINOMIAL TRIALS"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintRight_toRightOf="@id/vg90"
-            app:layout_constraintLeft_toRightOf="@id/vg10"
-            app:layout_constraintTop_toBottomOf="@id/hg10" />
 
 
         <Button
@@ -33,31 +22,6 @@
             app:layout_constraintLeft_toRightOf="@id/vg10"
             app:layout_constraintTop_toBottomOf="@id/txt_label" />
 
-        <TextView
-            android:id="@+id/success_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="56dp"
-            android:text="0"
-            android:textSize="20sp"
-            android:maxLength="4"
-            app:layout_constraintLeft_toRightOf="@id/vg10"
-            app:layout_constraintTop_toBottomOf="@id/btn_success"
-            android:layout_marginTop="10dp"
-            />
-
-        <TextView
-            android:id="@+id/failure_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="56dp"
-            android:text="0"
-            android:textSize="20sp"
-            android:maxLength="4"
-            app:layout_constraintRight_toLeftOf="@id/vg90"
-            app:layout_constraintTop_toBottomOf="@id/btn_success" />
-
 
         <Button
             android:id="@+id/btn_failure"
@@ -69,6 +33,53 @@
             android:textColor="#FFF"
             app:layout_constraintRight_toRightOf="@id/vg90"
             app:layout_constraintTop_toBottomOf="@id/txt_label" />
+
+        <Button
+            android:id="@+id/btn_save_qr_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Save QR"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_binom_qr" />
+
+        <ImageView
+            android:id="@+id/iv_binom_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/vg90"
+            app:layout_constraintStart_toStartOf="@+id/vg10"
+            app:layout_constraintTop_toBottomOf="@+id/tv_binom_qr_data"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <TextView
+            android:id="@+id/txt_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="BINOMIAL TRIALS"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/vg10"
+            app:layout_constraintRight_toRightOf="@id/vg90"
+            app:layout_constraintTop_toBottomOf="@id/hg10" />
+
+        <TextView
+            android:id="@+id/tv_binom_qr_data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="70dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_success" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/hg10"
@@ -97,7 +108,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.07" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

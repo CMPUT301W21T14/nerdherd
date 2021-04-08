@@ -30,7 +30,6 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     public void generateMockDatabase() {
-
         // Experiments
         for(int i=0;i<10;++i) {
             Region r = new Region("Region "+i, new GeoPoint(0, 0), i*50);

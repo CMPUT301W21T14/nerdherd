@@ -28,13 +28,9 @@ public class CountTrialDialogFragment extends DialogFragment {
 
     private int minTrials;
 
-    /**
-     * Getter/setter/constructor for the class
-     * @param minTrials for the trial to be successful
-     */
 
-    public CountTrialDialogFragment(int minTrials){
-        this.minTrials = minTrials;
+    public CountTrialDialogFragment(){
+
     }
     @NonNull
     @Override
@@ -80,7 +76,7 @@ public class CountTrialDialogFragment extends DialogFragment {
 //                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
 //                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
 //                        }
-                        ((TrialActivity) getActivity()).updateCountTrialView(count, minTrials);
+                        //((TrialActivity) getActivity()).updateCountTrialView(count, minTrials);
                     }
                 })
 

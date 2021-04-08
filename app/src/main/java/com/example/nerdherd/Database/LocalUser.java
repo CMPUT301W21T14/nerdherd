@@ -10,6 +10,7 @@ import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.example.nerdherd.QRResult;
 import com.example.nerdherd.R;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +56,13 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
     public static void removeSubscribedExperiment(String experimentId) {
         subscribed_experiments.remove(experimentId);
         saveLocalData();
+    }
+
+    public static GeoPoint getLastLocationGeo() {
+        if(lastLocation == null) {
+            return null;
+        }
+        return new GeoPoint(lastLocation.getLatitude(), lastLocation.getLongitude());
     }
 
     public static Set<String> getSubscribedExperiments() {

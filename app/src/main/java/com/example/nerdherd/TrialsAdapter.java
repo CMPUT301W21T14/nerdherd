@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.nerdherd.Model.TrialT;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -21,22 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder> {
 
-    ArrayList<Trial> trials;
+    ArrayList<TrialT> trials;
     TrialsAdapter.onClickListener listener;
-    private String trialtype;
 
-    /**
-     * Getter/setter of the class
-     * @param trials depending on which one the owner chooses
-     * @param listener to wait for the user/owner input
-     * @param trialType 1/4 options
-     */
-
-    public TrialsAdapter(ArrayList<Trial> trials, TrialsAdapter.onClickListener listener, String trialType){
+    public TrialsAdapter(ArrayList<TrialT> trials, TrialsAdapter.onClickListener listener){
         this.trials = trials;
         this.listener = listener;
-        this.trialtype = trialType;
-        Log.d("type", String.valueOf(trialType));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -68,30 +60,9 @@ public class TrialsAdapter extends RecyclerView.Adapter<TrialsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (trialtype.equals("Binomial Trial")){
-            holder.user_trial.setText(((BinomialTrial)trials.get(position)).getSuccess()+"");
-            holder.trials_executed.setText(((BinomialTrial)trials.get(position)).getFailure()+"");
-        }
-        if(trialtype.equals("Count")){
-            holder.user_trial.setText(((CountTrial)trials.get(position)).totaltrialCount()+"");
-            holder.trials_executed.setVisibility(View.INVISIBLE);
-        }
-        if(trialtype.equals("Measurement")){
-            int maxLength = 22;
-            holder.user_trial.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
-            holder.user_trial.setText(((MeasurementTrial)trials.get(position)).getMeasurements()+"");
-            holder.trials_executed.setVisibility(View.INVISIBLE);
-        }
-        if(trialtype.equals("Non-Negative Integer Count")){
-            Log.d("Does duplicate", String.valueOf(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials()));
-            int size = ((NonnegativeTrial)trials.get(position)).getNonNegativeTrials().size();
-
-            holder.user_trial.setText(((NonnegativeTrial)trials.get(position)).getNonNegativeTrials().toString());
-
-
-
-            holder.trials_executed.setVisibility(View.INVISIBLE);
-        }
+        TrialT t = trials.get(position);
+        holder.trials_executed.setText(String.valueOf(t.getOutcome()));
+        holder.user_trial.setText(t.getExperimenterId());
     }
 
 
