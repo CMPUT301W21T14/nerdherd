@@ -371,38 +371,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
         if (!Password.isEmpty() | !Name.isEmpty() | !Email.isEmpty() | avatar != -1){
             Toast.makeText(getApplicationContext(), "User Profile Updated", Toast.LENGTH_SHORT).show();
-            updateFirestore(Name, Email, avatar);
             ExperimentLinkage(Name, Email, avatar);
         }
     }
 
-    public void updateFirestore(String name, String email, Integer avatar){
-        revealList = new ArrayList<Experiment>();
-        savedList2 = new ArrayList<Experiment>();
-        fireStoreController.experimentReader(savedList2, new FireStoreController.FireStoreExperimentReadCallback() {
-            @Override
-            public void onCallback(ArrayList<Experiment> experiments) {
-
-                revealList.clear();
-
-                for (Experiment allExperiment : experiments){
-                    if (allExperiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
-                        revealList.add(allExperiment);
-                    }
-                }
-                Log.d("reveal list", String.valueOf(revealList.get(0)));
-                for (int y=0; y < revealList.size(); y++){
-
-                }
-
-            }
-        }, new FireStoreController.FireStoreExperimentReadFailCallback() {
-            @Override
-            public void onCallback() {
-                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     public void ExperimentLinkage(String Name, String email, Integer avatar){
 
         newExperiment = new ArrayList<Experiment>();
