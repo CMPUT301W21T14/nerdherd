@@ -9,6 +9,8 @@ import com.example.nerdherd.Experiment;
 import com.example.nerdherd.Model.ExperimentE;
 import com.example.nerdherd.Model.Region;
 import com.example.nerdherd.Model.TrialT;
+import com.example.nerdherd.Question;
+import com.example.nerdherd.Reply;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
@@ -173,16 +175,59 @@ public class ExperimentManager implements DatabaseListener {
     public void publishExperiment(String experimentId) {
         // US 01.02.01
         // As an owner, I want to unpublish an experiment.
-        // This means the ability to re-publish it - I assume with the same details
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("publishExp", "Exp=Null");
+            return;
+        }
+        e.setPublished(true);
+        databaseAdapter.updateExperiment(e);
     }
 
     public void unpublishExperiment(String experimentId) {
         // US 01.02.01
         // As an owner, I want to unpublish an experiment.
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("unpublishExp", "Exp=Null");
+            return;
+        }
+        e.setPublished(false);
+        databaseAdapter.updateExperiment(e);
     }
 
     public void addUserToExperimentBlacklist(String userId, String experimentId) {
 
+    }
+
+    public void addQuestionToExperiment(String experimentId, String question) {
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("addQuestion", "Invalid eId!");
+            return;
+        }
+        Question q = new Question(question);
+        e.addQuestion(q);
+        databaseAdapter.updateExperiment(e);
+    }
+
+    public void addReplyToExperimentQuestion(String experimentId, int questionIdx, String reply) {
+        ExperimentE e = getExperiment(experimentId);
+        if(e == null) {
+            Log.d("addReply", "Invalid eId!");
+            return;
+        }
+        if(e.getQuestions() == null) {
+            Log.d("addReply", "replyToNull");
+            return;
+        }
+        Question q = e.getQuestions().get(questionIdx);
+        if(q == null) {
+            Log.d("addReply", "invalidQIdx");
+            return;
+        }
+        q.addReply(new Reply(reply));
+        databaseAdapter.updateExperiment(e);
     }
 
     public void endExperiment(String experimentId) {

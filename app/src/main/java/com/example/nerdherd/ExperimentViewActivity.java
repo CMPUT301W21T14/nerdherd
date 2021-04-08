@@ -44,8 +44,12 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private Button experimentEnd;
     private Button experimentPublish;
     private Button experimentSubscribe;
-    private Intent myExperimentIntent;
     private ExperimentE currentExperiment;
+
+    private Button experimentQuestions;
+    private Button experimentTrials;
+    private Button experimentStatistics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,10 @@ public class ExperimentViewActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        experimentQuestions = findViewById(R.id.btn_view_questions);
+        experimentTrials = findViewById(R.id.btn_add_trials);
+        experimentStatistics = findViewById(R.id.btn_view_stats);
 
         experimentTitle = findViewById(R.id.experiment_title);
         experimentOwner = findViewById(R.id.experiment_owner);
@@ -96,7 +104,12 @@ public class ExperimentViewActivity extends AppCompatActivity {
 
         if (!LocalUser.getUserId().equals(ownerProfile.getUserId())) {
             experimentPublish.setVisibility(View.GONE);
-            experimentEnd.setVisibility(View.GONE);
+            if(currentExperiment.getStatus().equals("Ended")) {
+                experimentEnd.setText("View Results");
+            } else {
+                experimentEnd.setVisibility(View.GONE);
+            }
+
         }
 
         if(LocalUser.isSubscribed(experimentId)) {
@@ -106,9 +119,9 @@ public class ExperimentViewActivity extends AppCompatActivity {
         }
 
         if(currentExperiment.isPublished()) {
-            experimentPublish.setVisibility(View.VISIBLE);
+            experimentPublish.setText("Unpublish");
         } else {
-            experimentPublish.setVisibility(View.GONE);
+            experimentPublish.setText("Unpublish");
         }
 
         experimentSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +140,16 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eMgr.endExperiment(experimentId);
-                switcher();
+                if(currentExperiment.getStatus().equals("Ended")) {
+                    //
+                    Intent nintent = new Intent(ExperimentViewActivity.this, ExperimentResultsActivity.class);
+                    nintent.putExtra("experimentId", experimentId);
+                    startActivity(nintent);
+                } else {
+                    eMgr.endExperiment(experimentId);
+                    experimentStatus.setText("Ended");
+                    experimentEnd.setText("View Results");
+                }
             }
         });
 
@@ -145,7 +166,62 @@ public class ExperimentViewActivity extends AppCompatActivity {
             }
         });
 
+        experimentQuestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nintent = new Intent(ExperimentViewActivity.this, QuestionsActivity.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+
+        experimentStatistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nintent = new Intent(ExperimentViewActivity.this, statsactivity_checking.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+
+        experimentTrials.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nintent = new Intent(ExperimentViewActivity.this, TrialActivity.class);
+                nintent.putExtra("experimentId", experimentId);
+                startActivity(nintent);
+            }
+        });
+
     }
+
+    /*
+            if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){
+            intent = new Intent(context, ExperimentViewActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.experiment_trails && !(context instanceof TrialActivity)){
+            intent = new Intent(context, TrialActivity.class);
+            intent.putExtra("Type of Trial",trialType);
+            intent.putExtra("Min of Trial", mintrial);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.experiment_stats && !(context instanceof statsactivity_checking)){
+            intent = new Intent(context, statsactivity_checking.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+
+        if (item.getItemId() == R.id.experiment_questions && !(context instanceof QuestionsActivity)) {
+            intent = new Intent(context, QuestionsActivity.class);
+            context.startActivity(intent);
+            ((Activity)context).finish();
+        }
+     */
         /*index = GlobalVariable.indexForExperimentView;
 
         if (index != -1){
@@ -279,7 +355,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
     }*/
 
     private void switcher(){
-        myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
+        Intent myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
         startActivity(myExperimentIntent);
         finish();
     }

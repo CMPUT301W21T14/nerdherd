@@ -11,20 +11,20 @@ public class ExperimentE {
     public static final int EXPERIMENT_TYPE_NON_NEGATIVE = 2;
     public static final int EXPERIMENT_TYPE_MEASUREMENT = 3;
 
-    String experimentId;
-    String ownerId;
-    String description;
-    String title;
-    Region region;
-    int minimumTrials;
-    boolean published;
-    boolean locationRequired;
-    String status;
-    int type;
-    Timestamp date;
-    ArrayList<Question> questions;
-    ArrayList<TrialT> trials;
-    ArrayList<String> userIdBlacklist;
+    private String experimentId;
+    private String ownerId;
+    private String description;
+    private String title;
+    private Region region;
+    private int minimumTrials;
+    private boolean published;
+    private boolean locationRequired;
+    private String status;
+    private int type;
+    private Timestamp date;
+    private ArrayList<Question> questions;
+    private ArrayList<TrialT> trials;
+    private ArrayList<String> userIdBlacklist;
 
     public ExperimentE() {
         // Default constructor for serialization
@@ -147,6 +147,9 @@ public class ExperimentE {
     }
 
     public ArrayList<Question> getQuestions() {
+        if(questions == null) {
+            questions = new ArrayList<>();
+        }
         return questions;
     }
 

@@ -18,25 +18,53 @@
 
         <Button
             android:id="@+id/btn_publish_experiment"
-            android:layout_width="150dp"
-            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Publish"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_subscribe_experiment"
+            app:layout_constraintEnd_toStartOf="@+id/btn_view_questions"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardviewDetails" />
 
         <Button
             android:id="@+id/btn_subscribe_experiment"
-            android:layout_width="150dp"
-            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Subscribe"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_view_questions"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewDetails" />
+
+        <Button
+            android:id="@+id/btn_view_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Questions"
+            app:layout_constraintEnd_toStartOf="@+id/btn_subscribe_experiment"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_publish_experiment"
             app:layout_constraintTop_toBottomOf="@+id/cardviewDetails" />
+
+        <Button
+            android:id="@+id/btn_view_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistics"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_trials"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
+
+        <Button
+            android:id="@+id/btn_add_trials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Trials"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_view_stats"
+            app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardviewDetails"
