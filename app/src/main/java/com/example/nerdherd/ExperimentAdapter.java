@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.ObjectManager.ProfileManager;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -20,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.ViewHolder> {
 
-    ArrayList<Experiment> experiments;
+    ArrayList<ExperimentE> experiments;
     ExperimentAdapter.onClickListener listener;
 
     /**
@@ -29,20 +32,20 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Vi
      * @param listener for the app to wait for user's input
      */
 
-    public ExperimentAdapter(ArrayList<Experiment> experiments, ExperimentAdapter.onClickListener listener){
+    public ExperimentAdapter(ArrayList<ExperimentE> experiments, ExperimentAdapter.onClickListener listener){
         this.experiments = experiments;
         this.listener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView title;
+        TextView description;
         TextView owner;
         TextView status;
         View layout;
 
         public ViewHolder(View view){
             super(view);
-            title = view.findViewById(R.id.experimentTitle);
+            description = view.findViewById(R.id.experimentTitle);
             owner = view.findViewById(R.id.experimentOwner);
             status = view.findViewById(R.id.experimentStatus);
             layout = view.findViewById(R.id.listItemLayout);
@@ -67,18 +70,19 @@ public class ExperimentAdapter extends RecyclerView.Adapter<ExperimentAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.title.setText(experiments.get(position).getTitle());
-        holder.owner.setText(experiments.get(position).getOwnerProfile().getName());
-        holder.status.setText(experiments.get(position).getStatus());
-        Log.d("current names", experiments.get(position).getOwnerProfile().getName());
-        String experimentType = experiments.get(position).getType();
-        if (experimentType.compareTo("Binomial Trial") == 0)
+        ExperimentE e = experiments.get(position);
+        holder.description.setText(e.getDescription());
+        holder.owner.setText(ProfileManager.getProfile(e.getOwnerId()).getUserName());
+        holder.status.setText(e.getStatus());
+        String experimentType = e.typeToString();
+
+        if (experimentType.equals("Binomial") )
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("002ECC71",16)); //Green
-        else if (experimentType.compareTo("Count") == 0)
+        else if (experimentType.equals("Count") )
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("00E74C3C",16)); //Red
-        else if (experimentType.compareTo("Measurement") == 0)
+        else if (experimentType.equals("Measurement") )
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("00F7DC6F",16)); //Yellow
-        else if (experimentType.compareTo("Non-Negative Integer Count") == 0)
+        else if (experimentType.equals("Non-Negative") )
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("003498DB",16)); //Blue
     }
 

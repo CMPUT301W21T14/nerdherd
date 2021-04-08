@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.UserProfile;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
+import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -29,9 +34,6 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private Toolbar toolbar;
     private MenuController menuController;
-    private Intent previousIntent;
-    private Integer index;
-    private Experiment experiment;
     private TextView experimentTitle;
     private TextView experimentOwner;
     private TextView experimentStatus;
@@ -40,25 +42,27 @@ public class ExperimentViewActivity extends AppCompatActivity {
     private TextView experimentContact;
     private TextView experimentDescription;
     private Button experimentEnd;
-    private Button unpublishedSubscribe;
-    private FireStoreController fireStoreController;
+    private Button experimentPublish;
+    private Button experimentSubscribe;
     private Intent myExperimentIntent;
-    private String experimentIndicator = "Experiment";
-    private String publishIndicator = "Published";
-    private ArrayList<String> idList;
-    private Intent publicuser;
-    private String val;
+    private ExperimentE currentExperiment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
-//        Bundle pUser = publicuser.getExtras();
-//        if (pUser != null){
-//            Intent intent = getIntent();
-//            val = intent.getStringExtra("I Subscribed");
-//
-//        }
+        ExperimentManager eMgr = ExperimentManager.getInstance();
+        ProfileManager pMgr = ProfileManager.getInstance();
+        Intent intent = getIntent();
+        String experimentId = intent.getStringExtra("experimentId");
+        currentExperiment = eMgr.getExperiment(experimentId);
+        if (currentExperiment == null) {
+            // big uh oh
+            Log.d("ExperimentView", "NULL EXPERIMENT");
+            finish();
+            return;
+        }
+
         experimentTitle = findViewById(R.id.experiment_title);
         experimentOwner = findViewById(R.id.experiment_owner);
         experimentStatus = findViewById(R.id.experiment_status);
@@ -66,8 +70,9 @@ public class ExperimentViewActivity extends AppCompatActivity {
         experimentRegion = findViewById(R.id.experiment_region);
         experimentContact = findViewById(R.id.experiment_contact);
         experimentDescription = findViewById(R.id.experiment_description);
-        experimentEnd = findViewById(R.id.experiment_end);
-        unpublishedSubscribe = findViewById(R.id.unpublish_subscribe_button);
+        experimentEnd = findViewById(R.id.btn_end_experimentresults);
+        experimentPublish = findViewById(R.id.btn_publish_experiment);
+        experimentSubscribe = findViewById(R.id.btn_subscribe_experiment);
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.draw_layout_experiment_view);
@@ -76,8 +81,72 @@ public class ExperimentViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
+        //menuController.useMenu(true);
 
-        index = GlobalVariable.indexForExperimentView;
+        UserProfile ownerProfile = pMgr.getProfile(currentExperiment.getOwnerId());
+        if (ownerProfile != null) {
+            experimentTitle.setText(currentExperiment.getTitle());
+            experimentDescription.setText(currentExperiment.getDescription());
+            experimentOwner.setText(ownerProfile.getUserName());
+            experimentStatus.setText(currentExperiment.getStatus());
+            experimentType.setText(currentExperiment.typeToString());
+            experimentRegion.setText(currentExperiment.getRegion().getDescription());
+            experimentContact.setText(ownerProfile.getContactInfo());
+        }
+
+        if (!LocalUser.getUserId().equals(ownerProfile.getUserId())) {
+            experimentPublish.setVisibility(View.GONE);
+            experimentEnd.setVisibility(View.GONE);
+        }
+
+        if(LocalUser.isSubscribed(experimentId)) {
+            experimentSubscribe.setText("Unsubscribe");
+        } else {
+            experimentSubscribe.setText("Subscribe");
+        }
+
+        if(currentExperiment.isPublished()) {
+            experimentPublish.setVisibility(View.VISIBLE);
+        } else {
+            experimentPublish.setVisibility(View.GONE);
+        }
+
+        experimentSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(LocalUser.isSubscribed(experimentId)) {
+                    eMgr.unsubscribeToExperiment(experimentId);
+                    experimentSubscribe.setText("Subscribe");
+                } else {
+                    eMgr.subscribeToExperiment(experimentId);
+                    experimentSubscribe.setText("Unsubscribe");
+                }
+            }
+        });
+
+        experimentEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eMgr.endExperiment(experimentId);
+                switcher();
+            }
+        });
+
+        experimentPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentExperiment.isPublished()) {
+                    eMgr.unpublishExperiment(experimentId);
+                    experimentPublish.setText("Publish");
+                } else {
+                    eMgr.publishExperiment(experimentId);
+                    experimentPublish.setText("Unpublish");
+                }
+            }
+        });
+
+    }
+        /*index = GlobalVariable.indexForExperimentView;
 
         if (index != -1){
             experiment = GlobalVariable.experimentArrayList.get(index);
@@ -207,7 +276,7 @@ public class ExperimentViewActivity extends AppCompatActivity {
                 });
             }
         });
-    }
+    }*/
 
     private void switcher(){
         myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
