@@ -15,11 +15,21 @@ import java.util.ArrayList;
  * */
 public class NonnegativeTrial extends Trial {
 
+    private String timestamp;
     private Integer totalCount;
     private ArrayList<Long> nonNegativeTrials;
 
-    public NonnegativeTrial(ArrayList<Long>nonNegatives){
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public NonnegativeTrial(ArrayList<Long>nonNegatives, String timestamp){
         this.nonNegativeTrials = nonNegatives;
+        this.timestamp = timestamp;
     }
 
     public ArrayList<Long> getNonNegativeTrials(){

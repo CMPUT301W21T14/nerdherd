@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * First of the 4 trial classes
  * Allows user to perform a binomial trial with boolean outcomes
@@ -16,6 +19,9 @@ public class BinomialTrial extends Trial {
     //will be responsible for just setting the values and stuff
     private Integer success;
     private Integer failure;
+    private String timestamp;
+
+
 
     /**
      * Getter/setter/constructor for the class
@@ -23,11 +29,20 @@ public class BinomialTrial extends Trial {
      * @param failure of the trial
      */
 
-    BinomialTrial (Integer success, Integer failure)
+
+    BinomialTrial (Integer success, Integer failure, String timestamp)
     {
         this.success = success;
         this.failure = failure;
+        this.timestamp = timestamp;
+    }
 
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Integer getSuccess() {
