@@ -1,56 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/qr_layout">
 
-    <SurfaceView
-        android:id="@+id/surface_view"
+    <include
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/tool_bar_layout"/>
 
-    <TextView
-        android:id="@+id/barcode_text"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="5dp"
-        android:text="Barcode Text"
-        android:textSize="25sp"
-        app:layout_constraintTop_toBottomOf="@+id/surface_view"
-        tools:layout_editor_absoluteX="75dp" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_generate_qr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generate QR"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_qr_generate_data" />
+        <SurfaceView
+            android:id="@+id/surface_view"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_generated_qr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_generate_qr"
-        tools:srcCompat="@tools:sample/avatars" />
+        <TextView
+            android:id="@+id/barcode_text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Barcode Data"
+            app:layout_constraintTop_toBottomOf="@+id/surface_view"
+            tools:layout_editor_absoluteX="75dp" />
 
-    <EditText
-        android:id="@+id/et_qr_generate_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="DataToGenerate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/barcode_text" />
+        <Button
+            android:id="@+id/btn_add_trial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Add Trial"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barcode_text" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navigation_header"
+        app:itemTextAppearance="@style/NavigationViewStyle"
+        app:menu="@menu/menu">
+
+    </com.google.android.material.navigation.NavigationView>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
