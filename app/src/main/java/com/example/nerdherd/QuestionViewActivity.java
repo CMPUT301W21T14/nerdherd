@@ -22,9 +22,14 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * Base activity for viewing the replies on a particular Question
+ */
 public class QuestionViewActivity extends AppCompatActivity implements ExperimentManager.ExperimentOnChangeEventListener {
     // US 02.02.01
     // As an experimenter or owner, I want to ask to reply to questions about an experiment.
+
 
     private RecyclerView replyListView;
     private Button replyButton;
@@ -69,21 +74,13 @@ public class QuestionViewActivity extends AppCompatActivity implements Experimen
         MenuController menuController = new MenuController(QuestionViewActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(true);
 
-        replyButton.setText("Add a Reply");
+        replyButton.setText("Confirm");
         replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replyButton.setText("Confirm");
-                replyInput.setVisibility(View.VISIBLE);
-                replyButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String input = replyInput.getText().toString();
-                        replyInput.setText("");
-                        Reply newReply = new Reply(input);
-                        eMgr.addReplyToExperimentQuestion(experimentId, questionIdx, input);
-                    }
-                });
+                String input = replyInput.getText().toString();
+                replyInput.setText("");
+                eMgr.addReplyToExperimentQuestion(experimentId, questionIdx, input);
             }
         });
         questionContent.setText(experiment.getQuestions().get(questionIdx).getContent());

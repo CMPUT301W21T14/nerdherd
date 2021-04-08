@@ -69,26 +69,18 @@ public class QuestionsActivity extends AppCompatActivity implements ExperimentMa
         menuController = new MenuController(QuestionsActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(true);
 
-        buttonView.setText("Ask a Question");
+        buttonView.setText("Confirm");
         buttonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonView.setText("Confirm");
-                questionInput.setVisibility(View.VISIBLE);
-                buttonView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String input = questionInput.getText().toString();
-                        questionInput.setText("");
-                        eMgr.addQuestionToExperiment(experimentId, input);
-                    }
-                });
+                String input = questionInput.getText().toString();
+                questionInput.setText("");
+                eMgr.addQuestionToExperiment(experimentId, input);
             }
         });
         listener = new QuestionsAdapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
-                // TODO: Open Question specific Activity
                 Intent questionIntent = new Intent(QuestionsActivity.this, QuestionViewActivity.class);
                 questionIntent.putExtra("experimentId", experimentId);
                 questionIntent.putExtra("questionIdx", index);

@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for displaying replies in a formatted list
+ */
 public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> {
 
     ArrayList<Reply> replies;
@@ -37,6 +40,11 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
+    /**
+     * Puts different aspects of the Reply into the views that make up holder
+     * @param holder Template that holds each element of the list
+     * @param position Current position in the Reply array
+     */
     @Override
     public void onBindViewHolder(@NonNull ReplyAdapter.ViewHolder holder, int position) {
         Reply targetReply = replies.get(position);
