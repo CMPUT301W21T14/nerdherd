@@ -172,8 +172,6 @@ public class statsactivity_checking extends AppCompatActivity {
                 }
 
             });
-
-
         }
         if (expType.equals("Binomial Trial")) {
 

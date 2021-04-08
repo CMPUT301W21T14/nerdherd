@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,17 +17,27 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+@RuntimePermissions
 public class MapOpenActivity extends AppCompatActivity {
 
     private SupportMapFragment mapFragment;
@@ -83,7 +94,6 @@ public class MapOpenActivity extends AppCompatActivity {
         }
     }
 
-
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -92,7 +102,8 @@ public class MapOpenActivity extends AppCompatActivity {
 
     @SuppressWarnings({"MissingPermission"})
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
-    void getMyLocation() { //requires permission, access location of device -h
+
+    void getMyLocation() { //requires permission, access location of device
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
 
@@ -115,15 +126,22 @@ public class MapOpenActivity extends AppCompatActivity {
                 });
     }
 
-
+    /*
+     * Called when the Activity becomes visible.
+     */
     @Override
     protected void onStart() {
         super.onStart();
     }
+
+    /*
+     * Called when the Activity is no longer visible.
+     */
     @Override
     protected void onStop() {
         super.onStop();
     }
+
     private boolean isGooglePlayServicesAvailable() {
         // Check that Google Play services is available
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -144,9 +162,48 @@ public class MapOpenActivity extends AppCompatActivity {
                 errorFragment.setDialog(errorDialog);
                 errorFragment.show(getSupportFragmentManager(), "Location Updates");
             }
-
             return false;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Display the connection status
+
+        if (mCurrentLocation != null) {
+            Toast.makeText(this, "GPS location was found!", Toast.LENGTH_SHORT).show();
+            LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 17);
+            map.animateCamera(cameraUpdate);
+        } else {
+            Toast.makeText(this, "Current location was null, enable GPS on emulator!", Toast.LENGTH_SHORT).show();
+        }
+//        MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+    }
+
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    protected void startLocationUpdates() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+        //noinspection MissingPermission
+        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        onLocationChanged(locationResult.getLastLocation());
+                    }
+                },
+                Looper.myLooper());
     }
 
     public void onLocationChanged(Location location) {
@@ -154,7 +211,9 @@ public class MapOpenActivity extends AppCompatActivity {
         if (location == null) {
             return;
         }
+
         // Report to the UI that the location was updated
+
         mCurrentLocation = location;
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
@@ -162,6 +221,10 @@ public class MapOpenActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     // Define a DialogFragment that displays the error dialog
     public static class ErrorDialogFragment extends DialogFragment {
@@ -175,13 +238,15 @@ public class MapOpenActivity extends AppCompatActivity {
             mDialog = null;
         }
 
+        // Set the dialog to display
         public void setDialog(Dialog dialog) {
             mDialog = dialog;
         }
+
+        // return a dialog to the dialogfragment
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState){
             return mDialog;
         }
     }
-
 }

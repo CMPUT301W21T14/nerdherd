@@ -12,7 +12,12 @@ import java.util.ArrayList;
 public class MeasurementTrial extends Trial {
 
     private int totalMeasurementCount;
+    private String timestamp;
     private ArrayList<Double> Measurements;
+
+
+
+
     /**
      * Records for the user to keep track of
      * Getter/setter/constructor of the class
@@ -23,8 +28,18 @@ public class MeasurementTrial extends Trial {
 //        this.totalMeasurementCount = totalMeasurementCount;
 //    }
 
-    public MeasurementTrial(ArrayList<Double>measurements){
+    public MeasurementTrial(ArrayList<Double>measurements, String timestamp){
         this.Measurements = measurements;
+        this.timestamp = timestamp;
+    }
+
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public ArrayList<Double> getMeasurements(){

@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -295,7 +297,7 @@ public class TrialActivity extends AppCompatActivity {
 
     public void updateBinomialTrialView(int success, int failure, int minTrial){
 
-        Trial t1 = new BinomialTrial(success, failure);
+        Trial t1 = new BinomialTrial(success, failure, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         //experiment has trials
         //creating new experiment - but i want access to
         Log.d("test binomial", String.valueOf(binomialtrialing.size()));
@@ -308,6 +310,7 @@ public class TrialActivity extends AppCompatActivity {
         //total current trials - including the one just done by the user
         int fullSize = sum + (success + failure);
         Log.d("fullSize", String.valueOf(fullSize));
+
 
         //send email per instance of application - to remind the owner
         if (fullSize >= minTrial && GlobalVariable.success.equals("No")){
@@ -338,7 +341,7 @@ public class TrialActivity extends AppCompatActivity {
 
     public void updateCountTrialView(int[] count, int minTrial){
 
-        Trial t1 = new CountTrial(count[0]);
+        Trial t1 = new CountTrial(count[0],new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         int counted = (count[0]);
 
 
@@ -362,6 +365,7 @@ public class TrialActivity extends AppCompatActivity {
                     + " "+ "("+ExperimentName+")"+ " "+"is a success!", OwnerEmail);
             GlobalVariable.success = "yes";
         }
+
         targetexp.getTrials().add(t1);
 
         fireStoreController.addNewExperiment(targetexp, new FireStoreController.FireStoreExperimentCallback() {
@@ -394,7 +398,7 @@ public class TrialActivity extends AppCompatActivity {
         Log.d("arrays", negativeTrials.toString());
 //            Log.d("size of array", String.valueOf(NonnegativeTrials.size()));
         Log.d("passed values", String.valueOf(negativeTrials));
-        Trial t2 = new NonnegativeTrial(negativeTrials);
+        Trial t2 = new NonnegativeTrial(negativeTrials, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         ((NonnegativeTrial) t2).setNonNegativeTrials(negativeTrials);
 
         //experiment has trials
@@ -443,7 +447,7 @@ public class TrialActivity extends AppCompatActivity {
         //check if adding trials to Testtrial2 will result in success
 
         int size = measurements.size();
-        Trial t1 = new MeasurementTrial(measurements);
+        Trial t1 = new MeasurementTrial(measurements, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 //            ((MeasurementTrial) t1).setTotalMeasurementCount(size);
         ((MeasurementTrial) t1).setMeasurements(measurements);
         //experiment has trials
