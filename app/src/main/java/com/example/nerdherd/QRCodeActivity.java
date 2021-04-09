@@ -174,7 +174,6 @@ public class QRCodeActivity extends AppCompatActivity {
             }
         });
 
-
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
@@ -214,13 +213,13 @@ public class QRCodeActivity extends AppCompatActivity {
                                 barcodeText.setText(displayString);
                                 addTrialButton.setVisibility(View.VISIBLE);
                             } else {
-                                barcodeText.setText("Barcode not associated with any experiment!");
+                                barcodeText.setText("Barcode/QR not associated with any experiment!");
                                 addTrialButton.setVisibility(View.GONE);
                             }
                         }
                     }, 500);
                 } else {
-                    barcodeText.setText("No Barcode Found");
+                    barcodeText.setText("No Barcode/QR Found");
                     addTrialButton.setVisibility(View.GONE);
                 }
             }

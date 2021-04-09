@@ -1,6 +1,7 @@
 package com.example.nerdherd;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Environment;
 import android.util.Log;
@@ -9,7 +10,10 @@ import android.view.WindowManager;
 
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.firebase.Timestamp;
+import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +37,7 @@ public class QRHelper {
      * @return
      *      Bitmap - Image generated (Can be used in ImageView.setImageBitmap)
      */
-    public static Bitmap generateQRCode(String qrData) {
+    public static Bitmap generateQRCodeOld(String qrData) {
         Bitmap bitmap = null;
             QRGEncoder qrgEncoder = new QRGEncoder(
                     qrData, null,
@@ -45,6 +49,26 @@ public class QRHelper {
                 Log.v("GenerateQRCode", e.toString());
             }
         return bitmap;
+    }
+
+    public static Bitmap generateQRCode(String qrData) {
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(qrData, BarcodeFormat.QR_CODE, 512, 512);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            return bmp;
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static boolean saveTempBitmap(Bitmap bitmap, String data) {
