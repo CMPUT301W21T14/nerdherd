@@ -1,15 +1,22 @@
 package com.example.nerdherd;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,69 +29,104 @@ import androidx.fragment.app.DialogFragment;
  * @author Ogooluwa S. osamuel
  */
 
-public class CountTrialDialogFragment extends DialogFragment {
+public class CountTrialDialogFragment extends DialogFragment implements ExperimentManager.ExperimentOnChangeEventListener {
 
-    private TextView Counter;
+    private TextView counterTv;
+    private ExperimentManager eMgr = ExperimentManager.getInstance();
 
-    private int minTrials;
+    private String experimentId;
+    private Bitmap image;
 
-    /**
-     * Getter/setter/constructor for the class
-     * @param minTrials for the trial to be successful
-     */
+    private String qdata = null;
+    private Button launchRegisterQrButton;
 
-    public CountTrialDialogFragment(int minTrials){
-        this.minTrials = minTrials;
+
+    public CountTrialDialogFragment(String experimentId){
+        this.experimentId=experimentId;
     }
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_count_trial, null);
 
-        //link to xml
-        Button Counttbn = view.findViewById(R.id.btn_count);
+        Button Recordtbn = view.findViewById(R.id.record_measurement);
+        TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
+        Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
+        ImageView generateQRiv = view.findViewById(R.id.iv_binom_qr);
+        image = QRHelper.generateQRCode(experimentId+":1");
+        generateQRiv.setImageBitmap(image);
+        qrcontainstv.setText("Add a single count to current experiment");
+        Button countbtn = view.findViewById(R.id.btn_count);
+        eMgr.addOnChangeListener(this);
+        counterTv = view.findViewById(R.id.counter);
+        counterTv.setText(String.valueOf(eMgr.getTrialCount(experimentId)));
+        launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
 
-        Counter = view.findViewById(R.id.counter);
+        launchRegisterQrButton.setVisibility(View.GONE);
 
-        final int[] count = {0};
-
-        //each time successbtn is clicked increment success for trial
-        Counttbn.setOnClickListener(new View.OnClickListener() {
-
+        launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count[0] = Integer.parseInt(Counter.getText().toString());
-                count[0]++;
-//               need to show the output on the textView
-                Counter.setText(count[0] +"");
+                Intent intent = new Intent(getActivity(), RegisterBarcodeActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
 
+        //each time successbtn is clicked increment success for trial
+        countbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                qdata = experimentId+":"+"1";
+                launchRegisterQrButton.setVisibility(View.VISIBLE);
+                launchRegisterQrButton.setText("Register Result to Barcode");
+                ((TrialActivity) getActivity()).addCountTrial();
+            }
+        });
 
+        saveQRBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(image != null) {
+                    if(QRHelper.saveQRCode(image, qdata)) {
+                        saveSuccessToast();
+                    }
+                }
+            }
+        });
 
-
-
-        // we create the acctual dialog here
+        // we create the actual dialog here
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
                 .setView(view)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (count[0] == 0){
-                            count[0] = 0;
-                        }
-                        //if total number of trials taken is less than the minimum trials
-                        //required then u will be informed
-//                        if (count[0]< minTrials){
-//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-//                            //current solution is to just set their trials to 0 - in updateBinomialTrials, i would not display this
-//                        }
-                        ((TrialActivity) getActivity()).updateCountTrialView(count, minTrials);
+
                     }
                 })
-
-                .setNegativeButton("Cancel", null)
                 .create();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+            int overwrite = data.getIntExtra("overwrite", -1);
+            String qrData = data.getStringExtra("qrData");
+            if(overwrite != -1 && qrData != null) {
+                LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
+                launchRegisterQrButton.setText("Result Registered!");
+            }
+        }
+    }
+
+    private void saveSuccessToast() {
+        Toast.makeText(getContext(), "Saved to Downloads!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onExperimentDataChanged() {
+        counterTv.setText(String.valueOf(eMgr.getTrialCount(experimentId)));
     }
 }

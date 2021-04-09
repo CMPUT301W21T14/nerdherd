@@ -15,27 +15,81 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addTrial"
+        <Button
+            android:id="@+id/btn_ignore_experimenter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="28dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:clickable="true"
-            android:contentDescription="AddTrial"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:focusable="true"/>
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:text="Add"
+            app:layout_constraintEnd_toStartOf="@+id/et_ignore_experimenter"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_blacklist_label" />
+
+        <EditText
+            android:id="@+id/et_ignore_experimenter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Click a user to populate"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_ignore_experimenter"
+            app:layout_constraintTop_toBottomOf="@+id/tv_blacklist_label" />
+
+        <TextView
+            android:id="@+id/tv_blacklist_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Add user to experiment blacklist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/list_recyclerView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="?attr/actionBarSize"
             app:layout_constraintHeight_percent="0.7"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            tools:layout_editor_absoluteX="47dp" />
+            tools:layout_editor_absoluteX="47dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addTrial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="28dp"
+            android:clickable="true"
+            android:contentDescription="AddTrial"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
+        <TextView
+            android:id="@+id/tv_location_required"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Location data will be recorded!"
+            android:textColor="@color/Gradient"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_ignore_experimenter" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

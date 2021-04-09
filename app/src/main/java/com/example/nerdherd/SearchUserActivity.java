@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Model.UserProfile;
+import com.example.nerdherd.ObjectManager.ProfileManager;
+import com.example.nerdherd.RecycleViewAdapters.ProfileListAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.auth.User;
 
@@ -34,18 +37,19 @@ public class SearchUserActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private MenuController menuController;
     private RecyclerView recyclerView;
-    private UserAdapter adapter;
+    private ProfileListAdapter adapter;
     private ArrayList<Profile> profiles;
-    private UserAdapter.onClickListener listener;
+    private ProfileListAdapter.onClickListener listener;
     private AdapterController adapterController;
     private FireStoreController fireStoreController;
     private Button searchButton;
     private TextView keywordEdit;
     private String keyword;
-    private ArrayList<Profile> resultList;
+    private ArrayList<UserProfile> resultList;
     private Intent profileView;
     private SearchController searchController;
-    public static final String EXTRA_MESSAGE = "Index";
+    private ProfileManager pMgr = ProfileManager.getInstance();
+    public static final String EXTRA_MESSAGE = "userId";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,71 +67,36 @@ public class SearchUserActivity extends AppCompatActivity {
         menuController = new MenuController(SearchUserActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(false);
 
-        profiles = new ArrayList<Profile>();
-        fireStoreController = new FireStoreController();
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProfiles();
+            }
+        });
 
-        listener = new UserAdapter.onClickListener() {
+        listener = new ProfileListAdapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
+                UserProfile up = resultList.get(index);
+                if(up == null) {
+                    // shouldn't happen
+                    return;
+                }
+
                 profileView = new Intent(SearchUserActivity.this, ProfileActivity.class);
-                profileView.putExtra(EXTRA_MESSAGE, index);
+                profileView.putExtra(EXTRA_MESSAGE, up.getUserId());
                 startActivity(profileView);
                 //finish(); //finish was taken to fix the back button to go back to user screen instead of closing the app
             }
         };
 
-
-
-        fireStoreController.readProfile(profiles, null, "All User", null, null, new FireStoreController.FireStoreProfileListCallback() {
-            @Override
-            public void onCallback(ArrayList<Profile> profileList) {
-                showProfiles(profileList);
-                GlobalVariable.profileArrayList = profileList;
-
-                searchButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        resultList = new ArrayList<Profile>();
-                        keyword = keywordEdit.getText().toString();
-                        searchController = new SearchController();
-                        searchController.searchUser(keyword, profileList, resultList, new SearchController.UserNoResultCallBack() {
-                            @Override
-                            public void onCallback(ArrayList<Profile> itemList) {
-                                new AlertDialog.Builder(SearchUserActivity.this).setTitle("No Result").setMessage("No result found. Please enter another keyword. Thank you.")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                showProfiles(itemList);
-                                                GlobalVariable.profileArrayList = itemList;
-                                            }
-                                        }).show();
-                            }
-                        }, new SearchController.UserResultCallBack() {
-                            @Override
-                            public void onCallback(ArrayList<Profile> itemList) {
-                                showProfiles(itemList);
-                                GlobalVariable.profileArrayList = itemList;
-                            }
-                        }, new SearchController.UserNoKeywordCallBack() {
-                            @Override
-                            public void onCallback(ArrayList<Profile> itemList) {
-                                showProfiles(itemList);
-                                GlobalVariable.profileArrayList = itemList;
-                            }
-                        });
-                    }
-                });
-            }
-        }, new FireStoreController.FireStoreProfileListFailCallback() {
-            @Override
-            public void onCallback() {
-                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        showProfiles();
     }
 
-    private void showProfiles(ArrayList<Profile> itemList){
-        adapter = new UserAdapter(itemList, new ProfileController().getImageArray(), listener);
+    private void showProfiles(){
+        resultList = pMgr.searchProfileByKeyword(keywordEdit.getText().toString());
+        keywordEdit.setText("");
+        adapter = new ProfileListAdapter(resultList, listener);
         adapterController = new AdapterController(SearchUserActivity.this, recyclerView, adapter);
         adapterController.useAdapter();
     }

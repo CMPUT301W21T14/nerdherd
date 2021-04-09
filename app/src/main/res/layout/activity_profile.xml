@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Email"
+                    android:text="Contact Info"
                     android:textColor="@color/Gradient"
                     android:textSize="20sp"
                     android:textStyle="bold"

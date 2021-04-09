@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-
+/**
+ * Adapter for showing Questions in a formatted list
+ */
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.ViewHolder> {
 
     ArrayList<Question> questions;
@@ -49,6 +51,11 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
         return new ViewHolder(view);
     }
 
+    /**
+     * Organizes the aspects of Question so it can be formatted to show in the list
+     * @param holder View that will hold the element of the list
+     * @param position Current position in the Question Array
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Question targetQuestion = questions.get(position);

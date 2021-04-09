@@ -28,8 +28,4 @@ public class QRResult {
     public void setResult(String result) {
         this.result = result;
     }
-
-    public String trialOperationString() {
-        return "Add trial to experiment '"+experimentId+"' with result: "+result;
-    }
 }

@@ -22,7 +22,8 @@
         android:title="My Profile" />
     <item
         android:id="@+id/log_out"
-        android:title="Log Out" />
+        android:title="Log Out"
+        android:visible="false" />
     <item
         android:id="@+id/experiment_view"
         android:title="Experiment View">

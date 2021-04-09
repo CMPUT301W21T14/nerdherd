@@ -44,7 +44,7 @@
                 android:layout_marginTop="56dp"
                 android:hint="Enter your reply"
                 android:textSize="18sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

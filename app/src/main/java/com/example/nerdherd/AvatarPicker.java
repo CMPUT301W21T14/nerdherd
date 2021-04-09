@@ -5,9 +5,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.nerdherd.Database.LocalUser;
 
 /**
  * Profile avatar picker
@@ -33,33 +36,25 @@ public class AvatarPicker extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar_picker);
 
-        intent = getIntent();
-        isEdit = intent.getBooleanExtra("Profile Edit", false);
-
-        previousIntent = getIntent();
-        data = previousIntent.getBundleExtra("Data");
-
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         listener = new Adapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
-                if (isEdit){
-                    editIntent = new Intent(AvatarPicker.this, GlobalVariable.editProfile.getClass());
-                    editIntent.putExtra("Index for Edit", index);
-                    GlobalVariable.indexForEdit = index;
-                    startActivity(editIntent);
-                }
+                //if (isEdit){
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result", index);
+                setResult(Activity.RESULT_OK, returnIntent);
+                /*}
                 else{
                     register = new Intent(getApplicationContext(), RegisterActivity.class);
                     data.putInt("Index", index);
                     register.putExtra("Data", data);
                     startActivity(register);
-                }
+                }*/
                 finish();
             }
         };
-        profileController = new ProfileController();
-        adapter = new Adapter(profileController.getImageArray(), listener);
+        adapter = new Adapter(LocalUser.imageArray, listener);
         adapterController = new AdapterController(AvatarPicker.this, recyclerView, adapter);
         adapterController.useAdapter();
     }

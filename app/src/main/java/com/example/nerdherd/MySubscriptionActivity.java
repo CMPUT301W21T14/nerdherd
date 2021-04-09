@@ -9,11 +9,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -33,15 +37,9 @@ public class MySubscriptionActivity extends AppCompatActivity {
     private MenuController menuController;
     private AdapterController adapterController;
     private ExperimentAdapter adapter;
-    private FireStoreController fireStoreController;
-    private ArrayList<Experiment> savedList;
-    private ArrayList<Experiment> showList;
-    private Intent experimentView;
-    private SearchController searchController;
     private TextView keywordView;
     private Button searchButton;
-    private String keyword;
-    private ArrayList<Experiment> resultList;
+    private ArrayList<ExperimentE> experiments;
     private RecyclerView recyclerView;
     private long backPressedTime;
     private Toast backToast;
@@ -68,17 +66,32 @@ public class MySubscriptionActivity extends AppCompatActivity {
         listener = new ExperimentAdapter.onClickListener() {
             @Override
             public void onClick(View view, int index) {
-                experimentView = new Intent(MySubscriptionActivity.this, ExperimentViewActivity.class);
-                GlobalVariable.indexForExperimentView = index;
-//                Bundle bundle = new Bundle();
-//                //when i make instance of xperimentView, if it contains this and it is not null, then it was instantiated by
-//                bundle.putString("I Subscribed", GlobalVariable.profile.getId());
-//                experimentView.putExtras(bundle);
-                startActivity(experimentView);
-                //finish(); //clicking back takes us to the previous activity
+                if(experiments != null) {
+                    ExperimentE e = experiments.get(index);
+                    if(e == null) {
+                        return;
+                    }
+
+                    Log.d("Clicked Exp: ", e.getDescription());
+
+                    Intent experimentView = new Intent(MySubscriptionActivity.this, ExperimentViewActivity.class);
+                    experimentView.putExtra("experimentId", e.getExperimentId());
+
+                    startActivity(experimentView);
+                    //finish(); //clicking back takes us to the previous activity
+                }
             }
         };
-        savedList = new ArrayList<Experiment>();
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showExperiments();
+            }
+        });
+
+        showExperiments();
+        /*savedList = new ArrayList<Experiment>();
         showList = new ArrayList<Experiment>();
         fireStoreController = new FireStoreController();
 
@@ -133,7 +146,7 @@ public class MySubscriptionActivity extends AppCompatActivity {
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     // this sees if the user has pressed back button twice within 2 seconds to exit the app
@@ -151,8 +164,26 @@ public class MySubscriptionActivity extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
-    private void showExperiments(RecyclerView recyclerView, ArrayList<Experiment> experiments){
-        GlobalVariable.experimentArrayList = experiments;
+    private void showExperiments() {
+        experiments = new ArrayList<>();
+        ExperimentManager eMgr = ExperimentManager.getInstance();
+        for(String experimentId : LocalUser.getSubscribedExperiments()) {
+            ExperimentE e = eMgr.getExperiment(experimentId);
+            Log.d("Subscription: ", experimentId);
+            if(e == null) {
+                // Invalid - just ignore it I guess
+                Log.d("Null", experimentId);
+                continue;
+            }
+            if(!e.isPublished() && !e.getOwnerId().equals(LocalUser.getUserId())) {
+                continue;
+            }
+
+            if(!eMgr.experimentContainsKeyword(e, keywordView.getText().toString()))  {
+                continue;
+            }
+            experiments.add(e);
+        }
         adapter = new ExperimentAdapter(experiments, listener);
         adapterController = new AdapterController(MySubscriptionActivity.this, recyclerView, adapter);
         adapterController.useAdapter();

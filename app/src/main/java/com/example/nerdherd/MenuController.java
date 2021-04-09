@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.nerdherd.Database.LocalUser;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -75,7 +76,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
 
-        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialsPlot || context instanceof QuestionViewActivity || context instanceof TrialsHistogram ){
+        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialHistogramActivity || context instanceof QuestionViewActivity || context instanceof TrialScatterPlotActivity){
             viewExperiments.setVisible(true);
         }
         else{
@@ -114,6 +115,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
         if (item.getItemId() == R.id.my_profile){
             intent = new Intent(context, ProfileActivity.class);
+            intent.putExtra("userId", LocalUser.getUserId());
             context.startActivity(intent);
             ((Activity)context).finish();
         }
@@ -131,6 +133,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
         if (item.getItemId() == R.id.log_out){
+            /*
             sharedPreferences = context.getSharedPreferences("SharedPreferences", 0);
             editor = sharedPreferences.edit();
             editor.putBoolean(loggedInName, false);
@@ -141,7 +144,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             editor.apply();
             intent = new Intent(context, LogInActivity.class);
             context.startActivity(intent);
-            ((Activity)context).finish();
+            ((Activity)context).finish();*/
         }
 
         if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){

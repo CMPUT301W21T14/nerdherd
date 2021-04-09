@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.nerdherd.Model.ExperimentE;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapter.ViewHolder> {
 
-    ArrayList<Experiment> experiments;
+    ArrayList<ExperimentE> experiments;
     MyExperimentAdapter.onClickListener listener;
 
     /**
@@ -27,7 +29,7 @@ public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapte
      * @param listener for the app to listen to user's input
      */
 
-    public MyExperimentAdapter(ArrayList<Experiment> experiments, MyExperimentAdapter.onClickListener listener){
+    public MyExperimentAdapter(ArrayList<ExperimentE> experiments, MyExperimentAdapter.onClickListener listener){
         this.experiments = experiments;
         this.listener = listener;
     }
@@ -35,10 +37,13 @@ public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView title;
         TextView status;
+        View layout;
+
         public ViewHolder(View view){
             super(view);
             title = view.findViewById(R.id.expTitle);
             status = view.findViewById(R.id.expStatus);
+            layout = view.findViewById(R.id.profileExperimentLayout);
             view.setOnClickListener(this);
         }
 
@@ -59,8 +64,19 @@ public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        ExperimentE e = experiments.get(position);
         holder.title.setText(experiments.get(position).getTitle());
         holder.status.setText(experiments.get(position).getStatus());
+        String experimentType = e.typeToString();
+
+        if (experimentType.equals("Binomial") )
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("002ECC71",16)); //Green
+        else if (experimentType.equals("Count") )
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("00E74C3C",16)); //Red
+        else if (experimentType.equals("Measurement") )
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("00F7DC6F",16)); //Yellow
+        else if (experimentType.equals("Non-Negative") )
+            holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("003498DB",16)); //Blue
     }
 
 
