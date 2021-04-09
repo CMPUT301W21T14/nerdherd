@@ -3,9 +3,12 @@ package com.example.nerdherd;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -154,8 +158,48 @@ public class ViewTrialActivity extends Activity {
                 });
     }
 
-    void isGpsEnabled(Context context) {
 
+    ///////////////////////////////// Check GPS is Enabled or not ///////////////////////////////
+    public static Boolean isLocationEnabled(Context context)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // This is new method provided in API 28
+            LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            return lm.isLocationEnabled();
+        }
+        else
+        {
+            // This is Deprecated in API 28
+            int mode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+            return  (mode != Settings.Secure.LOCATION_MODE_OFF);
+
+        }
+    }
+
+    /////////////// Check GPS is Enabled or not & then let the user to enable it ///////////////
+    void isGpsEnabled(Context context)
+    {
+        if(!isLocationEnabled(context))
+        {
+            new MaterialAlertDialogBuilder(context)
+                    .setTitle("Enable GPS Location")
+                    .setMessage("GPS Location is needed to get device location")
+                    .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .show();
+
+        }
     }
 
 }
