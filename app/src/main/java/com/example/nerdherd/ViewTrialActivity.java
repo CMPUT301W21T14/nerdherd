@@ -4,14 +4,21 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 
 /**
@@ -64,9 +71,39 @@ public class ViewTrialActivity extends Activity {
     private void getmylocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
+        }
+
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(final Location location) {
+                smf.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap googleMap) {
+                        try {
+                            mMap = googleMap;
+                            LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
+                            showAllLocations();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.e("TAG", "onMapReady: "+e.getMessage());
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+    }
+
+    private void showAllLocations() {
     }
 
     void isGpsEnabled(Context context) {
+
     }
 
 }
