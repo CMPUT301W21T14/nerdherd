@@ -36,7 +36,7 @@
             tools:layout_editor_absoluteX="75dp" />
 
         <Button
-            android:id="@+id/btn_add_trial"
+            android:id="@+id/btn_add_qr_trial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

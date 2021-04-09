@@ -18,14 +18,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.Region;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -39,51 +45,52 @@ import java.util.HashMap;
  * @author Tas S. saiyera
  */
 
-public class CreateExperimentActivity extends AppCompatActivity {
-    public static final int PERMISSIONS_REQUEST_LOCATION = 99;
+public class CreateExperimentActivity extends AppCompatActivity implements ExperimentManager.ExperimentCreateEventListener {
     private Spinner experimentTypeSpinner;
     private String[] experimentTypes = {"Binomial Trial", "Count", "Measurement", "Non-Negative Integer Count"};
     private String experimentType = "Binomial Trial";
-    private FireStoreController fireStoreController;
-    private ArrayList<Experiment> experimentList;
-    private Boolean valid;
-    private ArrayList<String> idList;
-    String stringLatitude, stringLongitude;
-    Location lastLocation;
+
+    private EditText etLongitude;
+    private EditText etLattitude;
+    private EditText etRange;
+    private EditText etDescription;
+    private LinearLayout llRangeContainer;
+
+    private EditText editDescriptionView;
+    private EditText minTrialsView;
+    private CheckBox requireLocationCheck;
+    private CheckBox publishExperimentCheck;
+    private EditText editTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_experiment);
-        /*GPSTracker gpsTracker = new GPSTracker(this);
 
-        if (gpsTracker.getIsGPSTrackingEnabled()) {
-            stringLatitude = String.valueOf(gpsTracker.latitude);
-            String stringLongitude = String.valueOf(gpsTracker.longitude);
-        }*/
+        llRangeContainer = findViewById(R.id.region_container);
+        etLattitude = findViewById(R.id.et_region_lattitude);
+        etLongitude = findViewById(R.id.et_region_longitude);
+        etRange = findViewById(R.id.et_region_range);
+        etDescription = findViewById(R.id.et_region_descriptio);
 
-        // https://stackoverflow.com/questions/1513485/how-do-i-get-the-current-gps-location-programmatically-in-android
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(CreateExperimentActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
-            }
-        } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                    // Can use lastLocation for the location of trials
-                    // Remember to convert to a GeoPoint for firebase
-                    lastLocation = location;
-                    Log.d("LastLoc: ", location.toString());
+        editDescriptionView = findViewById(R.id.experiment_description_editText);
+        minTrialsView = findViewById(R.id.trial_number_editText);
+        requireLocationCheck = findViewById(R.id.require_location_box);
+        publishExperimentCheck = findViewById(R.id.publish_box);
+        editTitle = findViewById(R.id.exp_title);
+
+        llRangeContainer.setVisibility(View.GONE);
+
+        requireLocationCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    llRangeContainer.setVisibility(View.VISIBLE);
+                } else {
+                    llRangeContainer.setVisibility(View.GONE);
                 }
-            });
-        }
-
+            }
+        });
 
         //Initialize the spinner drop down
         experimentTypeSpinner = (Spinner) findViewById(R.id.experiment_type_spinner);
@@ -114,28 +121,37 @@ public class CreateExperimentActivity extends AppCompatActivity {
         }
     }
 
+    public double validateDouble(String input) {
+        try {
+            double val = Double.parseDouble(input);
+            return val;
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     /**
      * Owner is allowed to make changes to their owned trial for the users
      * @param view it on the app
      */
 
     public void createExperiment(View view) {
-        EditText editDescriptionView = (EditText) findViewById(R.id.experiment_description_editText);
-        EditText minTrialsView = (EditText) findViewById(R.id.trial_number_editText);
-        CheckBox requireLocationCheck = (CheckBox) findViewById(R.id.require_location_box);
-        CheckBox publishExperimentCheck = (CheckBox) findViewById(R.id.publish_box);
-        EditText editTitle = (EditText) findViewById(R.id.exp_title);
+
 
         String experimentDescription = editDescriptionView.getText().toString();
         String minTrialsString = minTrialsView.getText().toString();
         String experimentTitle = editTitle.getText().toString();
 
-        idList = new ArrayList<String>();
+
+        double lattitude = validateDouble(etLattitude.getText().toString());
+        double longitude = validateDouble(etLongitude.getText().toString());
+        int range = (int) validateDouble(etRange.getText().toString());
+        String regionDescription = etDescription.getText().toString();
 
         int minTrials;
 
-        if (experimentTitle.length() == 0 || experimentTitle.length() > 15){
-            Toast.makeText(this, "The experiment title must be between 1 and 15 characters", Toast.LENGTH_SHORT).show();
+        if (experimentTitle.length() == 0 || experimentTitle.length() > 25){
+            Toast.makeText(this, "The experiment title must be between 1 and 25 characters", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -159,67 +175,34 @@ public class CreateExperimentActivity extends AppCompatActivity {
             return;
         }
 
-        //TODO Location Dialog will be implemented here later...
+        HashMap<String, Integer> typeMapHack = new HashMap<String, Integer>() {{
+            put("Binomial Trial", ExperimentE.EXPERIMENT_TYPE_BINOMIAL);
+            put("Count", ExperimentE.EXPERIMENT_TYPE_COUNT);
+            put("Measurement", ExperimentE.EXPERIMENT_TYPE_MEASUREMENT);
+            put("Non-Negative Integer Count", ExperimentE.EXPERIMENT_TYPE_NON_NEGATIVE);
+        }};
 
-        fireStoreController = new FireStoreController();
-        experimentList = new ArrayList<Experiment>();
-        fireStoreController.createExperimentReader(experimentList, new FireStoreController.FireStoreCreateExperimentReadCallback() {
-            @Override
-            public void onCallback(ArrayList<Experiment> experiments) {
-
-                valid = true;
-
-                for (Experiment existedExperiment : experiments) {
-                    if (existedExperiment.getTitle().equals(experimentTitle)) {
-                        valid = false;
-                    }
-                }
-
-                if (valid) {
-
-                    if (requireLocationCheck.isChecked()){
-                        String label = "Cinnamon & Toast";
-                        String uriBegin = "geo:43.651070,79.347015";
-                        String query = "43.651070,-79.347015(" + label + ")";
-                        String encodedQuery = Uri.encode(query);
-                        String uriString = uriBegin + "?q=" + encodedQuery;
-                        Uri uri = Uri.parse(uriString);
-                        Intent intent = new Intent (Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
-                    }
-
-                    Experiment createdExperiment = new Experiment(GlobalVariable.profile, experimentTitle, "Ongoing", experimentDescription, experimentType, minTrials, requireLocationCheck.isChecked(), publishExperimentCheck.isChecked(), idList, new ArrayList<Trial>());
-                    fireStoreController.addNewExperiment(createdExperiment, new FireStoreController.FireStoreExperimentCallback() {
-                        @Override
-                        public void onCallback() {
-                            finish();
-                        }
-                    }, new FireStoreController.FireStoreExperimentFailCallback() {
-                        @Override
-                        public void onCallback() {
-                            Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "The title is already used, please try another one. Thank you.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new FireStoreController.FireStoreCreateExperimentReadFailCallback(){
-            @Override
-            public void onCallback() {
-                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        /*
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("Action", "create"); //This tells the parent activity that it is receiving a created experiment allows the parent to tell the difference between different children when they return
-        returnIntent.putExtra("newExperiment", createdExperiment);
-        setResult(1, returnIntent);
-         */
+        int experimentIntType = typeMapHack.get(experimentType);
+        boolean requiresLocation = requireLocationCheck.isChecked();
+        Region region = null;
+        if(requiresLocation) {
+            region = new Region(regionDescription, new GeoPoint(lattitude, longitude), range);
+        }
+        ExperimentManager eMgr = ExperimentManager.getInstance();
+        eMgr.createExperiment(experimentTitle, experimentDescription, experimentIntType, minTrials, region, requiresLocation, publishExperimentCheck.isChecked(), this);
     }
 
     public void cancelCreation(View view) {
         finish();
+    }
+
+    @Override
+    public void onCreateExperimentSuccess(ExperimentE createdExperiment) {
+        finish();
+    }
+
+    @Override
+    public void onCreateExperimentFailed(ExperimentE failedToCreate) {
+        Toast.makeText(this, "Could not create experiment, try again later!", Toast.LENGTH_LONG);
     }
 }

@@ -1,14 +1,22 @@
 package com.example.nerdherd;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.nerdherd.Database.LocalUser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,18 +33,15 @@ import java.util.ArrayList;
 
 public class MeaurementTrialFragment extends DialogFragment {
     private TextView Measurement_val;
-    private Double measures;
 
-    private int minTrials;
+    private String experimentId;
+    private Bitmap image;
 
-    /**
-     * Constraint for the trial
-     * Getter/setter/constructor for the class
-     * @param minTrials for the trial to be successful
-     */
+    private String qdata = null;
+    private Button launchRegisterQrButton;
 
-    public MeaurementTrialFragment(int minTrials){
-        this.minTrials = minTrials;
+    public MeaurementTrialFragment(String experimentId){
+        this.experimentId=experimentId;
     }
 
     @NonNull
@@ -44,43 +49,86 @@ public class MeaurementTrialFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_measurement_trial, null);
 
-        //link to xml
         Button Recordtbn = view.findViewById(R.id.record_measurement);
-
-        ArrayList<Double> measurements = new ArrayList<Double>();
-
+        TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
+        Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
+        ImageView generateQRiv = view.findViewById(R.id.iv_binom_qr);
+        image = null;
+        qrcontainstv.setText("");
         Measurement_val = view.findViewById(R.id.measurement_input);
+
+        launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
+
+        launchRegisterQrButton.setVisibility(View.GONE);
+
+        launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterBarcodeActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        Measurement_val.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(validateFloat(Measurement_val.getText().toString())) {
+                    String value = Measurement_val.getText().toString();
+                    image = QRHelper.generateQRCode(experimentId+":"+value);
+                    qrcontainstv.setText(getQRActionDescription(value));
+                    generateQRiv.setImageBitmap(image);
+                    saveQRBtn.setVisibility(View.VISIBLE);
+                    float outcome;
+                    if(validateFloat(value)) {
+                        outcome = Float.parseFloat(value);
+                        qdata = experimentId+":"+String.valueOf(outcome);
+                        launchRegisterQrButton.setVisibility(View.VISIBLE);
+                        launchRegisterQrButton.setText("Register Result to Barcode");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         Recordtbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!Measurement_val.getText().toString().equals("")){
-                    measures = Double.parseDouble(Measurement_val.getText().toString());
-                    measurements.add(measures);
+                String value = Measurement_val.getText().toString();
+                image = QRHelper.generateQRCode(experimentId+":"+value);
+                qrcontainstv.setText(getQRActionDescription(value));
+                generateQRiv.setImageBitmap(image);
+                saveQRBtn.setVisibility(View.VISIBLE);
+                float outcome;
+                if(validateFloat(value)) {
+                    outcome = Float.parseFloat(value);
+                    ((TrialActivity) getActivity()).addMeasurementTrial(outcome);
+                } else {
+                    inputError();
                 }
-                else{
-                    Toast.makeText(getContext(), "Invalid Input", Toast.LENGTH_SHORT).show();
-                }
-                Measurement_val.setText("");
-
             }
         });
-//
-//        //each time successbtn is clicked increment success for trial
-//        Counttbn.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                count[0] = Integer.parseInt(Counter.getText().toString());
-//                count[0]++;
-////               need to show the output on the textView
-//                Counter.setText(count[0] +"");
-//            }
-//        });
 
+        saveQRBtn.setVisibility(View.GONE);
 
-
-
+        saveQRBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(image != null) {
+                    if(QRHelper.saveQRCode(image, qdata)) {
+                        saveSuccessToast();
+                    }
+                }
+            }
+        });
 
         // we create the acctual dialog here
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -89,19 +137,46 @@ public class MeaurementTrialFragment extends DialogFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-//                        if (count[0] == 0){
-//                            count[0] = 0;
-//                        }
-                        //pass the arraylist
-                        int count = measurements.size();
-//                        if (count < minTrials){
-//                            Toast.makeText(getActivity(),"Requirement: Minimum Number of Trials not met", Toast.LENGTH_SHORT).show();
-//                        }
-                        ((TrialActivity) getActivity()).updateMeasurementTrialView(measurements, minTrials);
+
                     }
                 })
 
                 .setNegativeButton("Cancel", null)
                 .create();
+    }
+
+    public void inputError() {
+        Toast.makeText(this.getContext(), "Invalid entry!", Toast.LENGTH_LONG).show();
+    }
+
+    public boolean validateFloat(String input) {
+        try {
+            double val = Float.parseFloat(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+            int overwrite = data.getIntExtra("overwrite", -1);
+            String qrData = data.getStringExtra("qrData");
+            if(overwrite != -1 && qrData != null) {
+                LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
+                launchRegisterQrButton.setText("Result Registered!");
+            }
+        }
+    }
+
+    private void saveSuccessToast() {
+        Toast.makeText(getContext(), "Saved to Downloads!", Toast.LENGTH_LONG).show();
+    }
+
+    private String getQRActionDescription(String outcome) {
+        return "QR to Add a Measurement trial of " + outcome + " to current experiment";
     }
 }

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.nerdherd.Database.DatabaseAdapter;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -131,6 +132,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
         if (item.getItemId() == R.id.log_out){
+            /*
             sharedPreferences = context.getSharedPreferences("SharedPreferences", 0);
             editor = sharedPreferences.edit();
             editor.putBoolean(loggedInName, false);
@@ -141,7 +143,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             editor.apply();
             intent = new Intent(context, LogInActivity.class);
             context.startActivity(intent);
-            ((Activity)context).finish();
+            ((Activity)context).finish();*/
         }
 
         if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){

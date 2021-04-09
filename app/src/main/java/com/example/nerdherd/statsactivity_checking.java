@@ -18,6 +18,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.ExperimentStatistics;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -97,6 +100,16 @@ public class statsactivity_checking extends AppCompatActivity {
 
         menuController = new MenuController(statsactivity_checking.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(true);
+
+        Intent intent = getIntent();
+        String experimentId = intent.getStringExtra("experimentId");
+
+        ExperimentManager eMgr = ExperimentManager.getInstance();
+        ExperimentE experiment = eMgr.getExperiment(experimentId);
+        ExperimentStatistics eStats = new ExperimentStatistics(eMgr.getTrialsExcludeBlacklist(experimentId), experiment.getType());
+
+        // Maybe work on ExperimentStatistics class and then use it to populate this stuff?
+
 
 //        recyclerView = findViewById(R.id.subscription_experiment_recyclerView);
 
@@ -508,11 +521,11 @@ public class statsactivity_checking extends AppCompatActivity {
     //convert to single array of binomial trials
     public ArrayList<Integer> ConvertBinomial_val(){
         trials_1 = new ArrayList<Integer>();
-        Log.d("------------------","---------------------------------");
+//        Log.d("------------------","---------------------------------");
 //        Log.d("binomial trial", String.valueOf(binomialtrialing.get(0).getSuccess()));
         for (int y = 0; y < binomialtrialing.size(); y++){
             trials_1.add(binomialtrialing.get(y).getSuccess());
-            Log.d("bsuccess_count", binomialtrialing.get(y).getSuccess().toString());
+//            Log.d("bsuccess_count", binomialtrialing.get(y).getSuccess().toString());
             trials_1.add(binomialtrialing.get(y).getFailure());
         }
 

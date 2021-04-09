@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.nerdherd.Model.ExperimentE;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapter.ViewHolder> {
 
-    ArrayList<Experiment> experiments;
+    ArrayList<ExperimentE> experiments;
     MyExperimentAdapter.onClickListener listener;
 
     /**
@@ -27,7 +29,7 @@ public class MyExperimentAdapter extends RecyclerView.Adapter<MyExperimentAdapte
      * @param listener for the app to listen to user's input
      */
 
-    public MyExperimentAdapter(ArrayList<Experiment> experiments, MyExperimentAdapter.onClickListener listener){
+    public MyExperimentAdapter(ArrayList<ExperimentE> experiments, MyExperimentAdapter.onClickListener listener){
         this.experiments = experiments;
         this.listener = listener;
     }

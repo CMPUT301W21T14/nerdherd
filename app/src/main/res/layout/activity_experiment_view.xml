@@ -16,21 +16,79 @@
         android:layout_height="match_parent"
         android:padding="10dp">
 
+        <Button
+            android:id="@+id/btn_publish_experiment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Publish"
+            app:layout_constraintEnd_toStartOf="@+id/btn_view_questions"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewDetails" />
+
+        <Button
+            android:id="@+id/btn_subscribe_experiment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subscribe"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_view_questions"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewDetails" />
+
+        <Button
+            android:id="@+id/btn_view_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Questions"
+            app:layout_constraintEnd_toStartOf="@+id/btn_subscribe_experiment"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_publish_experiment"
+            app:layout_constraintTop_toBottomOf="@+id/cardviewDetails" />
+
+        <Button
+            android:id="@+id/btn_view_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistics"
+            app:layout_constraintEnd_toStartOf="@+id/btn_view_geomap"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
+
+        <Button
+            android:id="@+id/btn_add_trials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Trials"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_view_geomap"
+            app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
+
+        <Button
+            android:id="@+id/btn_view_geomap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GeoMap"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_trials"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_view_stats"
+            app:layout_constraintTop_toBottomOf="@+id/btn_view_questions" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardviewDetails"
             android:layout_width="match_parent"
             android:layout_height="550dp"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:backgroundTint="@color/LoginBackground"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="35dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="1"
-            app:cardCornerRadius="5dp"
-            tools:layout_editor_absoluteY="80dp"
-            app:cardElevation="35dp"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:backgroundTint="@color/LoginBackground"
-            >
+            app:layout_constraintWidth_percent="1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintcard"
@@ -38,12 +96,21 @@
                 android:layout_height="match_parent"
                 android:padding="10dp">
 
+                <Button
+                    android:id="@+id/btn_end_experimentresults"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:radius="15dp"
+                    android:text="End Experiment"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
+                    android:layout_marginTop="8dp"
                     android:text="DETAILS"
                     android:textColor="@color/Gradient"
                     android:textSize="27sp"
@@ -59,8 +126,8 @@
                     android:gravity="center"
                     android:text="Description"
                     android:textColor="@color/Gradient"
-                    android:textStyle="italic"
                     android:textSize="24sp"
+                    android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/experiment_contact"
@@ -89,16 +156,15 @@
                     android:textSize="24sp"
                     android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7"
-                     />
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <TextView
                     android:id="@+id/experiment_region"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="24sp"
                     android:textColor="@color/white"
+                    android:textSize="24sp"
                     app:layout_constraintStart_toEndOf="@+id/textView7"
                     app:layout_constraintTop_toBottomOf="@+id/experiment_type"
                     app:layout_constraintWidth_percent="0.75" />
@@ -110,8 +176,8 @@
                     android:layout_marginTop="5dp"
                     android:text="Region:"
                     android:textColor="@color/Gradient"
-                    android:textStyle="italic"
                     android:textSize="24sp"
+                    android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView6"
                     app:layout_constraintWidth_percent="0.25" />
@@ -123,8 +189,8 @@
                     android:layout_marginTop="5dp"
                     android:text="Type:"
                     android:textColor="@color/Gradient"
-                    android:textStyle="italic"
                     android:textSize="24sp"
+                    android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5"
                     app:layout_constraintWidth_percent="0.25" />
@@ -158,21 +224,21 @@
                     android:layout_marginTop="5dp"
                     android:text="Status:"
                     android:textColor="@color/Gradient"
-                    android:textStyle="italic"
                     android:textSize="24sp"
+                    android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView3"
                     app:layout_constraintWidth_percent="0.25" />
 
                 <TextView
                     android:id="@+id/experiment_owner"
-                    app:layout_constraintWidth_percent="0.75"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     app:layout_constraintStart_toEndOf="@+id/textView3"
-                    app:layout_constraintTop_toBottomOf="@+id/experiment_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/experiment_title"
+                    app:layout_constraintWidth_percent="0.75" />
 
                 <TextView
                     android:id="@+id/experiment_title"
@@ -181,8 +247,8 @@
                     android:layout_marginTop="?attr/actionBarSize"
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:textColor="@color/Gradient"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/Gradient"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -197,8 +263,8 @@
                     android:layout_height="wrap_content"
                     android:text="Owner:"
                     android:textColor="@color/Gradient"
-                    android:textStyle="italic"
                     android:textSize="24sp"
+                    android:textStyle="italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/experiment_title"
                     app:layout_constraintWidth_percent="0.25" />
@@ -206,39 +272,31 @@
                 <TextView
                     android:id="@+id/experiment_description"
                     android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:textSize="24sp"
+                    android:layout_height="125dp"
+                    android:gravity="center"
                     android:textColor="@color/white"
+                    android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView14"
-                    android:gravity="center"
                     app:layout_constraintWidth_percent="1" />
+
+                <TextView
+                    android:id="@+id/tv_min_trials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="TextView"
+                    android:textColor="@color/Gradient"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/experiment_description" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
-        <Button
-            android:id="@+id/unpublish_subscribe_button"
-            android:layout_width="150dp"
-            android:layout_height="70dp"
-            android:radius = "15dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardviewDetails"
-            />
-
-        <Button
-            android:id="@+id/experiment_end"
-            android:layout_width="150dp"
-            android:layout_height="70dp"
-            android:radius = "15dp"
-            android:visibility="invisible"
-            app:layout_constraintTop_toBottomOf="@id/cardviewDetails"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

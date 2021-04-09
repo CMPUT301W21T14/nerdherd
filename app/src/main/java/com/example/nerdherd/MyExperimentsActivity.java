@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.ObjectManager.ExperimentManager;
+import com.example.nerdherd.RecycleViewAdapters.ProfileListAdapter;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -38,14 +41,15 @@ public class MyExperimentsActivity extends AppCompatActivity {
     private TextView keywordView;
     private String keyword;
     private MyExperimentAdapter.onClickListener listener;
-    private ArrayList<Experiment> revealList;
+    private ArrayList<ExperimentE> experimentList;
     private SearchController searchController;
-    private ArrayList<Experiment> resultList;
     private AdapterController adapterController;
     private MyExperimentAdapter adapter;
-    private Intent experimentView;
+
     private long backPressedTime;
     private Toast backToast;
+    RecyclerView recyclerView;
+    private ExperimentManager eMgr = ExperimentManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +68,21 @@ public class MyExperimentsActivity extends AppCompatActivity {
         menuController = new MenuController(MyExperimentsActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(false);
 
-        RecyclerView recyclerView = findViewById(R.id.experimentprofile_recyclerView);
+        recyclerView = findViewById(R.id.experimentprofile_recyclerView);
         listener = new MyExperimentAdapter.onClickListener() {
-
             @Override
             public void onClick(View view, int index) {
-                experimentView = new Intent(MyExperimentsActivity.this, ExperimentViewActivity.class);
-                GlobalVariable.indexForExperimentView = index;
-                startActivity(experimentView);
+                ExperimentE e = experimentList.get(index);
+                Intent intent = new Intent(MyExperimentsActivity.this, ExperimentViewActivity.class);
+                intent.putExtra("experimentId", e.getExperimentId());
+                startActivity(intent);
                 //finish(); pressing back takes us to the previous activity, not the home screen
             }
         };
+
+        showExperiments();
+
+        /*
 
         savedList = new ArrayList<Experiment>();
         revealList = new ArrayList<Experiment>();
@@ -140,7 +148,14 @@ public class MyExperimentsActivity extends AppCompatActivity {
             public void onCallback() {
                 Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
+    }
+
+    private void showExperiments() {
+        experimentList = eMgr.getOwnedExperiments();
+        adapter = new MyExperimentAdapter(experimentList, listener);
+        adapterController = new AdapterController(MyExperimentsActivity.this, recyclerView, adapter);
+        adapterController.useAdapter();
     }
 
     // this sees if the user has pressed back button twice within 2 seconds to exit the app
