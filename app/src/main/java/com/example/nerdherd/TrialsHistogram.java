@@ -34,6 +34,7 @@ public class TrialsHistogram extends AppCompatActivity  {
     private ArrayList<Experiment> showList;
     private DrawerLayout drawerLayout;
     private ArrayList<Integer> nonNegativetrialValues;
+    private ArrayList<Double> measurementValues;
     private ArrayList<Integer> test_nonNegative;
     ArrayList<NonnegativeTrial> nonNegativetrialing = new ArrayList<>();
     BarChart barChart;
@@ -55,10 +56,12 @@ public class TrialsHistogram extends AppCompatActivity  {
     ArrayList<CountTrial> counttrialing = new ArrayList<>();
     private ArrayList<Integer> counttrialValues;
     ArrayList<MeasurementTrial> Testtrial2 = new ArrayList<>();
+    private  ArrayList<Integer> frequency = new ArrayList<>();
     private ArrayList<Integer> trials;
     private ArrayList<Double> Quartiles;
-    private ArrayList<Integer> trial_values;
+    private ArrayList<Double> trial_values;
     private ArrayList<Double> quartiles;
+    private ArrayList<Double> trialsing;
     private TextView trialheader;
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -144,9 +147,9 @@ public class TrialsHistogram extends AppCompatActivity  {
                 }
             });
         }
-        // Represents counts of counts. How many 0s, how many 2s.
-        if (expType.equals("Non-Negative Integer Count")){
-            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Non-negative trial", new FireStoreController.FireStoreCertainKeepCallback() {
+
+        if (expType.equals("Measurement")){
+            fireStoreController.keepGetTrialData(trialArrayList, targetexp.getTitle(), "Measurement trial", new FireStoreController.FireStoreCertainKeepCallback() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onCallback(ArrayList<Trial> list) {
@@ -155,17 +158,55 @@ public class TrialsHistogram extends AppCompatActivity  {
 
                     }
                     else {
-                        nonNegativetrialing = (ArrayList<NonnegativeTrial>) list.clone();
-                        nonNegativetrialValues = nonNegative_val();
-                        //
-                        Map<Integer, Integer> hm = new HashMap<>();
-                        for (Integer i : nonNegativetrialValues) {
-                            Integer j = hm.get(i);
+                        Testtrial2 = (ArrayList<MeasurementTrial>) list.clone();
+                        trial_values = measurement_val();
+                        Log.d("Measurments", trial_values.toString());
+                        //1. calculate # of bins
+                        int numDataPoints = (int) Math.ceil(Math.sqrt(trial_values.size()));
+                        Log.d("bin size", String.valueOf(numDataPoints));
+
+                        //2. Lowest and Highest class Value
+//                        double lowest_val = Collections.min(trial_values);
+//                        double highest_val = Collections.max(trial_values);
+//
+//                        int length = trial_values.size();
+//                        //3. Method 1: Range of each bin item / Interval Class Width
+//                        //we Use 10 Intervals
+//                        double width = (highest_val - lowest_val) / (10);
+//                        Log.d("class interval", String.valueOf(width));
+//                        //Method 2: interval size
+//                        Double std_value = CalculateStandarddeviation(trial_values, length);
+//                        Double classInterval = std_value / 3;
+//                        Log.d("class Interval", classInterval.toString());
+//
+//
+//                        int classRange = (int) (Math.ceil(highest_val - lowest_val) / classInterval);
+//                        Log.d("Range", String.valueOf(classRange));
+//                        int current_val = 0;
+//                        ArrayList<Double> temp_val = new ArrayList<>();
+//                        for (int y = 0; y < trial_values.size(); y++){
+//                            temp_val.add(trial_values.get(y) + classInterval);
+//                        }
+//
+//                        Log.d("temp values", temp_val.toString());
+//                        int count = 0;
+//                        for (int x = 0; x < trial_values.size(); x++){
+//                            for (int y = 0; y < temp_val.size(); y++){
+//                                if (trial_values.get(y) <= temp_val.get(x)){
+//                                    count+=1;
+//                                }
+//                            }
+//                            Log.d("total counted", String.valueOf(count));
+//
+//                        }
+                        Map<Double, Double> hm = new HashMap<>();
+                        for (Double i : trial_values) {
+                            Double j = hm.get(i);
                             hm.put(i, (j == null) ? 1 : j + 1);
                         }
 
                         //
-                        create_Chart(hm);
+                        create_Charting(hm);
                     }
                 }
             }, new FireStoreController.FireStoreCertainKeepFailCallback() {
@@ -180,11 +221,41 @@ public class TrialsHistogram extends AppCompatActivity  {
 
 
 
+    //handle double standard deviation calculations - for population
+    public double CalculateStandarddeviation(ArrayList<Double> values, int arr_legnth)
+    {
+        double sum_val = 0.0;
+        double std_deviation = 0.0;
+        for(double num_val :values) {
+            sum_val += num_val;
+        }
+
+        double mean = sum_val/arr_legnth;
+        for(double num: values) {
+            std_deviation += Math.pow(num - mean, 2);
+        }
+        return Math.sqrt(std_deviation/arr_legnth);
+    }
+
 
     public int indexing(ArrayList<Double> values, int left_sub, int right_sub){
         int temp = right_sub - left_sub + 1;
         temp = (temp + 1) / 2-1;
         return temp;
+    }
+
+    /*This will convert 2d array Measurements into single array -
+        to do calculations on all the data
+     */
+    public ArrayList<Double> measurement_val(){
+        trialsing= new ArrayList<Double>();
+        Log.d("------------------","---------------------------------");
+        for (int i = 0; i < Testtrial2.size(); ++i) {
+            for(int j = 0; j < Testtrial2.get(i).getMeasurements().size(); ++j) {
+                trialsing.add(Testtrial2.get(i).getMeasurements().get(j));
+            }
+        }
+        return trialsing;
     }
 
 
@@ -209,6 +280,43 @@ public class TrialsHistogram extends AppCompatActivity  {
         return test_nonNegative;
     }
 
+
+    public void create_Charting(Map<Double, Double> values){
+
+
+        barEntryArrayList = new ArrayList<>();
+        labelName = new ArrayList<>();
+        int i =0;
+        for (Map.Entry<Double, Double> val : values.entrySet()) {
+            double key = val.getKey();
+            double value = val.getValue();
+            barEntryArrayList.add(new BarEntry(i, (float) value));
+            labelName.add(String.valueOf(key));
+            i++;
+        }
+
+        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Trials");
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        Description description = new Description();
+        description.setText("");
+        description.setTextSize(15);
+        barChart.setDescription(description);
+        BarData barData = new BarData(barDataSet);
+        barChart.setData(barData);
+
+        XAxis xAxis = barChart.getXAxis();
+
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labelName));
+
+
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelCount(labelName.size());
+        barChart.animateY(2000);
+        barChart.invalidate();
+
+    }
 
     public void create_Chart(Map<Integer, Integer> hm){
         // displaying the occurrence of elements in the arraylist

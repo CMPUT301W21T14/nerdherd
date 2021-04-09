@@ -339,12 +339,15 @@ public class TrialsPlot extends AppCompatActivity  {
     }
 
 
-    //return all successes for given experiment
+    //return success Proportions for trials for given experiment
     public ArrayList<Integer> ConvertBinomial_val(){
         trials_1 = new ArrayList<Integer>();
         Log.d("binomial Trials", binomialtrialing.toString());
         for (int y = 0; y < binomialtrialing.size(); y++){
-            trials_1.add(binomialtrialing.get(y).getSuccess());
+            int curr_success = binomialtrialing.get(y).getSuccess();
+            int curr_failure = binomialtrialing.get(y).getFailure();
+            int success_proportion = curr_success/ (curr_success + curr_failure);
+            trials_1.add(success_proportion);
 
         }
 
