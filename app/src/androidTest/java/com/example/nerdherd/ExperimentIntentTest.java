@@ -74,6 +74,14 @@ public class ExperimentIntentTest{
         solo.enterText((EditText) solo.getView(R.id.keyword_edit), "Intent");
         solo.clickOnButton("Search");
         assertTrue(solo.waitForText("Intent Test", 1, 1000));
+
+        solo.enterText((EditText) solo.getView(R.id.keyword_edit), "Binomial");
+        solo.clickOnButton("Search");
+        assertTrue(solo.waitForText("Intent Test", 1, 1000));
+
+        solo.enterText((EditText) solo.getView(R.id.keyword_edit), "experiment");
+        solo.clickOnButton("Search");
+        assertTrue(solo.waitForText("Intent Test", 1, 1000));
     }
 
     /**
