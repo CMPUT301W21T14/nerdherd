@@ -64,17 +64,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_view);
 
-        ProfileManager pMgr = ProfileManager.getInstance();
-        Intent intent = getIntent();
-        experimentId = intent.getStringExtra("experimentId");
-        currentExperiment = eMgr.getExperiment(experimentId);
-        if (currentExperiment == null) {
-            // big uh oh
-            Log.d("ExperimentView", "NULL EXPERIMENT");
-            finish();
-            return;
-        }
-
         experimentQuestions = findViewById(R.id.btn_view_questions);
         experimentTrials = findViewById(R.id.btn_add_trials);
         experimentStatistics = findViewById(R.id.btn_view_stats);
@@ -103,49 +92,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
 
         eMgr.addOnChangeListener(this);
 
-        UserProfile ownerProfile = pMgr.getProfile(currentExperiment.getOwnerId());
-        if (ownerProfile != null) {
-            experimentTitle.setText(currentExperiment.getTitle());
-            experimentDescription.setText(currentExperiment.getDescription());
-            experimentOwner.setText(ownerProfile.getUserName());
-            experimentStatus.setText(currentExperiment.getStatus());
-            experimentType.setText(currentExperiment.typeToString());
-            Region region = currentExperiment.getRegion();
-            if(region == null) {
-                experimentRegion.setText("N/A");
-            } else {
-                experimentRegion.setText(region.getDescription());
-            }
-
-            experimentContact.setText(ownerProfile.getContactInfo());
-        }
-
-        if (!LocalUser.getUserId().equals(ownerProfile.getUserId())) {
-            experimentPublish.setVisibility(View.GONE);
-            if(currentExperiment.getStatus().equals("Ended")) {
-                experimentEnd.setText("View Results");
-            } else {
-                experimentEnd.setVisibility(View.GONE);
-            }
-
-        }
-
-        if(LocalUser.isSubscribed(experimentId)) {
-            experimentSubscribe.setText("Unsubscribe");
-        } else {
-            experimentSubscribe.setText("Subscribe");
-        }
-
-        if(currentExperiment.isPublished()) {
-            experimentPublish.setText("Unpublish");
-        } else {
-            experimentPublish.setText("Publish");
-        }
-
-        if(currentExperiment.getStatus().equals("Ended")) {
-            experimentTrials.setVisibility(View.GONE);
-            experimentEnd.setVisibility(View.GONE);
-        }
+        loadUIViews();
 
         experimentSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,6 +172,63 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
                 startActivityForResult(nintent, 1);
             }
         });
+    }
+
+    public void loadUIViews() {
+        ProfileManager pMgr = ProfileManager.getInstance();
+        Intent intent = getIntent();
+        experimentId = intent.getStringExtra("experimentId");
+        currentExperiment = eMgr.getExperiment(experimentId);
+        if (currentExperiment == null) {
+            // big uh oh
+            Log.d("ExperimentView", "NULL EXPERIMENT");
+            finish();
+            return;
+        }
+
+        UserProfile ownerProfile = pMgr.getProfile(currentExperiment.getOwnerId());
+        if (ownerProfile != null) {
+            experimentTitle.setText(currentExperiment.getTitle());
+            experimentDescription.setText(currentExperiment.getDescription());
+            experimentOwner.setText(ownerProfile.getUserName());
+            experimentStatus.setText(currentExperiment.getStatus());
+            experimentType.setText(currentExperiment.typeToString());
+            Region region = currentExperiment.getRegion();
+            if(region == null) {
+                experimentRegion.setText("N/A");
+            } else {
+                experimentRegion.setText(region.getDescription());
+            }
+
+            experimentContact.setText(ownerProfile.getContactInfo());
+        }
+
+        if (!LocalUser.getUserId().equals(ownerProfile.getUserId())) {
+            experimentPublish.setVisibility(View.GONE);
+            if(currentExperiment.getStatus().equals("Ended")) {
+                experimentEnd.setText("View Results");
+            } else {
+                experimentEnd.setVisibility(View.GONE);
+            }
+
+        }
+
+        if(LocalUser.isSubscribed(experimentId)) {
+            experimentSubscribe.setText("Unsubscribe");
+        } else {
+            experimentSubscribe.setText("Subscribe");
+        }
+
+        if(currentExperiment.isPublished()) {
+            experimentPublish.setText("Unpublish");
+        } else {
+            experimentPublish.setText("Publish");
+        }
+
+        if(currentExperiment.getStatus().equals("Ended")) {
+            experimentTrials.setVisibility(View.GONE);
+            experimentEnd.setVisibility(View.GONE);
+        }
 
         updateTrialGoal();
     }
@@ -241,15 +245,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         }
     }
 
-    private void updateExperimentInfo() {
-        currentExperiment = eMgr.getExperiment(experimentId);
-        if(currentExperiment == null) {
-            Log.d("UpdateExpView", "curexp=NULL");
-            finish();
-            return;
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -260,7 +255,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
 
     @Override
     public void onExperimentDataChanged() {
-        updateExperimentInfo();
+        loadUIViews();
         updateTrialGoal();
     }
 }
