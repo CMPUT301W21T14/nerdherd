@@ -34,8 +34,8 @@
         <activity android:name=".ProfileActivity" />
         <activity android:name=".TrialActivity" />
         <activity android:name=".statsActivity" />
-        <activity android:name=".TrialsPlot" />
-        <activity android:name=".TrialsHistogram" />
+        <activity android:name=".TrialHistogramActivity" />
+        <activity android:name=".TrialScatterPlotActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

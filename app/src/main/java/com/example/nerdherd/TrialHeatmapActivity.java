@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import androidx.fragment.app.FragmentActivity;
@@ -83,11 +85,14 @@ public class TrialHeatmapActivity extends FragmentActivity {
             }
         }
         if(latLngArrayList.isEmpty()) {
+            setResult(Activity.RESULT_CANCELED);
             finish();
+            return;
         }
 
         // Create a heat map tile provider, passing it the latlngs of the police stations.
         HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(latLngArrayList).build();
+        // provider.setRadius - maybe make dots bigger?
         // Add a tile overlay to the map, using the heat map tile provider.
         mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
     }

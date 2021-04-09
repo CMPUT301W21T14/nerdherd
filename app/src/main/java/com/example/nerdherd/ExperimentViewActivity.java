@@ -1,9 +1,11 @@
 package com.example.nerdherd;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -98,6 +100,8 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
 
         menuController = new MenuController(ExperimentViewActivity.this, toolbar, navigationView, drawerLayout);
         //menuController.useMenu(true);
+
+        eMgr.addOnChangeListener(this);
 
         UserProfile ownerProfile = pMgr.getProfile(currentExperiment.getOwnerId());
         if (ownerProfile != null) {
@@ -219,17 +223,11 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
                 //TODO Maps activity entry point
                 Intent nintent = new Intent(ExperimentViewActivity.this, TrialHeatmapActivity.class);
                 nintent.putExtra("experimentId", experimentId);
-                startActivity(nintent);
+                startActivityForResult(nintent, 1);
             }
         });
 
         updateTrialGoal();
-    }
-
-    private void switcher(){
-        Intent myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
-        startActivity(myExperimentIntent);
-        finish();
     }
 
     private void updateTrialGoal() {
@@ -241,6 +239,14 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
             minTrialsTv.setTextColor(getResources().getColor(R.color.ic_launcher_background));
         } else {
             minTrialsTv.setTextColor(getResources().getColor(R.color.Gradient));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_CANCELED) {
+            Toast.makeText(this, "No GeoLocation enabled trials to show", Toast.LENGTH_LONG).show();
         }
     }
 

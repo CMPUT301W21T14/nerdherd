@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.nerdherd.Database.DatabaseAdapter;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -76,7 +75,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
 
-        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialsPlot || context instanceof QuestionViewActivity || context instanceof TrialsHistogram ){
+        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialHistogramActivity || context instanceof QuestionViewActivity || context instanceof TrialScatterPlotActivity){
             viewExperiments.setVisible(true);
         }
         else{
