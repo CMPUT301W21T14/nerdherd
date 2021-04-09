@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nerdherd.Database.LocalUser;
 
@@ -66,7 +67,9 @@ public class BinomialTrialDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if(image != null) {
-                    QRHelper.saveQRCode(image);
+                    if(QRHelper.saveQRCode(image, qdata)) {
+                        saveSuccessToast();
+                    }
                 }
             }
         });
@@ -129,6 +132,10 @@ public class BinomialTrialDialogFragment extends DialogFragment {
                 launchRegisterQrButton.setText("Result Registered!");
             }
         }
+    }
+
+    private void saveSuccessToast() {
+        Toast.makeText(getContext(), "Saved to Downloads!", Toast.LENGTH_LONG).show();
     }
 
     private String getQRActionDescription(String outcome) {

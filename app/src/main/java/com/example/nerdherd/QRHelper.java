@@ -2,6 +2,7 @@ package com.example.nerdherd;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -10,6 +11,10 @@ import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.google.firebase.Timestamp;
 import com.google.zxing.WriterException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import androidmads.library.qrgenearator.QRGContents;
@@ -42,8 +47,48 @@ public class QRHelper {
         return bitmap;
     }
 
-    public static boolean saveQRCode(Bitmap bitmap) {
+    public static boolean saveTempBitmap(Bitmap bitmap, String data) {
+        if (isExternalStorageWritable()) {
+            return saveImage(bitmap, data);
+        }else{
+            Log.d("Access", "StorageDenied");
+            return false;
+        }
+    }
+
+    private static boolean saveImage(Bitmap finalBitmap, String data) {
+
+        File myDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        myDir.mkdirs();
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fname = "nerdherdQR_["+data+"]"+ timeStamp +".jpg";
+
+        File file = new File(myDir, fname);
+        if (file.exists()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
+    }
+
+    /* Checks if external storage is available for read and write */
+    private static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean saveQRCode(Bitmap bitmap, String data) {
+        return saveTempBitmap(bitmap, data);
     }
 
     private static boolean isNumeric(String str) {

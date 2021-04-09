@@ -87,7 +87,9 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
             @Override
             public void onClick(View v) {
                 if(image != null) {
-                    QRHelper.saveQRCode(image);
+                    if(QRHelper.saveQRCode(image, qdata)) {
+                        saveSuccessToast();
+                    }
                 }
             }
         });
@@ -119,6 +121,10 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
                 launchRegisterQrButton.setText("Result Registered!");
             }
         }
+    }
+
+    private void saveSuccessToast() {
+        Toast.makeText(getContext(), "Saved to Downloads!", Toast.LENGTH_LONG).show();
     }
 
     @Override

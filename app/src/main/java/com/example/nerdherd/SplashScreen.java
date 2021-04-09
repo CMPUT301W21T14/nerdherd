@@ -1,8 +1,12 @@
 package com.example.nerdherd;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -29,6 +33,7 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RequestPermissions();
         InitializeData(false);
 
         new Handler().postDelayed(new Runnable() {
@@ -39,6 +44,19 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
                 finish();
             }
         }, time);
+    }
+
+    private void RequestPermissions() {
+        int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Request for permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
     }
 
     private void InitializeData(boolean useMockData) {

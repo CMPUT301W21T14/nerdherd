@@ -82,28 +82,13 @@ public class TrialHeatmapActivity extends FragmentActivity {
                 latLngArrayList.add(new LatLng(t.getLocation().getLatitude(), t.getLocation().getLongitude()));
             }
         }
+        if(latLngArrayList.isEmpty()) {
+            finish();
+        }
 
         // Create a heat map tile provider, passing it the latlngs of the police stations.
         HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(latLngArrayList).build();
         // Add a tile overlay to the map, using the heat map tile provider.
         mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
-    }
-    /**
-     * Read the data (locations of police stations) from raw resources.
-     */
-    private ArrayList<LatLng> readItems(int resource) throws JSONException {
-        ArrayList<LatLng> list = new ArrayList<LatLng>();
-        InputStream inputStream = getResources().openRawResource(resource);
-        @SuppressWarnings("resource")
-        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
-            list.add(new LatLng(lat, lng));
-        }
-
-        return list;
     }
 }
