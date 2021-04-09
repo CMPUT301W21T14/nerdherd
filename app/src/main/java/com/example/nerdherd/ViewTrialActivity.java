@@ -3,7 +3,6 @@ package com.example.nerdherd;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +16,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -94,10 +92,10 @@ public class ViewTrialActivity extends AppCompatActivity {
 
     }
 
-
     public void getmylocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
+
         }
 
         Task<Location> task = client.getLastLocation();
@@ -120,7 +118,7 @@ public class ViewTrialActivity extends AppCompatActivity {
                     }
                 });
             }
-        });
+        }  )   ;
     }
 
     private void showAllLocations() {
@@ -128,7 +126,6 @@ public class ViewTrialActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference locationsCol = db.collection("Experiment").document(experimentTitle)
                 .collection("Locations");
-
         locationsCol.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -154,8 +151,7 @@ public class ViewTrialActivity extends AppCompatActivity {
 
                                 // Placing a marker
                                 mMap.addMarker(markerOptions);
-
-
+                                
 
                             }
                         } else {
@@ -164,7 +160,6 @@ public class ViewTrialActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
     ///////////////////////////////// Check GPS is Enabled or not ///////////////////////////////
     public static Boolean isLocationEnabled(Context context)
@@ -208,7 +203,5 @@ public class ViewTrialActivity extends AppCompatActivity {
 
         }
     }
-
-
 
 }
