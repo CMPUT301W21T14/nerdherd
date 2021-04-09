@@ -5,9 +5,16 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.button.MaterialButton;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 /**
  * Location marker placer
@@ -16,6 +23,7 @@ import com.google.android.material.button.MaterialButton;
  */
 
 public class StartTrialActivity extends Activity {
+
     private SupportMapFragment smf;
     private FusedLocationProviderClient client;
     private String experimentTitle;
@@ -58,5 +66,11 @@ public class StartTrialActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    private void getmylocation() {
+    }
+
+    private void isGpsEnabled(StartTrialActivity startTrialActivity) {
     }
 }
