@@ -139,13 +139,12 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         if(currentExperiment.isPublished()) {
             experimentPublish.setText("Unpublish");
         } else {
-            experimentPublish.setText("Unpublish");
+            experimentPublish.setText("Publish");
         }
 
         if(currentExperiment.getStatus().equals("Ended")) {
-            experimentPublish.setVisibility(View.GONE);
             experimentTrials.setVisibility(View.GONE);
-
+            experimentEnd.setVisibility(View.GONE);
         }
 
         experimentSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -242,16 +241,26 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         }
     }
 
+    private void updateExperimentInfo() {
+        currentExperiment = eMgr.getExperiment(experimentId);
+        if(currentExperiment == null) {
+            Log.d("UpdateExpView", "curexp=NULL");
+            finish();
+            return;
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_CANCELED) {
+        if(resultCode == 5) {
             Toast.makeText(this, "No GeoLocation enabled trials to show", Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onExperimentDataChanged() {
+        updateExperimentInfo();
         updateTrialGoal();
     }
 }

@@ -441,9 +441,13 @@ public class ExperimentManager implements DatabaseListener {
 
         ArrayList<ExperimentE> results = new ArrayList<>();
         for( ExperimentE e : experimentList ) {
-            if(experimentContainsKeyword(e, keyword)) {
-                results.add(e);
+            if(!experimentContainsKeyword(e, keyword)) {
+                continue;
             }
+            if(!e.getOwnerId().equals(LocalUser.getUserId()) && !e.isPublished()) {
+                continue;
+            }
+            results.add(e);
         }
 
         return results;

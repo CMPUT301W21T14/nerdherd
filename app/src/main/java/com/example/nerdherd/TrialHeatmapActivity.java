@@ -85,7 +85,7 @@ public class TrialHeatmapActivity extends FragmentActivity {
             }
         }
         if(latLngArrayList.isEmpty()) {
-            setResult(Activity.RESULT_CANCELED);
+            setResult(5);
             finish();
             return;
         }
