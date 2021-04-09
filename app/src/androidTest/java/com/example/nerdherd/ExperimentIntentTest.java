@@ -57,7 +57,7 @@ public class ExperimentIntentTest{
      * Test the creation of a new experiment
      */
     @Test
-    public void createExperiment() {
+    public void createAndSearchExperiment() {
         solo.assertCurrentActivity("Wrong Activity", SearchExperimentActivity.class);
         solo.clickOnButton("Search");
         solo.clickOnButton("Create Experiment");
