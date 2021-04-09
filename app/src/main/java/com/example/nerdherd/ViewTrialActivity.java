@@ -151,7 +151,7 @@ public class ViewTrialActivity extends AppCompatActivity {
 
                                 // Placing a marker
                                 mMap.addMarker(markerOptions);
-                                
+
 
                             }
                         } else {
