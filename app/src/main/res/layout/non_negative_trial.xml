@@ -79,6 +79,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/record_nonNegativeTrial" />
 
+        <Button
+            android:id="@+id/btn_launch_register_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Register Result to Barcode"
+            app:layout_constraintEnd_toStartOf="@+id/vg90"
+            app:layout_constraintStart_toStartOf="@+id/vg10"
+            app:layout_constraintTop_toBottomOf="@+id/btn_save_qr_code" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/hg10"
             android:layout_width="wrap_content"

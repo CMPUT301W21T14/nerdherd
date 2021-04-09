@@ -226,165 +226,6 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         updateTrialGoal();
     }
 
-    /*
-            if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){
-            intent = new Intent(context, ExperimentViewActivity.class);
-            context.startActivity(intent);
-            ((Activity)context).finish();
-        }
-
-        if (item.getItemId() == R.id.experiment_trails && !(context instanceof TrialActivity)){
-            intent = new Intent(context, TrialActivity.class);
-            intent.putExtra("Type of Trial",trialType);
-            intent.putExtra("Min of Trial", mintrial);
-            context.startActivity(intent);
-            ((Activity)context).finish();
-        }
-
-        if (item.getItemId() == R.id.experiment_stats && !(context instanceof statsactivity_checking)){
-            intent = new Intent(context, statsactivity_checking.class);
-            context.startActivity(intent);
-            ((Activity)context).finish();
-        }
-
-        if (item.getItemId() == R.id.experiment_questions && !(context instanceof QuestionsActivity)) {
-            intent = new Intent(context, QuestionsActivity.class);
-            context.startActivity(intent);
-            ((Activity)context).finish();
-        }
-     */
-        /*index = GlobalVariable.indexForExperimentView;
-
-        if (index != -1){
-            experiment = GlobalVariable.experimentArrayList.get(index);
-            experimentTitle.setText(experiment.getTitle());
-            experimentOwner.setText(experiment.getOwnerProfile().getName());
-            experimentStatus.setText(experiment.getStatus());
-            experimentType.setText(experiment.getType());
-            experimentRegion.setText("N/A");
-            experimentContact.setText(experiment.getOwnerProfile().getEmail());
-            experimentDescription.setText(experiment.getDescription());
-            menuController.useMenu(false);
-        }
-
-        GlobalVariable.experimentType = experiment.getType();
-        GlobalVariable.experimentMinTrials = experiment.getMinTrials();
-
-        if (experiment.getOwnerProfile().getId().equals(GlobalVariable.profile.getId())){
-            if (experiment.getStatus().equals("Ended")) {
-                experimentEnd.setText("Reopen");
-                experimentEnd.setVisibility(View.VISIBLE);
-                endButtonHandler("Ongoing");
-            }
-            else{
-                experimentEnd.setText("End");
-                experimentEnd.setVisibility(View.VISIBLE);
-                endButtonHandler("Ended");
-            }
-
-            if (experiment.isPublished()) {
-
-                unpublishedSubscribe.setText("Unpublish");
-
-                publishButtonHandler(publishIndicator, false);
-            }
-            else{
-                unpublishedSubscribe.setText("Publish");
-
-                publishButtonHandler(publishIndicator, true);
-            }
-            menuController.useMenu(true);
-        }
-        else{
-            idList = GlobalVariable.experimentArrayList.get(index).getSubscriberId();
-            menuController.useMenu(false);
-
-            if (idList.contains(GlobalVariable.profile.getId())){
-                unpublishedSubscribe.setVisibility(View.INVISIBLE);
-                menuController.useMenu(true);
-                menuController.setTrialType(experiment.getType());
-                menuController.setMinTrials(experiment.getMinTrials());
-
-            }
-            else {
-                if (!experiment.getStatus().equals("Ended")) {
-                    unpublishedSubscribe.setText("Subscribe");
-                    unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            idList.add(GlobalVariable.profile.getId());
-                            GlobalVariable.experimentArrayList.get(index).setSubscriberId(idList);
-                            fireStoreController = new FireStoreController();
-                            fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Subscriber Id", idList, new FireStoreController.FireStoreUpdateCallback() {
-                                @Override
-                                public void onCallback() {
-                                    Toast.makeText(getApplicationContext(), "You are successfully subscribed. Thank you.", Toast.LENGTH_SHORT).show();
-                                }
-                            }, new FireStoreController.FireStoreUpdateFailCallback() {
-                                @Override
-                                public void onCallback() {
-                                    Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                            unpublishedSubscribe.setVisibility(View.INVISIBLE);
-                            menuController.useMenu(true);
-
-                        }
-                    });
-                }
-                else{
-                    unpublishedSubscribe.setVisibility(View.INVISIBLE);
-                    menuController.useMenu(false);
-                }
-            }
-        }
-
-    }
-
-
-    private void publishButtonHandler(String indicator, Boolean isWhat){
-        unpublishedSubscribe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GlobalVariable.experimentArrayList.get(index).setPublished(isWhat);
-                fireStoreController = new FireStoreController();
-                fireStoreController.updater(experimentIndicator, experiment.getTitle(), indicator, isWhat, new FireStoreController.FireStoreUpdateCallback() {
-                    @Override
-                    public void onCallback() {
-                        switcher();
-                    }
-                }, new FireStoreController.FireStoreUpdateFailCallback() {
-                    @Override
-                    public void onCallback() {
-                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-    }
-
-    private void endButtonHandler(String status){
-        experimentEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GlobalVariable.experimentArrayList.get(index).setStatus(status);
-                fireStoreController = new FireStoreController();
-                fireStoreController.updater(experimentIndicator, experiment.getTitle(), "Status", status, new FireStoreController.FireStoreUpdateCallback() {
-                    @Override
-                    public void onCallback() {
-                        switcher();
-                    }
-                }, new FireStoreController.FireStoreUpdateFailCallback() {
-                    @Override
-                    public void onCallback() {
-                        Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-    }*/
-
     private void switcher(){
         Intent myExperimentIntent = new Intent(ExperimentViewActivity.this, MyExperimentsActivity.class);
         startActivity(myExperimentIntent);
@@ -396,6 +237,11 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         int current = eMgr.getTrialCount(experimentId);
         String value = "Trial Count: "+current+"/"+target;
         minTrialsTv.setText(value);
+        if(current > target) {
+            minTrialsTv.setTextColor(getResources().getColor(R.color.ic_launcher_background));
+        } else {
+            minTrialsTv.setTextColor(getResources().getColor(R.color.Gradient));
+        }
     }
 
     @Override

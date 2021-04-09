@@ -3,20 +3,16 @@ package com.example.nerdherd;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +30,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import androidmads.library.qrgenearator.QRGEncoder;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 // https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
@@ -78,7 +72,7 @@ public class QRCodeActivity extends AppCompatActivity {
         surfaceView = findViewById(R.id.surface_view);
         barcodeText = findViewById(R.id.barcode_text);
 
-        addTrialButton = findViewById(R.id.btn_add_trial);
+        addTrialButton = findViewById(R.id.btn_add_qr_trial);
         addTrialButton.setVisibility(View.GONE);
 
         addTrialButton.setOnClickListener(new View.OnClickListener() {

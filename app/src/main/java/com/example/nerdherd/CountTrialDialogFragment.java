@@ -1,8 +1,10 @@
 package com.example.nerdherd;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 
 import androidx.annotation.NonNull;
@@ -34,6 +37,9 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
     private String experimentId;
     private Bitmap image;
 
+    private String qdata = null;
+    private Button launchRegisterQrButton;
+
 
     public CountTrialDialogFragment(String experimentId){
         this.experimentId=experimentId;
@@ -54,11 +60,25 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
         eMgr.addOnChangeListener(this);
         counterTv = view.findViewById(R.id.counter);
         counterTv.setText(String.valueOf(eMgr.getTrialCount(experimentId)));
+        launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
+
+        launchRegisterQrButton.setVisibility(View.GONE);
+
+        launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterBarcodeActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
         //each time successbtn is clicked increment success for trial
         countbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                qdata = experimentId+":"+"1";
+                launchRegisterQrButton.setVisibility(View.VISIBLE);
+                launchRegisterQrButton.setText("Register Result to Barcode");
                 ((TrialActivity) getActivity()).addCountTrial();
             }
         });
@@ -85,6 +105,20 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
 
                 .setNegativeButton("Cancel", null)
                 .create();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+            int overwrite = data.getIntExtra("overwrite", -1);
+            String qrData = data.getStringExtra("qrData");
+            if(overwrite != -1 && qrData != null) {
+                LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
+                launchRegisterQrButton.setText("Result Registered!");
+            }
+        }
     }
 
     @Override

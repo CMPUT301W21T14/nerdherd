@@ -1,8 +1,10 @@
 package com.example.nerdherd;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.nerdherd.Database.LocalUser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +37,9 @@ public class MeaurementTrialFragment extends DialogFragment {
     private String experimentId;
     private Bitmap image;
 
+    private String qdata = null;
+    private Button launchRegisterQrButton;
+
     public MeaurementTrialFragment(String experimentId){
         this.experimentId=experimentId;
     }
@@ -42,7 +49,6 @@ public class MeaurementTrialFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_measurement_trial, null);
 
-        //link to xml
         Button Recordtbn = view.findViewById(R.id.record_measurement);
         TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
         Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
@@ -50,6 +56,18 @@ public class MeaurementTrialFragment extends DialogFragment {
         image = null;
         qrcontainstv.setText("");
         Measurement_val = view.findViewById(R.id.measurement_input);
+
+        launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
+
+        launchRegisterQrButton.setVisibility(View.GONE);
+
+        launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterBarcodeActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
         Measurement_val.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,6 +83,13 @@ public class MeaurementTrialFragment extends DialogFragment {
                     qrcontainstv.setText(getQRActionDescription(value));
                     generateQRiv.setImageBitmap(image);
                     saveQRBtn.setVisibility(View.VISIBLE);
+                    float outcome;
+                    if(validateFloat(value)) {
+                        outcome = Float.parseFloat(value);
+                        qdata = experimentId+":"+String.valueOf(outcome);
+                        launchRegisterQrButton.setVisibility(View.VISIBLE);
+                        launchRegisterQrButton.setText("Register Result to Barcode");
+                    }
                 }
             }
 
@@ -128,6 +153,20 @@ public class MeaurementTrialFragment extends DialogFragment {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+            int overwrite = data.getIntExtra("overwrite", -1);
+            String qrData = data.getStringExtra("qrData");
+            if(overwrite != -1 && qrData != null) {
+                LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
+                launchRegisterQrButton.setText("Result Registered!");
+            }
         }
     }
 

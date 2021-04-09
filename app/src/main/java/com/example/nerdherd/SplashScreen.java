@@ -44,7 +44,7 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
     private void InitializeData(boolean useMockData) {
         // Create a database adapter to use with our managers
         DatabaseAdapter dbAdapter;
-        if(false) {
+        if(useMockData) {
             LocalUser.setMockDBUsed();
             dbAdapter = new MockDatabaseAdapater();
         } else {

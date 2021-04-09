@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NerdHerd">
-        <activity android:name=".ExperimentResultsActivity"></activity>
+        <activity android:name=".RegisterBarcodeActivity"></activity>
+        <activity android:name=".ExperimentResultsActivity" />
         <activity android:name=".ManageExperiment" />
         <activity android:name=".QRCodeActivity" />
         <activity android:name=".QuestionViewActivity" />
@@ -60,10 +61,10 @@
 
     <uses-feature android:name="android.hardware.camera.any" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-sdk tools:overrideLibrary="androidx.camera.view, androidx.camera.camera2, androidx.camera.lifecycle, androidx.camera.core" />
 

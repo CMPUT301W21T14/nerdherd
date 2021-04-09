@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -170,6 +171,9 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
             Log.d("appContext:", "isFucked");
             return;
         }
+
+        buildBarcodeStringSey();
+
         SharedPreferences prefs = appContext.getSharedPreferences("SharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("userId", userId);
@@ -193,7 +197,14 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
                 continue;
             }
 
-            addRegisteredBarcode(components[0], components[1]+":"+components[2]);
+            addRegisteredBarcode(components[0], components[1]+":"+components[2], 0, false);
+        }
+    }
+
+    private static void buildBarcodeStringSey() {
+        for(Map.Entry entry : registeredBarcodeMap.entrySet() ) {
+            custom_barcodes.add(entry.getKey()+":"+entry.getValue());
+            Log.d("Adding: ", entry.getKey()+":"+entry.getValue());
         }
     }
 
@@ -230,7 +241,7 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
      */
     public static void addCustomBarcode(String barcodeData, String experimentId, String trialResult) {
         String data = barcodeData+":"+experimentId+":"+trialResult;
-        if(addRegisteredBarcode(barcodeData, experimentId+":"+trialResult)) {
+        if(addRegisteredBarcode(barcodeData, experimentId+":"+trialResult, 0, true)) {
             custom_barcodes.add(data);
         }
     }
@@ -247,6 +258,16 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
     }
 
     /**
+     * Generic function to help with experiment->qr->barcode mapping
+     * @param barcodeData
+     *      String - barCode data as the key
+     * @return
+     */
+    public static Boolean hasBarcodeMapping(String barcodeData) {
+        return registeredBarcodeMap.containsKey(barcodeData);
+    }
+
+    /**
      * Adds a barcode to our local storage which we will now associate with a certain experiment+outcome
      * @param barcodeData
      *      String - barcode data retreieved from the codescanner
@@ -255,11 +276,19 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
      * @return
      *      Boolean - returns true if barcode doesn't already exist. Can't have a barcode trigger multiple trial outcomes
      */
-    public static boolean addRegisteredBarcode(String barcodeData, String codeData) {
+    public static boolean addRegisteredBarcode(String barcodeData, String codeData, int overwrite, boolean save) {
         if(registeredBarcodeMap.containsKey(barcodeData)) {
-            return false;
+            if(overwrite == 1) {
+                registeredBarcodeMap.remove(barcodeData);
+            } else {
+                return false;
+            }
         }
+        Log.d("BarcodeAdd: ", barcodeData+":"+codeData);
         registeredBarcodeMap.put(barcodeData, codeData);
+        if(save) {
+            saveLocalData();
+        }
         return true;
     }
 

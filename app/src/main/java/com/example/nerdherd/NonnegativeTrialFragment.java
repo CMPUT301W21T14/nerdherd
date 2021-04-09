@@ -1,8 +1,10 @@
 package com.example.nerdherd;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.nerdherd.Database.LocalUser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +38,9 @@ public class NonnegativeTrialFragment extends DialogFragment {
     private String experimentId;
     private Bitmap image;
 
+    private String qdata = null;
+    private Button launchRegisterQrButton;
+
     public NonnegativeTrialFragment(String experimentId){
         this.experimentId=experimentId;
     }
@@ -52,6 +59,18 @@ public class NonnegativeTrialFragment extends DialogFragment {
         image = null;
         qrcontainstv.setText("");
 
+        launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
+
+        launchRegisterQrButton.setVisibility(View.GONE);
+
+        launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterBarcodeActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
         inputEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,6 +85,9 @@ public class NonnegativeTrialFragment extends DialogFragment {
                     qrcontainstv.setText(getQRActionDescription(value));
                     generateQRiv.setImageBitmap(image);
                     saveQRBtn.setVisibility(View.VISIBLE);
+                    qdata = experimentId+":"+value;
+                    launchRegisterQrButton.setVisibility(View.VISIBLE);
+                    launchRegisterQrButton.setText("Register Result to Barcode");
                 }
             }
 
@@ -136,6 +158,20 @@ public class NonnegativeTrialFragment extends DialogFragment {
         } catch (NumberFormatException ex)
         {
             return false;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+            int overwrite = data.getIntExtra("overwrite", -1);
+            String qrData = data.getStringExtra("qrData");
+            if(overwrite != -1 && qrData != null) {
+                LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
+                launchRegisterQrButton.setText("Result Registered!");
+            }
         }
     }
 
