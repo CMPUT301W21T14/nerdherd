@@ -115,7 +115,7 @@ public class ExperimentIntentTest{
         assertTrue(solo.waitForText("Is this an Intent Test?", 1, 1000));
         solo.clickOnText("Is this an Intent Test?");
 
-        solo.assertCurrentActivity("Wrong Activiy", QuestionViewActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", QuestionViewActivity.class);
         solo.enterText((EditText) solo.getView(R.id.reply_input), "yes");
         solo.clickOnButton("Confirm");
         assertTrue(solo.waitForText("yes", 1, 1000));
