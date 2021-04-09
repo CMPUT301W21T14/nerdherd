@@ -24,6 +24,8 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 
 /**
+ * GPS location
+ * Access the location of the user
  * Create this Class from tutorial :
  * http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial
  *
