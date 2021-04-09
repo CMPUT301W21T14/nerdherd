@@ -2,9 +2,13 @@ package com.example.nerdherd;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -12,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -24,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,7 +50,7 @@ import java.util.Map;
  * The marker states the current location of the user who is doing the experiment
  */
 
-public class StartTrialActivity extends Activity {
+public class StartTrialActivity extends AppCompatActivity {
 
     private SupportMapFragment smf;
     private FusedLocationProviderClient client;
@@ -160,7 +166,7 @@ public class StartTrialActivity extends Activity {
     }
 
     /////////////// Check GPS is Enabled or not & then let the user to enable it ///////////////
-    void isGpsEnabled(Context context)
+    void isGpsEnabled(StartTrialActivity context)
     {
         if(!isLocationEnabled(context))
         {
