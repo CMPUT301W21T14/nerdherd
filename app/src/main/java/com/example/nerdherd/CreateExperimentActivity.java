@@ -111,7 +111,7 @@ public class CreateExperimentActivity extends AppCompatActivity implements Exper
     public boolean validateInteger(String input) {
         try {
             int intInput = Integer.parseInt(input);
-            if(intInput > 0) { //Need at least one trial
+            if(intInput >= 0) {
                 return true;
             }
             return false;
@@ -171,7 +171,7 @@ public class CreateExperimentActivity extends AppCompatActivity implements Exper
             minTrials = Integer.parseInt(minTrialsString);
         }
         else { //Any incorrect minTrial input will show this toast
-            Toast.makeText(this, "The value entered for the minimum number of trials was invalid. Please enter an integer greater than 0.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The value entered for the minimum number of trials was invalid. Please enter an integer greater or equal to 0.", Toast.LENGTH_SHORT).show();
             return;
         }
 
