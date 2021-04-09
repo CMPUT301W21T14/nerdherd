@@ -25,7 +25,7 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import androidx.fragment.app.FragmentActivity;
 
-/**
+/** Modified from
  * https://github.com/sarahmaddox/simple-heatmap/blob/master/simple-heatmap/src/com/example/simple_heatmap/MainActivity.java
  */
 public class TrialHeatmapActivity extends FragmentActivity {
@@ -49,23 +49,12 @@ public class TrialHeatmapActivity extends FragmentActivity {
     }
 
     /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.
-     * <p>
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
+     * Grabbing the new onMapReady
      */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
+            // Get the map
             ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(GoogleMap googleMap) {

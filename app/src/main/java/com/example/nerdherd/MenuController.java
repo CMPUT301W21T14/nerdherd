@@ -132,6 +132,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
         if (item.getItemId() == R.id.log_out){
+            /*
             sharedPreferences = context.getSharedPreferences("SharedPreferences", 0);
             editor = sharedPreferences.edit();
             editor.putBoolean(loggedInName, false);
@@ -142,7 +143,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             editor.apply();
             intent = new Intent(context, LogInActivity.class);
             context.startActivity(intent);
-            ((Activity)context).finish();
+            ((Activity)context).finish();*/
         }
 
         if (item.getItemId() == R.id.experiment_details && !(context instanceof ExperimentViewActivity)){
