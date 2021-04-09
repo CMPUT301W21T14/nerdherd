@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.nerdherd.Database.LocalUser;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -114,6 +115,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
         if (item.getItemId() == R.id.my_profile){
             intent = new Intent(context, ProfileActivity.class);
+            intent.putExtra("userId", LocalUser.getUserId());
             context.startActivity(intent);
             ((Activity)context).finish();
         }
