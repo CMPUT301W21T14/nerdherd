@@ -37,6 +37,11 @@ import permissions.dispatcher.RuntimePermissions;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+/**
+ * Map access
+ * It opens google map with a single pointer on the screen
+ */
+
 @RuntimePermissions
 public class MapOpenActivity extends AppCompatActivity {
 
