@@ -89,56 +89,8 @@ public class SearchUserActivity extends AppCompatActivity {
                 //finish(); //finish was taken to fix the back button to go back to user screen instead of closing the app
             }
         };
+
         showProfiles();
-
-
-
-        /*fireStoreController.readProfile(profiles, null, "All User", null, null, new FireStoreController.FireStoreProfileListCallback() {
-            @Override
-            public void onCallback(ArrayList<Profile> profileList) {
-                showProfiles(profileList);
-                GlobalVariable.profileArrayList = profileList;
-
-                searchButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        resultList = new ArrayList<Profile>();
-                        keyword = keywordEdit.getText().toString();
-                        searchController = new SearchController();
-                        searchController.searchUser(keyword, profileList, resultList, new SearchController.UserNoResultCallBack() {
-                            @Override
-                            public void onCallback(ArrayList<Profile> itemList) {
-                                new AlertDialog.Builder(SearchUserActivity.this).setTitle("No Result").setMessage("No result found. Please enter another keyword. Thank you.")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                showProfiles(itemList);
-                                                GlobalVariable.profileArrayList = itemList;
-                                            }
-                                        }).show();
-                            }
-                        }, new SearchController.UserResultCallBack() {
-                            @Override
-                            public void onCallback(ArrayList<Profile> itemList) {
-                                showProfiles(itemList);
-                                GlobalVariable.profileArrayList = itemList;
-                            }
-                        }, new SearchController.UserNoKeywordCallBack() {
-                            @Override
-                            public void onCallback(ArrayList<Profile> itemList) {
-                                showProfiles(itemList);
-                                GlobalVariable.profileArrayList = itemList;
-                            }
-                        });
-                    }
-                });
-            }
-        }, new FireStoreController.FireStoreProfileListFailCallback() {
-            @Override
-            public void onCallback() {
-                Toast.makeText(getApplicationContext(), "The database cannot be accessed at this point, please try again later. Thank you.", Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
 
     private void showProfiles(){

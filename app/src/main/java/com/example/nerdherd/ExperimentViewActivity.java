@@ -94,6 +94,15 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
 
         loadUIViews();
 
+        experimentOwner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileView = new Intent(ExperimentViewActivity.this, ProfileActivity.class);
+                profileView.putExtra("userId", currentExperiment.getOwnerId());
+                startActivity(profileView);
+            }
+        });
+
         experimentSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

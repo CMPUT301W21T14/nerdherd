@@ -42,63 +42,32 @@ import java.util.Arrays;
 public class ProfileActivity extends AppCompatActivity implements ProfileManager.ProfileOnChangeEventListener {
 
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private Intent searchUser;
-    private Intent UsersProfile;
-    private Intent Experiments;
-    private Intent Subscription;
-    private Intent myExperiments;
-    private Bundle dataBundle;
-    //the users custom image
+
     private ImageView usersAvatar;
-    private Intent avatarPicker;
-    private Integer avatar;
-    private Intent getAvatar;
-    private String name;
-    private String password;
+
     public  String email;
-    private String id;
-    //profile controller
-    private ArrayList<String> emailData;
-    private Boolean isNew;
-    private ProfileController profController;
+
     private MenuController menuController;
-    private FireStoreController fireStoreController;
+
     //set the users name
     private TextView usersname;
     private TextView uname;
     private TextView usersemail;
     private TextView userExperiments;
     private Button edtUserProfile;
-    private Intent publicuser;
-    private int val;
-    private String useridval;
-    private ArrayList<String> updateditem;
-    private String CurrentName;
+
     private long backPressedTime;
     private Toast backToast;
 
     private ProfileManager pMgr = ProfileManager.getInstance();
     private ExperimentManager eMgr = ExperimentManager.getInstance();
+    private UserProfile currentProfile;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
-    private Experiment experiment;
     private Button usersExpDetailed;
-    private ArrayList<Experiment> savedList;
 
-    private ArrayList<Experiment> allExperiments;
-    private ArrayList<Experiment> returneditems;
-    private ArrayList<Experiment> newExperiment;
-
-    private int current_exp;
-    private int publicUSer_exp;
-    private ArrayList<Experiment> revealList;
-    private ArrayList<Experiment> savedList2;
-    private int publicExpCounter;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -141,8 +110,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileManager
     }
 
     private void updateViews() {
-        UserProfile up = pMgr.getProfile(LocalUser.getUserId());
-        if(up == null) {
+        Intent intent = getIntent();
+        String userId = intent.getStringExtra("userId");
+        currentProfile = pMgr.getProfile(userId);
+        if(currentProfile == null) {
             Log.d("Null userId", "very bad");
             // shouldn't happen
             return;
@@ -150,10 +121,14 @@ public class ProfileActivity extends AppCompatActivity implements ProfileManager
 
         int numExperiments = eMgr.getOwnedExperiments().size();
         userExperiments.setText(numExperiments+""+" Experiments Currently Owned");
-        uname.setText(up.getUserName());
-        usersname.setText(up.getUserName());
-        usersemail.setText(up.getContactInfo());
-        usersAvatar.setImageResource(LocalUser.imageArray.get(up.getAvatarId()));
+        uname.setText(currentProfile.getUserName());
+        usersname.setText(currentProfile.getUserName());
+        usersemail.setText(currentProfile.getContactInfo());
+        usersAvatar.setImageResource(LocalUser.imageArray.get(currentProfile.getAvatarId()));
+
+        if(!userId.equals(LocalUser.getUserId())) {
+            edtUserProfile.setVisibility(View.GONE);
+        }
     }
 
         /*
