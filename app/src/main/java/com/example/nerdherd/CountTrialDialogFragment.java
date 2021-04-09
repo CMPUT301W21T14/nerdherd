@@ -94,7 +94,7 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
             }
         });
 
-        // we create the acctual dialog here
+        // we create the actual dialog here
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
                 .setView(view)
@@ -104,8 +104,6 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
 
                     }
                 })
-
-                .setNegativeButton("Cancel", null)
                 .create();
     }
 

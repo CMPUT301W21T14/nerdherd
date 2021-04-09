@@ -130,7 +130,7 @@ public class MeaurementTrialFragment extends DialogFragment {
             }
         });
 
-        // we create the acctual dialog here
+        // we create the actual dialog here
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
                 .setView(view)
@@ -140,8 +140,6 @@ public class MeaurementTrialFragment extends DialogFragment {
 
                     }
                 })
-
-                .setNegativeButton("Cancel", null)
                 .create();
     }
 

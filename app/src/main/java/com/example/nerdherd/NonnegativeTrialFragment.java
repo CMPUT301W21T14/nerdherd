@@ -134,7 +134,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
         });
 
 
-        // we create the acctual dialog here
+        // we create the actual dialog here
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
                 .setView(view)
@@ -144,8 +144,6 @@ public class NonnegativeTrialFragment extends DialogFragment {
 
                     }
                 })
-
-                .setNegativeButton("Cancel", null)
                 .create();
     }
 

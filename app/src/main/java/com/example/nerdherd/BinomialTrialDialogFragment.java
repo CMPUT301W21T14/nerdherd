@@ -105,7 +105,7 @@ public class BinomialTrialDialogFragment extends DialogFragment {
             }
         });
 
-        // we create the acctual dialog here
+        // we create the actual dialog here
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         return builder
                 .setView(view)
@@ -115,8 +115,6 @@ public class BinomialTrialDialogFragment extends DialogFragment {
                         // nothing to really do with this I guess
                     }
                 })
-
-                .setNegativeButton("Cancel", null)
                 .create();
     }
 

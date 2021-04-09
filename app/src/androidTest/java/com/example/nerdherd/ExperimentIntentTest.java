@@ -57,7 +57,7 @@ public class ExperimentIntentTest{
      * Test the creation of a new experiment
      */
     @Test
-    public void createExperiment() {
+    public void createAndSearchExperiment() {
         solo.assertCurrentActivity("Wrong Activity", SearchExperimentActivity.class);
         solo.clickOnButton("Search");
         solo.clickOnButton("Create Experiment");
@@ -72,6 +72,14 @@ public class ExperimentIntentTest{
 
         assertFalse(solo.searchText("Intent Test"));
         solo.enterText((EditText) solo.getView(R.id.keyword_edit), "Intent");
+        solo.clickOnButton("Search");
+        assertTrue(solo.waitForText("Intent Test", 1, 1000));
+
+        solo.enterText((EditText) solo.getView(R.id.keyword_edit), "Binomial");
+        solo.clickOnButton("Search");
+        assertTrue(solo.waitForText("Intent Test", 1, 1000));
+
+        solo.enterText((EditText) solo.getView(R.id.keyword_edit), "experiment");
         solo.clickOnButton("Search");
         assertTrue(solo.waitForText("Intent Test", 1, 1000));
     }
@@ -107,7 +115,7 @@ public class ExperimentIntentTest{
         assertTrue(solo.waitForText("Is this an Intent Test?", 1, 1000));
         solo.clickOnText("Is this an Intent Test?");
 
-        solo.assertCurrentActivity("Wrong Activiy", QuestionViewActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", QuestionViewActivity.class);
         solo.enterText((EditText) solo.getView(R.id.reply_input), "yes");
         solo.clickOnButton("Confirm");
         assertTrue(solo.waitForText("yes", 1, 1000));

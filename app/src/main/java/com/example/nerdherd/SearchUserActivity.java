@@ -143,6 +143,7 @@ public class SearchUserActivity extends AppCompatActivity {
 
     private void showProfiles(){
         resultList = pMgr.searchProfileByKeyword(keywordEdit.getText().toString());
+        keywordEdit.setText("");
         adapter = new ProfileListAdapter(resultList, listener);
         adapterController = new AdapterController(SearchUserActivity.this, recyclerView, adapter);
         adapterController.useAdapter();

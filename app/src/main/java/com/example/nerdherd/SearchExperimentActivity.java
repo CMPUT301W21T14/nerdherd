@@ -205,6 +205,7 @@ public class SearchExperimentActivity extends AppCompatActivity implements Exper
 
     private void showExperiments(){
         String keyword = keywordView.getText().toString();
+        keywordView.setText("");
         searchResult = eMgr.searchForExperimentsByKeyword(keyword);
         RecyclerView recyclerView = findViewById(R.id.experiment_recyclerView);
         adapter = new ExperimentAdapter(searchResult, listener);
