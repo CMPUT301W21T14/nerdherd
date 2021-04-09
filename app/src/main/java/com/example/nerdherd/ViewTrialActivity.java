@@ -1,18 +1,22 @@
 package com.example.nerdherd;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,10 +27,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,14 +47,13 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Multiple location shower
  * The number of markers states all the locations where the experiment is performed for multiple users when they start the trial
  * All the locations are shown with a red marker on the map stating the geolocation stored in the database
  */
 
-public class ViewTrialActivity extends Activity {
+public class ViewTrialActivity extends AppCompatActivity {
 
     private SupportMapFragment smf;
     private FusedLocationProviderClient client;
@@ -88,7 +94,8 @@ public class ViewTrialActivity extends Activity {
 
     }
 
-    private void getmylocation() {
+
+    public void getmylocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -114,9 +121,6 @@ public class ViewTrialActivity extends Activity {
                 });
             }
         });
-
-
-
     }
 
     private void showAllLocations() {
@@ -150,6 +154,9 @@ public class ViewTrialActivity extends Activity {
 
                                 // Placing a marker
                                 mMap.addMarker(markerOptions);
+
+
+
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -201,5 +208,7 @@ public class ViewTrialActivity extends Activity {
 
         }
     }
+
+
 
 }
