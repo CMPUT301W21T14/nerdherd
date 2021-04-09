@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nerdherd.Database.LocalUser;
+import com.google.android.gms.maps.model.LatLng;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

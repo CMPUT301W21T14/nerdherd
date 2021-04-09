@@ -10,12 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NerdHerd">
-        <activity android:name=".RegisterBarcodeActivity"></activity>
-        <activity android:name=".ExperimentResultsActivity" />
-        <activity android:name=".ManageExperiment" />
-        <activity android:name=".QRCodeActivity" />
-        <activity android:name=".QuestionViewActivity" />
-        <activity android:name=".QuestionsActivity" />
+        <activity android:name=".TrialHeatmapActivity"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -24,9 +19,23 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
+        <activity android:name=".RegisterBarcodeActivity" />
+
+        <activity android:name=".ExperimentResultsActivity" />
+        <activity android:name=".QRCodeActivity" />
+        <activity android:name=".QuestionViewActivity" />
+        <activity android:name=".QuestionsActivity" />
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
         <activity android:name=".MySubscriptionActivity" />
         <activity android:name=".MyExperimentsActivity" />
         <activity android:name=".ExperimentViewActivity" />
@@ -50,21 +59,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
     </application>
-
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-sdk tools:overrideLibrary="androidx.camera.view, androidx.camera.camera2, androidx.camera.lifecycle, androidx.camera.core" />
 

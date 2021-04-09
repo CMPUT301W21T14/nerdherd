@@ -217,7 +217,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
             @Override
             public void onClick(View v) {
                 //TODO Maps activity entry point
-                Intent nintent = new Intent(ExperimentViewActivity.this, MapsActivity.class);
+                Intent nintent = new Intent(ExperimentViewActivity.this, TrialHeatmapActivity.class);
                 nintent.putExtra("experimentId", experimentId);
                 startActivity(nintent);
             }
