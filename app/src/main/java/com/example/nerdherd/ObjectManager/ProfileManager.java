@@ -3,7 +3,6 @@ package com.example.nerdherd.ObjectManager;
 import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Model.UserProfile;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -287,7 +286,7 @@ public class ProfileManager implements DatabaseListener {
      * @param data
      *      ArrayList<UserProfile> - list of profiles loaded in
      */
-    public void loadInitialExperimentData(ArrayList<UserProfile> data) {
+    public void loadInitialProfileData(ArrayList<UserProfile> data) {
         profileList = data;
         notifyListenerProfilesLoaded();
     }
@@ -311,7 +310,7 @@ public class ProfileManager implements DatabaseListener {
                 checkProfileDataChange((ArrayList<UserProfile>) data);
                 break;
             case DB_EVENT_PROFILE_LOADED_ON_START:
-                loadInitialExperimentData((ArrayList<UserProfile>)data);
+                loadInitialProfileData((ArrayList<UserProfile>)data);
                 break;
             case DB_EVENT_PROFILE_ON_START_LOAD_FAILURE:
                 break;
@@ -329,14 +328,24 @@ public class ProfileManager implements DatabaseListener {
         }
     }
 
+    /**
+     * Listen for profile creation events
+     */
     public interface ProfileCreateEventListener {
         void onCreateProfileFailed(UserProfile failedToCreate);
         void onCreateProfileSuccess(UserProfile createdProfile);
     }
+
+    /**
+     * Listen for initial profile load succes event
+     */
     public interface ProfileDataLoadedEventListener {
         void onProfileDataLoaded();
     }
 
+    /**
+     * Listen for profile changes in the database
+     */
     public interface ProfileOnChangeEventListener {
         void onProfileDataChanged();
     }

@@ -75,6 +75,9 @@ public class QuestionsListAdapter extends RecyclerView.Adapter<QuestionsListAdap
         return questions.size();
     }
 
+    /**
+     * Listens for click events within the view
+     */
     public interface onClickListener{
         void onClick(View view, int index);
     }

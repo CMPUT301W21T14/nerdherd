@@ -59,6 +59,9 @@ public class ReplyListAdapter extends RecyclerView.Adapter<ReplyListAdapter.View
             holder.layout.setBackgroundColor(0xFF000000 + Integer.parseInt("003498DB",16));
     }
 
+    /**
+     * Listens for click events within the view
+     */
     @Override
     public int getItemCount() {
         return replies.size();

@@ -38,6 +38,9 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Displays the basic statistics of the given trial
+ */
 public class TrialStatisticsActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;

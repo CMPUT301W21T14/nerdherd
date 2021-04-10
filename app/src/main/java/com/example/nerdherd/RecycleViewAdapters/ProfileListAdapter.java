@@ -72,6 +72,9 @@ public class ProfileListAdapter extends RecyclerView.Adapter<ProfileListAdapter.
         return profiles.size();
     }
 
+    /**
+     * Listens for click events within the view
+     */
     public interface onClickListener{
         void onClick(View view, int index);
     }

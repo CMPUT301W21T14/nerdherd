@@ -1,1 +1,13 @@
 com.example.nerdherd
+com.example.nerdherd.Database
+com.example.nerdherd.Deprecated
+com.example.nerdherd.Model
+com.example.nerdherd.ObjectManager
+com.example.nerdherd.QRCodes
+com.example.nerdherd.RecycleViewAdapters
+com.example.nerdherd.UserInterfaceExperiments
+com.example.nerdherd.UserInterfaceProfile
+com.example.nerdherd.UserInterfaceQRCodes
+com.example.nerdherd.UserInterfaceQuestions
+com.example.nerdherd.UserInterfaceSearch
+com.example.nerdherd.UserInterfaceTrials

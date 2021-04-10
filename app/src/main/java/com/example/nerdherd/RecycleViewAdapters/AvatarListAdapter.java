@@ -67,6 +67,9 @@ public class AvatarListAdapter extends RecyclerView.Adapter<AvatarListAdapter.Vi
         return images.size();
     }
 
+    /**
+     * Listens for click events within the view
+     */
     public interface onClickListener{
         void onClick(View view, int index);
     }

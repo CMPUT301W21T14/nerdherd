@@ -17,10 +17,12 @@ import com.example.nerdherd.Database.MockDatabaseAdapater;
 import com.example.nerdherd.Deprecated.LogInActivity;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.ObjectManager.ProfileManager;
+import com.example.nerdherd.UserInterfaceSearch.SearchExperimentActivity;
 
 /**
  * Splash screen for the app
  * The constant screen that is played for a fixed amount of time when the app is opened
+ * Setup database initialization here. set useMockData=false for offline testing database
  * @author Zhipeng Z. zhipeng4, roulette
  */
 public class SplashScreen extends AppCompatActivity implements ProfileManager.ProfileDataLoadedEventListener {
@@ -39,7 +41,7 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                logInIntent = new Intent(SplashScreen.this, LogInActivity.class);
+                logInIntent = new Intent(SplashScreen.this, SearchExperimentActivity.class);
                 startActivity(logInIntent);
                 finish();
             }

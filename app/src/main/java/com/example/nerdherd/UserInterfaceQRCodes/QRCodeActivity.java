@@ -37,8 +37,12 @@ import java.io.IOException;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
-// https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
+
+/**
+ * This activity allows the user to Scan a QR or Barcode, and use it to add a trial to the associated experiment
+ */
 public class QRCodeActivity extends AppCompatActivity {
+    // taken from https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
     private static final int PERMISSION_REQUEST_CAMERA = 0;
 
     private SurfaceView surfaceView;

@@ -20,6 +20,9 @@ import java.util.Date;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
+/**
+ * Helper class to read, generate and save QR codes to disk
+ */
 public class QRHelper {
 
     public QRHelper() {
@@ -47,6 +50,12 @@ public class QRHelper {
         return bitmap;
     }
 
+    /**
+     * Generates a new QR containing the data in qrData
+     * @param qrData
+     *      String - data to be converted into a qr code
+     * @return
+     */
     public static Bitmap generateQRCode(String qrData) {
         QRCodeWriter writer = new QRCodeWriter();
         try {
@@ -77,13 +86,13 @@ public class QRHelper {
     }
 
     /**
-     * TAKEN FROM https://gist.github.com/vxhviet/07429133e71b5fec2e39bd60171184cd
+     * Saves a picture of the QR code as Jpeg in the Downloads folder of the phone to be printed off
      * @param finalBitmap
      * @param data
      * @return
      */
     private static boolean saveImage(Bitmap finalBitmap, String data) {
-
+        //TAKEN FROM https://gist.github.com/vxhviet/07429133e71b5fec2e39bd60171184cd
         File myDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         myDir.mkdirs();
 
@@ -154,6 +163,11 @@ public class QRHelper {
         return false;
     }
 
+    /**
+     * Process a string of data given from the app in the format experimentId:outcome e.g "aDxasd132df43:47.5"
+     * @param data
+     * @return
+     */
     public static QRResult processQRTextString(String data) {
         String parts[] = data.split(":");
         if(parts[0] != null && parts[1] != null) {

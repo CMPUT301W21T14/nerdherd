@@ -2,6 +2,9 @@ package com.example.nerdherd.QRCodes;
 
 import com.google.firebase.Timestamp;
 
+/**
+ * Object representing a QRCode result associated with an experiment and trial outcome
+ */
 public class QRResult {
     private String experimentId;
     private String result;

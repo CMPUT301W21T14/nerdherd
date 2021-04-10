@@ -24,6 +24,9 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+/**
+ * Displays a scatterplot of the given experimentId
+ */
 public class TrialScatterPlotActivity extends AppCompatActivity  {
 
     private DrawerLayout drawerLayout;

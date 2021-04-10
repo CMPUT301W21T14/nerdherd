@@ -79,6 +79,9 @@ public class TrialsListAdapter extends RecyclerView.Adapter<TrialsListAdapter.Vi
         return trials.size();
     }
 
+    /**
+     * Listens for click events within the view
+     */
     public interface onClickListener{
         void onClick(View view, int index);
     }

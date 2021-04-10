@@ -26,8 +26,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-// https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
+/**
+ * This activity returns the result of a scanned barcode which will be associated with a certain trial result
+ */
 public class RegisterBarcodeActivity extends AppCompatActivity {
+    // https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
     private static final int PERMISSION_REQUEST_CAMERA = 0;
 
     private SurfaceView surfaceView;
