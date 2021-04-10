@@ -9,6 +9,7 @@ import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.ObjectManager.ProfileManager;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class testCreateProfile {
     private ExperimentManager eMgr;
@@ -34,10 +35,16 @@ public class testCreateProfile {
     @Test
     public void testProfileCreation() {
         // MockDatabase has 5 profiles by default.
-        assert(pMgr.getProfileList().size() == 5);
+        assertEquals(5, pMgr.getProfileList().size());
+
+        // Create a new profile - username and contact info generated - user can change if they want
         String newId = pMgr.createNewProfile();
-        assert(pMgr.getProfileList().size() == 6);
+
+        // Verify count went up
+        assertEquals(6, pMgr.getProfileList().size());
+
+        // Verify this profile now exists
         UserProfile profile = pMgr.getProfileList().get(Integer.parseInt(newId));
-        assert(profile.getUserId()==newId);
+        assertEquals(profile.getUserId(), newId);
     }
 }

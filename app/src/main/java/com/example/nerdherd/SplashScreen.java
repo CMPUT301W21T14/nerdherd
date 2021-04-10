@@ -14,15 +14,15 @@ import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.FirestoreAdapter;
 import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Database.MockDatabaseAdapater;
+import com.example.nerdherd.Deprecated.LogInActivity;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.ObjectManager.ProfileManager;
 
 /**
  * Splash screen for the app
  * The constant screen that is played for a fixed amount of time when the app is opened
- * @author Zhipeng Z. zhipeng4
+ * @author Zhipeng Z. zhipeng4, roulette
  */
-
 public class SplashScreen extends AppCompatActivity implements ProfileManager.ProfileDataLoadedEventListener {
 
     private Intent logInIntent;
@@ -46,19 +46,23 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         }, time);
     }
 
+    // TODO: maybe request all app permissions on startup
     private void RequestPermissions() {
         int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            // Request for permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
     }
 
+    /**
+     * IMPORTANT: useMockData = true to use a different mockDatabase with the program
+     * below it will load a MockDatabaseAdapter instead.
+     * @param useMockData
+     */
     private void InitializeData(boolean useMockData) {
         // Create a database adapter to use with our managers
         DatabaseAdapter dbAdapter;
@@ -79,7 +83,6 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         pMgr.addOnLoadListener(this);
         // Can also add a load listener for eMgr to only continue once a data source has loaded in
         // eMgr.addOnLoadListener(this); // -> implement 'implements ExperimentManager.OnExperimentDataLoaded'
-
         eMgr.init();
         pMgr.init();
     }

@@ -1,7 +1,7 @@
 package com.example.nerdherd.Database;
 
 
-import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.Experiment;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.DatabaseListener;
 
@@ -12,8 +12,8 @@ public abstract class DatabaseAdapter {
     public abstract void addListener(String tableName, DatabaseListener listener);
     public abstract void removeListener(String tableName, DatabaseListener listener);
 
-    public abstract void saveNewExperiment(ExperimentE experiment);
-    public abstract void updateExperiment(ExperimentE experiment);
+    public abstract void saveNewExperiment(Experiment experiment);
+    public abstract void updateExperiment(Experiment experiment);
     public abstract void saveNewProfile(UserProfile profile);
     public abstract void updateProfile(UserProfile profile);
 

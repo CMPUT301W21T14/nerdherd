@@ -10,6 +10,11 @@ import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Database.MockDatabaseAdapater;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.ObjectManager.ProfileManager;
+import com.example.nerdherd.UserInterfaceExperiments.CreateExperimentActivity;
+import com.example.nerdherd.UserInterfaceExperiments.ExperimentViewActivity;
+import com.example.nerdherd.UserInterfaceQuestions.QuestionViewActivity;
+import com.example.nerdherd.UserInterfaceQuestions.QuestionsActivity;
+import com.example.nerdherd.UserInterfaceSearch.SearchExperimentActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.After;

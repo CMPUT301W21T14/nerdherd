@@ -17,7 +17,7 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/trials"
+            android:id="@+id/trialDeprecateds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="22dp"
@@ -36,7 +36,7 @@
             android:layout_marginTop="35dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trials" />
+            app:layout_constraintTop_toBottomOf="@+id/trialDeprecateds" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

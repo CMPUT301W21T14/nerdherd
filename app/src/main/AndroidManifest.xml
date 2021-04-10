@@ -16,40 +16,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NerdHerd">
 
-        <activity android:name=".TrialHeatmapActivity"/>
-        <activity android:name=".RegisterBarcodeActivity" />
+        <activity android:name=".UserInterfaceTrials.TrialHeatmapActivity"/>
+        <activity android:name=".UserInterfaceQRCodes.RegisterBarcodeActivity" />
 
-        <activity android:name=".ExperimentResultsActivity" />
-
-        <activity android:name=".ViewTrialActivity"
-            android:parentActivityName=".ExperimentViewActivity"
+        <activity android:name=".Deprecated.ViewTrialActivity"
+            android:parentActivityName=".UserInterfaceExperiments.ExperimentViewActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".StartTrialActivity"
-            android:parentActivityName=".ExperimentViewActivity"
+        <activity android:name=".Deprecated.StartTrialActivity"
+            android:parentActivityName=".UserInterfaceExperiments.ExperimentViewActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".QRCodeActivity" />
-        <activity android:name=".QuestionViewActivity" />
-        <activity android:name=".QuestionsActivity" />
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".MySubscriptionActivity" />
-        <activity android:name=".MyExperimentsActivity" />
-        <activity android:name=".ExperimentViewActivity" />
-        <activity android:name=".statsactivity_checking" />
-        <activity android:name=".CreateExperimentActivity" />
-        <activity android:name=".SearchUserActivity" />
-        <activity android:name=".Reseter" />
-        <activity android:name=".AvatarPicker" />
-        <activity android:name=".SearchExperimentActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LogInActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".TrialActivity" />
-        <activity android:name=".statsActivity" />
-        <activity android:name=".TrialHistogramActivity" />
-        <activity android:name=".TrialScatterPlotActivity" />
+        <activity android:name=".UserInterfaceQRCodes.QRCodeActivity" />
+        <activity android:name=".UserInterfaceQuestions.QuestionViewActivity" />
+        <activity android:name=".UserInterfaceQuestions.QuestionsActivity" />
+        <activity android:name=".UserInterfaceExperiments.MySubscriptionActivity" />
+        <activity android:name=".UserInterfaceExperiments.MyExperimentsActivity" />
+        <activity android:name=".UserInterfaceExperiments.ExperimentViewActivity" />
+        <activity android:name=".UserInterfaceTrials.TrialStatisticsActivity" />
+        <activity android:name=".UserInterfaceExperiments.CreateExperimentActivity" />
+        <activity android:name=".UserInterfaceSearch.SearchUserActivity" />
+        <activity android:name=".Deprecated.Reseter" />
+        <activity android:name=".UserInterfaceProfile.AvatarPickerActivity" />
+        <activity android:name=".UserInterfaceSearch.SearchExperimentActivity" />
+        <activity android:name=".Deprecated.RegisterActivity" />
+        <activity android:name=".Deprecated.LogInActivity" />
+        <activity android:name=".UserInterfaceProfile.ProfileActivity" />
+        <activity android:name=".UserInterfaceTrials.TrialActivity" />
+        <activity android:name=".Deprecated.statsActivity" />
+        <activity android:name=".UserInterfaceTrials.TrialHistogramActivity" />
+        <activity android:name=".UserInterfaceTrials.TrialScatterPlotActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

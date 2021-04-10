@@ -1,29 +1,18 @@
 package com.example.nerdherd.Database;
 
-import com.example.nerdherd.Experiment;
-import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.Experiment;
 import com.example.nerdherd.Model.Region;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.DatabaseListener;
-import com.example.nerdherd.Question;
-import com.example.nerdherd.Reply;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.nerdherd.Model.Question;
+import com.example.nerdherd.Model.Reply;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Use this Database adapter for Testing where we don't want to mess with Firebase.
@@ -33,13 +22,16 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     public final static String COLLECTION_EXPERIMENT = "ExperimentE";
     public final static String COLLECTION_PROFILE = "UserProfile";
 
+    public final static String MOCK_EXISTING_EXPERIMENT_ID = "0";
+    public final static String MOCK_NON_EXISTANT_EXPERIMENT_ID = "15";
+
     private int nextIdProfile;
     private int nextIdExperiment;
 
     private ListenerRegistration profileSnapshotListener = null;
     private ListenerRegistration experimentSnapshotListener = null;
 
-    private ArrayList<ExperimentE> experiments;
+    private ArrayList<Experiment> experiments;
     private ArrayList<UserProfile> profiles;
     private HashMap<String, ArrayList<DatabaseListener>> listeners;
 
@@ -56,7 +48,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
         for(int i=0;i<10;++i) {
             Region r = new Region("Region "+i, new GeoPoint(i*2, i), i*50);
             //String experimentId, String description, String ownerId, Region region, int minimumTrials, int type, Timestamp date)
-            ExperimentE e = new ExperimentE(String.valueOf(i), "GenericTitle"+i,"Description"+i, String.valueOf(i%5), r, i*2, i%4, Timestamp.now(), false, true);
+            Experiment e = new Experiment(String.valueOf(i), "GenericTitle"+i,"Description"+i, String.valueOf(i%5), r, i*2, i%4, Timestamp.now(), false, true);
             for(int j=0;j<3;++j) {
                 Question q = new Question("QuestionExp" + i + "Question"+j);
                 q.addReply(new Reply("Single Reply"));
@@ -175,8 +167,8 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
      * @param experimentId
      * @return
      */
-    public ExperimentE containsExperiment(String experimentId) {
-        for( ExperimentE e : experiments ) {
+    public Experiment containsExperiment(String experimentId) {
+        for( Experiment e : experiments ) {
             if(e.getExperimentId().equals(experimentId)) {
                 return e;
             }
@@ -188,8 +180,8 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
      * @param experiment
      */
     @Override
-    public void saveNewExperiment(ExperimentE experiment) {
-        ExperimentE e = containsExperiment(experiment.getExperimentId());
+    public void saveNewExperiment(Experiment experiment) {
+        Experiment e = containsExperiment(experiment.getExperimentId());
         if(e == null) {
             experiments.add(experiment);
             sendListenerNotification(COLLECTION_EXPERIMENT,  DatabaseListener.DB_EVENT_EXPERIMENT_SAVE_SUCCESS, experiment);
@@ -217,7 +209,7 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
     }
 
     private void removeOldExperiment(String experimentId) {
-        for ( ExperimentE e : experiments ) {
+        for ( Experiment e : experiments ) {
             if(e.getExperimentId().equals(experimentId)) {
                 experiments.remove(e);
                 return;
@@ -230,8 +222,8 @@ public class MockDatabaseAdapater extends DatabaseAdapter {
      * @param experiment
      */
     @Override
-    public void updateExperiment(ExperimentE experiment) {
-        ExperimentE e = containsExperiment(experiment.getExperimentId());
+    public void updateExperiment(Experiment experiment) {
+        Experiment e = containsExperiment(experiment.getExperimentId());
         if(e != null) {
             removeOldExperiment(experiment.getExperimentId());
             experiments.add(experiment);

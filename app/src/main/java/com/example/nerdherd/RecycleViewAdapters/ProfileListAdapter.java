@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nerdherd.Model.UserProfile;
-import com.example.nerdherd.Profile;
 import com.example.nerdherd.R;
 
 import java.util.ArrayList;

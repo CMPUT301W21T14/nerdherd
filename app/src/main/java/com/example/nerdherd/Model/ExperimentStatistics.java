@@ -14,7 +14,7 @@ public class ExperimentStatistics {
     private float q2;
     private float stdev;
 
-    public ExperimentStatistics(ArrayList<TrialT> results, int type) {
+    public ExperimentStatistics(ArrayList<Trial> results, int type) {
 
     }
 

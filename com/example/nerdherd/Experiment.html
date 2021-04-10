@@ -98,7 +98,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>com.example.nerdherd.Experiment</li>
+<li>com.example.nerdherd.Deprecated.Experiment_Deprecated</li>
 </ul>
 </li>
 </ul>
@@ -118,7 +118,7 @@ implements java.io.Serializable</pre>
  It gives all the possible details an Experiment possess like owner of that Experiment, title etc for the owner to set as per their needs</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../serialized-form.html#com.example.nerdherd.Experiment">Serialized Form</a></dd>
+<dd><a href="../../../serialized-form.html#com.example.nerdherd.Deprecated.Experiment_Deprecated">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -138,7 +138,7 @@ implements java.io.Serializable</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/example/nerdherd/Experiment.html#Experiment-com.example.nerdherd.Profile-java.lang.String-java.lang.String-java.lang.String-java.lang.String-int-boolean-boolean-java.util.ArrayList-java.util.ArrayList-">Experiment</a></span>(<a href="../../../com/example/nerdherd/Profile.html" title="class in com.example.nerdherd">Profile</a>&nbsp;profile,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../com/example/nerdherd/Experiment.html#Experiment-com.example.nerdherd.Deprecated.Profile-java.lang.String-java.lang.String-java.lang.String-java.lang.String-int-boolean-boolean-java.util.ArrayList-java.util.ArrayList-">Experiment</a></span>(<a href="../../../com/example/nerdherd/Profile.html" title="class in com.example.nerdherd">Profile</a>&nbsp;profile,
           java.lang.String&nbsp;title,
           java.lang.String&nbsp;status,
           java.lang.String&nbsp;description,
@@ -147,7 +147,7 @@ implements java.io.Serializable</pre>
           boolean&nbsp;requireLocation,
           boolean&nbsp;published,
           java.util.ArrayList&lt;java.lang.String&gt;&nbsp;subscriberId,
-          java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trials)</code>
+          java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trialDeprecateds)</code>
 <div class="block">Experiment describer
  The owners can tweak their experiment based on their needs</div>
 </td>
@@ -217,7 +217,7 @@ implements java.io.Serializable</pre>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/example/nerdherd/Experiment.html#setOwnerProfile-com.example.nerdherd.Profile-">setOwnerProfile</a></span>(<a href="../../../com/example/nerdherd/Profile.html" title="class in com.example.nerdherd">Profile</a>&nbsp;profile)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/example/nerdherd/Experiment.html#setOwnerProfile-com.example.nerdherd.Deprecated.Profile-">setOwnerProfile</a></span>(<a href="../../../com/example/nerdherd/Profile.html" title="class in com.example.nerdherd">Profile</a>&nbsp;profile)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -241,7 +241,7 @@ implements java.io.Serializable</pre>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/example/nerdherd/Experiment.html#setTrials-java.util.ArrayList-">setTrials</a></span>(java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trials)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/example/nerdherd/Experiment.html#setTrials-java.util.ArrayList-">setTrials</a></span>(java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trialDeprecateds)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -269,7 +269,7 @@ implements java.io.Serializable</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="Experiment-com.example.nerdherd.Profile-java.lang.String-java.lang.String-java.lang.String-java.lang.String-int-boolean-boolean-java.util.ArrayList-java.util.ArrayList-">
+<a name="Experiment-com.example.nerdherd.Deprecated.Profile-java.lang.String-java.lang.String-java.lang.String-java.lang.String-int-boolean-boolean-java.util.ArrayList-java.util.ArrayList-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -284,7 +284,7 @@ implements java.io.Serializable</pre>
                   boolean&nbsp;requireLocation,
                   boolean&nbsp;published,
                   java.util.ArrayList&lt;java.lang.String&gt;&nbsp;subscriberId,
-                  java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trials)</pre>
+                  java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trialDeprecateds)</pre>
 <div class="block">Experiment describer
  The owners can tweak their experiment based on their needs</div>
 <dl>
@@ -298,7 +298,7 @@ implements java.io.Serializable</pre>
 <dd><code>requireLocation</code> - geolocation availability</dd>
 <dd><code>published</code> - boolean confirmation of it being visible to the users</dd>
 <dd><code>subscriberId</code> - </dd>
-<dd><code>trials</code> - </dd>
+<dd><code>trialDeprecateds</code> - </dd>
 </dl>
 </li>
 </ul>
@@ -325,7 +325,7 @@ implements java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTrials</h4>
-<pre>public&nbsp;void&nbsp;setTrials(java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trials)</pre>
+<pre>public&nbsp;void&nbsp;setTrials(java.util.ArrayList&lt;<a href="../../../com/example/nerdherd/Trial.html" title="class in com.example.nerdherd">Trial</a>&gt;&nbsp;trialDeprecateds)</pre>
 </li>
 </ul>
 <a name="getOwnerProfile--">
@@ -337,7 +337,7 @@ implements java.io.Serializable</pre>
 <pre>public&nbsp;<a href="../../../com/example/nerdherd/Profile.html" title="class in com.example.nerdherd">Profile</a>&nbsp;getOwnerProfile()</pre>
 </li>
 </ul>
-<a name="setOwnerProfile-com.example.nerdherd.Profile-">
+<a name="setOwnerProfile-com.example.nerdherd.Deprecated.Profile-">
 <!--   -->
 </a>
 <ul class="blockList">

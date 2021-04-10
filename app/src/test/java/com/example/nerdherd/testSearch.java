@@ -1,8 +1,8 @@
 package com.example.nerdherd;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.widget.Toast;
+import com.example.nerdherd.Deprecated.Experiment_Deprecated;
+import com.example.nerdherd.Deprecated.Profile;
+import com.example.nerdherd.Deprecated.SearchController;
 
 import org.junit.Test;
 
@@ -12,27 +12,27 @@ import static org.junit.Assert.*;
 
 public class testSearch {
 
-    ArrayList<Experiment> resultList;
+    ArrayList<Experiment_Deprecated> resultList;
     ArrayList<Profile> userResultList;
 
     public Profile mockProfile() {
         return new Profile("test", "password", "email", "id", 1);
     }
-    public Experiment mockExperiment() {
-        return new Experiment(mockProfile(), "test", "status", "description", "type", 1, true, true, new ArrayList(), new ArrayList());
+    public Experiment_Deprecated mockExperiment() {
+        return new Experiment_Deprecated(mockProfile(), "test", "status", "description", "type", 1, true, true, new ArrayList(), new ArrayList());
     }
 
-    public void searchExperiment(String keyword, ArrayList<Experiment> showList) {
+    public void searchExperiment(String keyword, ArrayList<Experiment_Deprecated> showList) {
         SearchController mockController = new SearchController();
         mockController.searchExperiment(keyword, showList, resultList, new SearchController.ExperimentNoResultCallBack() {
             @Override
-            public void onCallback(ArrayList<Experiment> itemList) {}
+            public void onCallback(ArrayList<Experiment_Deprecated> itemList) {}
         }, new SearchController.ExperimentResultCallBack() {
             @Override
-            public void onCallback(ArrayList<Experiment> itemList) {}
+            public void onCallback(ArrayList<Experiment_Deprecated> itemList) {}
         }, new SearchController.ExperimentNoKeywordCallBack() {
             @Override
-            public void onCallback(ArrayList<Experiment> itemList) {}
+            public void onCallback(ArrayList<Experiment_Deprecated> itemList) {}
         });
     }
 
@@ -54,8 +54,8 @@ public class testSearch {
     public void testSearchExperiment() {
         resultList = new ArrayList<>();
         resultList.clear();
-        ArrayList<Experiment> showList = new ArrayList<>();
-        Experiment mockExp = mockExperiment();
+        ArrayList<Experiment_Deprecated> showList = new ArrayList<>();
+        Experiment_Deprecated mockExp = mockExperiment();
 
         searchExperiment("test", showList);
         assertFalse(resultList.contains(mockExp));
@@ -83,12 +83,12 @@ public class testSearch {
         assertTrue(resultList.contains(mockExp));
         resultList.clear();
 
-        Experiment secondExperiment = new Experiment(mockProfile(), "second", "status", "description", "type", 1, true, true, new ArrayList(), new ArrayList());
-        showList.add(secondExperiment);
+        Experiment_Deprecated secondExperimentDeprecated = new Experiment_Deprecated(mockProfile(), "second", "status", "description", "type", 1, true, true, new ArrayList(), new ArrayList());
+        showList.add(secondExperimentDeprecated);
 
         searchExperiment("second", showList);
         assertEquals(1, resultList.size());
-        assertTrue(resultList.contains(secondExperiment));
+        assertTrue(resultList.contains(secondExperimentDeprecated));
         assertFalse(resultList.contains(mockExp));
         resultList.clear();
     }

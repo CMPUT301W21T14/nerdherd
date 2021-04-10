@@ -1,6 +1,6 @@
 package com.example.nerdherd.Database;
 
-import com.example.nerdherd.Model.ExperimentE;
+import com.example.nerdherd.Model.Experiment;
 import com.example.nerdherd.Model.UserProfile;
 import com.example.nerdherd.ObjectManager.DatabaseListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,7 +89,6 @@ public class FirestoreAdapter extends DatabaseAdapter {
      *      DatabaseListener - object to remove
      */
     public void removeListener(String collectionName, DatabaseListener databaseListener) {
-
         if(listeners.get(collectionName) == null) {
             return;
         }
@@ -123,9 +122,9 @@ public class FirestoreAdapter extends DatabaseAdapter {
         experimentSnapshotListener = ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                ArrayList<ExperimentE> experiments = new ArrayList<>();
+                ArrayList<Experiment> experiments = new ArrayList<>();
                 for( QueryDocumentSnapshot doc : value ) {
-                    ExperimentE e = processExperimentSnapshot(doc);
+                    Experiment e = processExperimentSnapshot(doc);
                     experiments.add(e);
                 }
                 sendListenerNotification(COLLECTION_EXPERIMENT, DatabaseListener.DB_EVENT_EXPERIMENT_CHECK_DATA_CHANGED, experiments);
@@ -175,8 +174,8 @@ public class FirestoreAdapter extends DatabaseAdapter {
      * @param doc
      *      QueryDocumentSnapshot - potentially modified document
      */
-    public ExperimentE processExperimentSnapshot(QueryDocumentSnapshot doc) {
-        ExperimentE experiment = doc.toObject(ExperimentE.class);
+    public Experiment processExperimentSnapshot(QueryDocumentSnapshot doc) {
+        Experiment experiment = doc.toObject(Experiment.class);
         return experiment;
     }
 
@@ -194,7 +193,7 @@ public class FirestoreAdapter extends DatabaseAdapter {
      * @param experiment
      */
     @Override
-    public void saveNewExperiment(ExperimentE experiment) {
+    public void saveNewExperiment(Experiment experiment) {
         CollectionReference ref = dbInstance.collection(COLLECTION_EXPERIMENT);
         ref.document(experiment.getExperimentId()).set(experiment).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -234,10 +233,10 @@ public class FirestoreAdapter extends DatabaseAdapter {
      * Update a single experiment in the database.
      * Triggers DB_EVENT_UPDATE_EXPERIMENT_SUCCESS and DB_EVENT_UPDATE_EXPERIMENT_FAILURE
      * @param experiment
-     * @see ExperimentE - altered experiment to overwrite in the database
+     * @see Experiment - altered experiment to overwrite in the database
      */
     @Override
-    public void updateExperiment(ExperimentE experiment) {
+    public void updateExperiment(Experiment experiment) {
         CollectionReference ref = dbInstance.collection(COLLECTION_EXPERIMENT);
         ref.document(experiment.getExperimentId()).set(experiment).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -284,9 +283,9 @@ public class FirestoreAdapter extends DatabaseAdapter {
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                ArrayList<ExperimentE> experiments = new ArrayList<>();
+                ArrayList<Experiment> experiments = new ArrayList<>();
                 for( QueryDocumentSnapshot doc : queryDocumentSnapshots ) {
-                    ExperimentE e = processExperimentSnapshot(doc);
+                    Experiment e = processExperimentSnapshot(doc);
                     if(e != null) {
                         experiments.add(e);
                     }

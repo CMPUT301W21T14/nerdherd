@@ -8,6 +8,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.nerdherd.Database.LocalUser;
+import com.example.nerdherd.Deprecated.statsActivity;
+import com.example.nerdherd.UserInterfaceExperiments.ExperimentViewActivity;
+import com.example.nerdherd.UserInterfaceExperiments.MyExperimentsActivity;
+import com.example.nerdherd.UserInterfaceExperiments.MySubscriptionActivity;
+import com.example.nerdherd.UserInterfaceProfile.ProfileActivity;
+import com.example.nerdherd.UserInterfaceQRCodes.QRCodeActivity;
+import com.example.nerdherd.UserInterfaceQuestions.QuestionViewActivity;
+import com.example.nerdherd.UserInterfaceQuestions.QuestionsActivity;
+import com.example.nerdherd.UserInterfaceSearch.SearchExperimentActivity;
+import com.example.nerdherd.UserInterfaceSearch.SearchUserActivity;
+import com.example.nerdherd.UserInterfaceTrials.TrialActivity;
+import com.example.nerdherd.UserInterfaceTrials.TrialHistogramActivity;
+import com.example.nerdherd.UserInterfaceTrials.TrialScatterPlotActivity;
+import com.example.nerdherd.UserInterfaceTrials.TrialStatisticsActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -29,8 +43,6 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
     private Menu menu;
     private MenuItem viewExperiments;
     private MenuItem trails;
@@ -76,7 +88,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         }
 
 
-        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof statsactivity_checking || context instanceof TrialHistogramActivity || context instanceof QuestionViewActivity || context instanceof TrialScatterPlotActivity){
+        if (context instanceof  ExperimentViewActivity || context instanceof QuestionsActivity || context instanceof TrialActivity || context instanceof statsActivity || context instanceof TrialStatisticsActivity || context instanceof TrialHistogramActivity || context instanceof QuestionViewActivity || context instanceof TrialScatterPlotActivity){
             viewExperiments.setVisible(true);
         }
         else{
@@ -161,8 +173,8 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
             ((Activity)context).finish();
         }
 
-        if (item.getItemId() == R.id.experiment_stats && !(context instanceof statsactivity_checking)){
-            intent = new Intent(context, statsactivity_checking.class);
+        if (item.getItemId() == R.id.experiment_stats && !(context instanceof TrialStatisticsActivity)){
+            intent = new Intent(context, TrialStatisticsActivity.class);
             context.startActivity(intent);
             ((Activity)context).finish();
         }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QuestionViewActivity">
+    tools:context=".UserInterfaceQuestions.QuestionViewActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/draw_layout_replies_view"
