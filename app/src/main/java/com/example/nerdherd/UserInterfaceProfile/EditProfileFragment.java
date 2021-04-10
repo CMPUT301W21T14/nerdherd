@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Model.UserProfile;
@@ -92,6 +93,11 @@ public class EditProfileFragment extends DialogFragment {
 
     // The only profile we can update is our own
     private void saveProfile(String newUsername, String newContactInfo, int newAvatar) {
+        if(pMgr.getProfileByUsername(newUsername) != null) {
+            // Couldn't get it to work
+            //Toast.makeText(getActivity(), "Username taken!", Toast.LENGTH_LONG);
+            return;
+        }
         pMgr.updateProfile(newUsername, newContactInfo, newAvatar);
     }
 
