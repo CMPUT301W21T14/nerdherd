@@ -240,7 +240,8 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
 
     private void updateTrialGoal() {
         int target = currentExperiment.getMinimumTrials();
-        int current = eMgr.getTrialCount(experimentId);
+        //int current = eMgr.getTrialCount(experimentId);
+        int current = eMgr.getTrialsExcludeBlacklist(experimentId).size();
         String value = "Trial Count: "+current+"/"+target;
         minTrialsTv.setText(value);
         if(current > target) {

@@ -93,11 +93,22 @@ public class EditProfileFragment extends DialogFragment {
 
     // The only profile we can update is our own
     private void saveProfile(String newUsername, String newContactInfo, int newAvatar) {
-        if(pMgr.getProfileByUsername(newUsername) != null) {
-            // Couldn't get it to work
-            //Toast.makeText(getActivity(), "Username taken!", Toast.LENGTH_LONG);
+        UserProfile profile = pMgr.getProfile(LocalUser.getUserId());
+        if(profile == null) {
+            // Shouldn't happen
             return;
         }
+
+        // If the new username is different from our current one
+        if(!profile.getUserName().equals(newUsername)) {
+            // And and if the new username already exists
+            if(pMgr.getProfileByUsername(newUsername) != null ) {
+                // Cannot update profile!
+                return;
+            }
+        }
+
+        // We continue to update the rest of the profile
         pMgr.updateProfile(newUsername, newContactInfo, newAvatar);
     }
 

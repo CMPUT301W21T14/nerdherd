@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.nerdherd.MenuController;
 import com.example.nerdherd.Model.Experiment;
+import com.example.nerdherd.Model.Trial;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.R;
 import com.example.nerdherd.RecycleViewAdapters.AdapterController;
@@ -22,6 +23,8 @@ import com.example.nerdherd.RecycleViewAdapters.ExperimentListAdapter;
 import com.example.nerdherd.UserInterfaceExperiments.CreateExperimentActivity;
 import com.example.nerdherd.UserInterfaceExperiments.ExperimentViewActivity;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -66,7 +69,6 @@ public class SearchExperimentActivity extends AppCompatActivity implements Exper
 
         menuController = new MenuController(SearchExperimentActivity.this, toolbar, navigationView, drawerLayout);
         menuController.useMenu(false);
-
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
