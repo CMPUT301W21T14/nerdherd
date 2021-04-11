@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.FirestoreAdapter;
@@ -99,5 +100,6 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         lu.loadLocalData();
         lu.externalPath = this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
         Log.d("PATH:", lu.externalPath.getAbsolutePath());
+        Toast.makeText(this, lu.externalPath.getAbsolutePath(), Toast.LENGTH_LONG);
     }
 }
