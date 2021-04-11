@@ -8,7 +8,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.nerdherd.Database.DatabaseAdapter;
 import com.example.nerdherd.Database.FirestoreAdapter;
@@ -95,5 +97,6 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         LocalUser lu = LocalUser.getInstance();
         lu.setContext(getApplicationContext());
         lu.loadLocalData();
+        lu.externalPath = this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
     }
 }

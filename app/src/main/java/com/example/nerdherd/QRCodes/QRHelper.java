@@ -1,12 +1,15 @@
 package com.example.nerdherd.QRCodes;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
 
+import com.example.nerdherd.Database.LocalUser;
 import com.example.nerdherd.Model.Experiment;
 import com.example.nerdherd.ObjectManager.ExperimentManager;
+import com.google.api.Service;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -92,8 +95,9 @@ public class QRHelper {
      * @return
      */
     private static boolean saveImage(Bitmap finalBitmap, String data) {
+
         //TAKEN FROM https://gist.github.com/vxhviet/07429133e71b5fec2e39bd60171184cd
-        File myDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File myDir = LocalUser.externalPath;//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         myDir.mkdirs();
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

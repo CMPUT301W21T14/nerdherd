@@ -10,6 +10,7 @@ import com.example.nerdherd.ObjectManager.ProfileManager;
 import com.example.nerdherd.R;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
     private static LocalUser instance = null;
     private static Location lastLocation = null;
     private static boolean mockDBUsed = false;
+    public static File externalPath;
 
     private LocalUser() {
 
