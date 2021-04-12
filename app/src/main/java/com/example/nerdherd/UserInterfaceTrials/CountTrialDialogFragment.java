@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.example.nerdherd.UserInterfaceQRCodes.RegisterBarcodeActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.print.PrintHelper;
 
 /**
  * Maintain consistency in the app
@@ -41,6 +43,7 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
 
     private String qdata = null;
     private Button launchRegisterQrButton;
+    private ImageButton printQRButton;
 
 
     public CountTrialDialogFragment(String experimentId){
@@ -50,7 +53,7 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_count_trial, null);
-
+        printQRButton = view.findViewById(R.id.ib_print_qr);
         Button Recordtbn = view.findViewById(R.id.record_measurement);
         TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
         Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
@@ -93,6 +96,15 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
                         saveSuccessToast();
                     }
                 }
+            }
+        });
+
+        printQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PrintHelper photoPrinter = new PrintHelper(getActivity());
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                photoPrinter.printBitmap("qr_"+experimentId+"_print", image);
             }
         });
 

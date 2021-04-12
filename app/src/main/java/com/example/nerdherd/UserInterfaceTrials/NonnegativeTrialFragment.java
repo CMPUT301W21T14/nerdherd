@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.example.nerdherd.UserInterfaceQRCodes.RegisterBarcodeActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.print.PrintHelper;
 
 /**
  * Maintain consistency in the app
@@ -41,6 +43,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
 
     private String qdata = null;
     private Button launchRegisterQrButton;
+    private ImageButton printQRButton;
 
     public NonnegativeTrialFragment(String experimentId){
         this.experimentId=experimentId;
@@ -50,7 +53,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.non_negative_trial, null);
-
+        printQRButton = view.findViewById(R.id.ib_print_qr);
         //link to xml
         Button Recordtbn = view.findViewById(R.id.record_nonNegativeTrial);
         inputEt = view.findViewById(R.id.nonNegative_input);
@@ -63,7 +66,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
         launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
 
         launchRegisterQrButton.setVisibility(View.GONE);
-
+        printQRButton.setVisibility(View.GONE);
         launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +92,7 @@ public class NonnegativeTrialFragment extends DialogFragment {
                     qdata = experimentId+":"+value;
                     launchRegisterQrButton.setVisibility(View.VISIBLE);
                     launchRegisterQrButton.setText("Register Result to Barcode");
+                    printQRButton.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -117,6 +121,15 @@ public class NonnegativeTrialFragment extends DialogFragment {
                 } else {
                     inputError();
                 }
+            }
+        });
+
+        printQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PrintHelper photoPrinter = new PrintHelper(getActivity());
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                photoPrinter.printBitmap("qr_"+experimentId+"_print", image);
             }
         });
 

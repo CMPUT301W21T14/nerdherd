@@ -17,22 +17,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:background="#64B5F6"
-            android:text="ADD SUCCESS"
+            android:text="Add Failure"
             android:textColor="#FFF"
-            app:layout_constraintLeft_toRightOf="@id/vg10"
+            app:layout_constraintEnd_toStartOf="@+id/vg90"
+            app:layout_constraintStart_toStartOf="@+id/vg10"
             app:layout_constraintTop_toBottomOf="@id/txt_label" />
 
-
-        <Button
-            android:id="@+id/btn_failure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:background="#64B5F6"
-            android:text="ADD FAILURE"
-            android:textColor="#FFF"
-            app:layout_constraintRight_toRightOf="@id/vg90"
-            app:layout_constraintTop_toBottomOf="@id/txt_label" />
 
         <Button
             android:id="@+id/btn_save_qr_code"
@@ -74,12 +64,12 @@
             android:layout_marginLeft="70dp"
             android:layout_marginRight="70dp"
             android:layout_marginStart="70dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_success" />
+            app:layout_constraintTop_toBottomOf="@+id/sw_success_failure_for_qr" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/hg10"
@@ -118,6 +108,28 @@
             app:layout_constraintEnd_toStartOf="@+id/vg90"
             app:layout_constraintStart_toStartOf="@+id/vg10"
             app:layout_constraintTop_toBottomOf="@+id/btn_save_qr_code" />
+
+        <ImageButton
+            android:id="@+id/ib_print_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:background="@android:color/transparent"
+            android:foreground="@drawable/ic_baseline_print_24"
+            app:layout_constraintStart_toEndOf="@+id/iv_binom_qr"
+            app:layout_constraintTop_toTopOf="@+id/iv_binom_qr"
+            app:srcCompat="@drawable/ic_baseline_print_24" />
+
+        <Switch
+            android:id="@+id/sw_success_failure_for_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Success"
+            app:layout_constraintEnd_toStartOf="@+id/vg90"
+            app:layout_constraintStart_toStartOf="@+id/vg10"
+            app:layout_constraintTop_toBottomOf="@+id/btn_success" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

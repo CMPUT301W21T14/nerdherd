@@ -11,7 +11,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import com.example.nerdherd.UserInterfaceQRCodes.RegisterBarcodeActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.print.PrintHelper;
 
 /**
  * Maintain consistency in the app
@@ -36,6 +40,8 @@ public class BinomialTrialDialogFragment extends DialogFragment {
     private Bitmap image = null;
     private String qdata = null;
     private Button launchRegisterQrButton;
+    private Switch successSwitch;
+    private ImageButton printQRButton;
 
     public BinomialTrialDialogFragment(String experimentId){
         this.experimentId=experimentId;
@@ -45,17 +51,19 @@ public class BinomialTrialDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_binomial_trial, null);
-
+        printQRButton = view.findViewById(R.id.ib_print_qr);
         //link to xml
         Button sucesstbn = view.findViewById(R.id.btn_success);
-        Button failurebtn = view.findViewById(R.id.btn_failure);
         launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
         TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
         Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
         ImageView generateQRiv = view.findViewById(R.id.iv_binom_qr);
+        successSwitch = view.findViewById(R.id.sw_success_failure_for_qr);
+        qdata = experimentId + ":" + "0";
 
-        saveQRBtn.setVisibility(View.GONE);
-        launchRegisterQrButton.setVisibility(View.GONE);
+        image = QRHelper.generateQRCode(qdata);
+        qrcontainstv.setText(getQRActionDescription("Unsuccessful"));
+        generateQRiv.setImageBitmap(image);
 
         launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,36 +84,46 @@ public class BinomialTrialDialogFragment extends DialogFragment {
             }
         });
 
-
+        successSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    qdata = experimentId + ":" + "1";
+                    image = QRHelper.generateQRCode(qdata);
+                    qrcontainstv.setText(getQRActionDescription("Successful"));
+                    generateQRiv.setImageBitmap(image);
+                    launchRegisterQrButton.setText("Register Result to Barcode");
+                    sucesstbn.setText("Add Success");
+                } else {
+                    qdata = experimentId + ":" + "0";
+                    image = QRHelper.generateQRCode(qdata);
+                    qrcontainstv.setText(getQRActionDescription("Unsuccessful"));
+                    generateQRiv.setImageBitmap(image);
+                    launchRegisterQrButton.setText("Register Result to Barcode");
+                    sucesstbn.setText("Add Failure");
+                }
+            }
+        });
 
 
         //each time successbtn is clicked increment success for trial
         sucesstbn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image = QRHelper.generateQRCode(experimentId+":"+"1");
-                qrcontainstv.setText(getQRActionDescription("Successful"));
-                generateQRiv.setImageBitmap(image);
-                saveQRBtn.setVisibility(View.VISIBLE);
-                qdata = experimentId+":"+"1";
-                launchRegisterQrButton.setVisibility(View.VISIBLE);
-                launchRegisterQrButton.setText("Register Result to Barcode");
-                ((TrialActivity)getActivity()).addSuccessfulBinomialTrial();
+                if(successSwitch.isChecked()) {
+                    ((TrialActivity) getActivity()).addSuccessfulBinomialTrial();
+                } else {
+                    ((TrialActivity)getActivity()).addUnsuccessfulBinomialTrial();
+                }
             }
         });
 
-        //each time failbutton is clicked increment fail for trial
-        failurebtn.setOnClickListener(new View.OnClickListener() {
+        printQRButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image = QRHelper.generateQRCode(experimentId+":"+"0");
-                qrcontainstv.setText(getQRActionDescription("Unsuccessful"));
-                generateQRiv.setImageBitmap(image);
-                saveQRBtn.setVisibility(View.VISIBLE);
-                qdata = experimentId+":"+"0";
-                launchRegisterQrButton.setVisibility(View.VISIBLE);
-                launchRegisterQrButton.setText("Register Result to Barcode");
-                ((TrialActivity)getActivity()).addUnsuccessfulBinomialTrial();
+                PrintHelper photoPrinter = new PrintHelper(getActivity());
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                photoPrinter.printBitmap("qr_"+experimentId+"_print", image);
             }
         });
 

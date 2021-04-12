@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.example.nerdherd.UserInterfaceQRCodes.RegisterBarcodeActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.print.PrintHelper;
 
 /**
  * Maintain consistency in the app
@@ -40,6 +42,7 @@ public class MeaurementTrialFragment extends DialogFragment {
 
     private String qdata = null;
     private Button launchRegisterQrButton;
+    private ImageButton printQRButton;
 
     public MeaurementTrialFragment(String experimentId){
         this.experimentId=experimentId;
@@ -54,6 +57,7 @@ public class MeaurementTrialFragment extends DialogFragment {
         TextView qrcontainstv = view.findViewById(R.id.tv_binom_qr_data);
         Button saveQRBtn = view.findViewById(R.id.btn_save_qr_code);
         ImageView generateQRiv = view.findViewById(R.id.iv_binom_qr);
+        printQRButton = view.findViewById(R.id.ib_print_qr);
         image = null;
         qrcontainstv.setText("");
         Measurement_val = view.findViewById(R.id.measurement_input);
@@ -61,6 +65,7 @@ public class MeaurementTrialFragment extends DialogFragment {
         launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
 
         launchRegisterQrButton.setVisibility(View.GONE);
+        printQRButton.setVisibility(View.GONE);
 
         launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +95,7 @@ public class MeaurementTrialFragment extends DialogFragment {
                         qdata = experimentId+":"+String.valueOf(outcome);
                         launchRegisterQrButton.setVisibility(View.VISIBLE);
                         launchRegisterQrButton.setText("Register Result to Barcode");
+                        printQRButton.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -99,6 +105,8 @@ public class MeaurementTrialFragment extends DialogFragment {
 
             }
         });
+
+
 
         Recordtbn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +127,15 @@ public class MeaurementTrialFragment extends DialogFragment {
         });
 
         saveQRBtn.setVisibility(View.GONE);
+
+        printQRButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PrintHelper photoPrinter = new PrintHelper(getActivity());
+                photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                photoPrinter.printBitmap("qr_"+experimentId+"_print", image);
+            }
+        });
 
         saveQRBtn.setOnClickListener(new View.OnClickListener() {
             @Override

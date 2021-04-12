@@ -94,6 +94,18 @@
             app:layout_constraintStart_toStartOf="@+id/vg10"
             app:layout_constraintTop_toBottomOf="@+id/btn_save_qr_code" />
 
+        <ImageButton
+            android:id="@+id/ib_print_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:background="@android:color/transparent"
+            android:foreground="@drawable/ic_baseline_print_24"
+            app:layout_constraintStart_toEndOf="@+id/iv_binom_qr"
+            app:layout_constraintTop_toTopOf="@+id/iv_binom_qr"
+            app:srcCompat="@drawable/ic_baseline_print_24" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/hg10"
             android:layout_width="wrap_content"
