@@ -242,7 +242,7 @@ public class ExperimentViewActivity extends AppCompatActivity implements Experim
         int target = currentExperiment.getMinimumTrials();
         //int current = eMgr.getTrialCount(experimentId);
         int current = eMgr.getTrialsExcludeBlacklist(experimentId).size();
-        String value = "Trial Count: "+current+"/"+target;
+        String value = "Goal: "+current+"/"+target+" accepted trials";
         minTrialsTv.setText(value);
         if(current > target) {
             minTrialsTv.setTextColor(getResources().getColor(R.color.ic_launcher_background));

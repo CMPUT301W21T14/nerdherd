@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/trial_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="15dp"
         android:text="oS5RUC2W6h8enhhUfkzU"
         android:textSize="20sp"
@@ -17,14 +17,31 @@
 
     <TextView
         android:id="@+id/trials_executed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginStart="15dp"
+        android:gravity="right"
         android:text="48.5"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/trial_user"
-        app:layout_constraintLeft_toRightOf="@+id/trial_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_has_location"
         app:layout_constraintTop_toTopOf="@+id/trial_user" />
+
+    <TextView
+        android:id="@+id/tv_has_location"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:gravity="center"
+        android:text="Yes"
+        app:layout_constraintStart_toEndOf="@+id/trial_user"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="20sp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

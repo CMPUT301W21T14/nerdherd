@@ -2,6 +2,7 @@ package com.example.nerdherd.UserInterfaceQRCodes;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,6 +28,7 @@ import com.example.nerdherd.ObjectManager.ExperimentManager;
 import com.example.nerdherd.QRCodes.QRHelper;
 import com.example.nerdherd.QRCodes.QRResult;
 import com.example.nerdherd.R;
+import com.example.nerdherd.UserInterfaceExperiments.ExperimentViewActivity;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -41,7 +43,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 /**
  * This activity allows the user to Scan a QR or Barcode, and use it to add a trial to the associated experiment
  */
-public class QRCodeActivity extends AppCompatActivity {
+public class QRCodeActivity extends AppCompatActivity implements LocationListener {
     // taken from https://medium.com/analytics-vidhya/creating-a-barcode-scanner-using-android-studio-71cff11800a2
     private static final int PERMISSION_REQUEST_CAMERA = 0;
 
@@ -57,6 +59,7 @@ public class QRCodeActivity extends AppCompatActivity {
     private QRResult result;
 
     private Button addTrialButton;
+    private Button viewExperimentButton;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -79,9 +82,11 @@ public class QRCodeActivity extends AppCompatActivity {
 
         surfaceView = findViewById(R.id.surface_view);
         barcodeText = findViewById(R.id.barcode_text);
+        viewExperimentButton = findViewById(R.id.btn_view_experiment_qr);
 
         addTrialButton = findViewById(R.id.btn_add_qr_trial);
         addTrialButton.setVisibility(View.GONE);
+        viewExperimentButton.setVisibility(View.GONE);
 
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +94,18 @@ public class QRCodeActivity extends AppCompatActivity {
                 ExperimentManager eMgr = ExperimentManager.getInstance();
                 if(!eMgr.addTrialToExperiment(result.getExperimentId(), eMgr.generateTrial(Float.valueOf(result.getResult()), LocalUser.getLastLocation()))) {
                     Log.d("eMgr", "Invalid experimentId");
+                } else {
+                    Toast.makeText(getApplicationContext(), "Trial added successfully!", Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        viewExperimentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QRCodeActivity.this, ExperimentViewActivity.class);
+                intent.putExtra("experimentId", result.getExperimentId());
+                startActivity(intent);
             }
         });
 
@@ -109,15 +125,7 @@ public class QRCodeActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
             }
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                    // Can use lastLocation for the location of trials
-                    // Remember to convert to a GeoPoint for firebase
-                    LocalUser.setLastLocation(location);
-                    Log.d("LastLoc: ", location.toString());
-                }
-            });
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
         }
     }
 
@@ -220,6 +228,7 @@ public class QRCodeActivity extends AppCompatActivity {
                                 String displayString = "Add trial to "+experimentTitle+" with result "+result.getResult();
                                 barcodeText.setText(displayString);
                                 addTrialButton.setVisibility(View.VISIBLE);
+                                viewExperimentButton.setVisibility(View.VISIBLE);
                             } else {
                                 barcodeText.setText("Barcode/QR not associated with any experiment! Or invalid trial outcome");
                                 addTrialButton.setVisibility(View.GONE);
@@ -232,5 +241,10 @@ public class QRCodeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        LocalUser.setLastLocation(location);
     }
 }

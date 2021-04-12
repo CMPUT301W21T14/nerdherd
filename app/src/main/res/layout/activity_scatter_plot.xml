@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="22dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="55dp"
             android:text="TRIAL OUTCOME SCATTER PLOT"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -33,10 +33,40 @@
             android:id="@+id/scatterChart"
             android:layout_width="387dp"
             android:layout_height="512dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trialDeprecateds" />
+
+        <TextView
+            android:id="@+id/tv_start_date"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/scatterChart"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_end_date"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="right"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/scatterChart"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_bottom_label_scatter"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:gravity="center"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scatterChart" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

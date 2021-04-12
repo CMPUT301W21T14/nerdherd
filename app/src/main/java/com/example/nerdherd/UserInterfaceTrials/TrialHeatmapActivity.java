@@ -17,6 +17,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -72,9 +73,15 @@ public class TrialHeatmapActivity extends FragmentActivity {
             return;
         }
         ArrayList<LatLng> latLngArrayList = new ArrayList<>();
+        ArrayList<WeightedLatLng> weightedLatLngArrayList = new ArrayList<>();
+        double avg_lat = 0;
+        double avg_lng = 0;
         for( Trial t : experiment.getTrials() ) {
             if(t.getLocation() != null) {
+                avg_lat+=t.getLocation().getLatitude();
+                avg_lng+=t.getLocation().getLongitude();
                 latLngArrayList.add(new LatLng(t.getLocation().getLatitude(), t.getLocation().getLongitude()));
+                weightedLatLngArrayList.add(new WeightedLatLng(new LatLng(t.getLocation().getLatitude(), t.getLocation().getLongitude()), t.getOutcome()));
             }
         }
         if(latLngArrayList.isEmpty()) {
@@ -82,9 +89,14 @@ public class TrialHeatmapActivity extends FragmentActivity {
             finish();
             return;
         }
+        avg_lat = avg_lat / latLngArrayList.size();
+        avg_lng = avg_lng / latLngArrayList.size();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(avg_lat, avg_lng), 5));
 
-        // Create a heat map tile provider, passing it the latlngs of the police stations.
-        HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(latLngArrayList).build();
+        // Create a heat map tile provider, passing it the latlngs of the TRIALS
+        //HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(latLngArrayList).build();
+        HeatmapTileProvider provider = new HeatmapTileProvider.Builder().weightedData(weightedLatLngArrayList).build();
+
         // provider.setRadius - maybe make dots bigger?
         // Add a tile overlay to the map, using the heat map tile provider.
         mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));

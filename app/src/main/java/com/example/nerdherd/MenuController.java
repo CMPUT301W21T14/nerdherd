@@ -117,7 +117,7 @@ public class MenuController implements NavigationView.OnNavigationItemSelectedLi
         if(item.getItemId() == R.id.qr_code) {
             intent = new Intent(context, QRCodeActivity.class);
             context.startActivity(intent);
-            ((Activity)context).finish();
+            //((Activity)context).finish();
         }
 
         if (item.getItemId() == R.id.experiments && !(context instanceof SearchExperimentActivity)){

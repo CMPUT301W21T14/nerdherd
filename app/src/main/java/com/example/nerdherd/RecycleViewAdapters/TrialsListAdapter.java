@@ -1,5 +1,6 @@
 package com.example.nerdherd.RecycleViewAdapters;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +37,12 @@ public class TrialsListAdapter extends RecyclerView.Adapter<TrialsListAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView user_trial;
         TextView trials_executed;
+        TextView has_location;
         public ViewHolder(View view){
             super(view);
             user_trial = view.findViewById(R.id.trial_user);
             trials_executed = view.findViewById(R.id.trials_executed);
-
+            has_location = view.findViewById(R.id.tv_has_location);
             view.setOnClickListener(this);
         }
 
@@ -70,6 +72,12 @@ public class TrialsListAdapter extends RecyclerView.Adapter<TrialsListAdapter.Vi
         }
         holder.trials_executed.setText(String.valueOf(t.getOutcome()));
         holder.user_trial.setText(up.getUserName());
+        String hasLocation = "Yes";
+
+        if(t.getLocation() == null) {
+            hasLocation = "No";
+        }
+        holder.has_location.setText(hasLocation);
     }
 
 
