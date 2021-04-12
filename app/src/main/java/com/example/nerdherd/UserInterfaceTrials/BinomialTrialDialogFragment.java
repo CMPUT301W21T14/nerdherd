@@ -149,7 +149,7 @@ public class BinomialTrialDialogFragment extends DialogFragment {
             String qrData = data.getStringExtra("qrData");
             if(overwrite != -1 && qrData != null) {
                 LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
-                launchRegisterQrButton.setText("Result Registered!");
+                Toast.makeText(this.getContext(), "Barcode registered to result!", Toast.LENGTH_LONG).show();
             }
         }
     }

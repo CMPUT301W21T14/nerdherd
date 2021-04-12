@@ -119,7 +119,7 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         }
 
         if(experiment.isLocationRequired()) {
-            beginLocationUpdates();
+            initLocationUpdates();
         } else {
             locRequiredTv.setVisibility(View.GONE);
         }
@@ -176,6 +176,26 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
         showTrials();
     }
 
+    // https://stackoverflow.com/questions/10311834/how-to-check-if-location-services-are-enabled
+    public void initLocationUpdates() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+            return;
+        }
+        beginLocationUpdates();
+    }
+
     public void invalidBlacklistUser() {
         Toast.makeText(this, "Invalid Username", Toast.LENGTH_LONG).show();
     }
@@ -218,7 +238,6 @@ public class TrialActivity extends AppCompatActivity implements ExperimentManage
                     // Can use lastLocation for the location of trials
                     // Remember to convert to a GeoPoint for firebase
                     LocalUser.setLastLocation(location);
-                    Log.d("LastLoc: ", location.toString());
                 }
             });
         }

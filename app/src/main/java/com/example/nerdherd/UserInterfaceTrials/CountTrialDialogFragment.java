@@ -67,8 +67,6 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
         counterTv.setText(String.valueOf(eMgr.getTrialCount(experimentId)));
         launchRegisterQrButton = view.findViewById(R.id.btn_launch_register_qr);
 
-        launchRegisterQrButton.setVisibility(View.GONE);
-
         launchRegisterQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +128,7 @@ public class CountTrialDialogFragment extends DialogFragment implements Experime
             String qrData = data.getStringExtra("qrData");
             if(overwrite != -1 && qrData != null) {
                 LocalUser.addRegisteredBarcode(qrData, qdata, overwrite, true);
-                launchRegisterQrButton.setText("Result Registered!");
+                Toast.makeText(this.getContext(), "Barcode registered to result!", Toast.LENGTH_LONG).show();
             }
         }
     }

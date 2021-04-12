@@ -109,7 +109,7 @@ public class QRCodeActivity extends AppCompatActivity implements LocationListene
             }
         });
 
-        beginLocationUpdates();
+        initLocationUpdates();
         requestCamera();
     }
 
@@ -139,6 +139,27 @@ public class QRCodeActivity extends AppCompatActivity implements LocationListene
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
             }
         }
+    }
+
+    // https://stackoverflow.com/questions/10311834/how-to-check-if-location-services-are-enabled
+    public void initLocationUpdates() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled && !network_enabled) {
+
+            return;
+        }
+        beginLocationUpdates();
     }
 
     @Override

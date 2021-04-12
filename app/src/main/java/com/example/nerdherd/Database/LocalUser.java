@@ -204,6 +204,7 @@ public class LocalUser implements ProfileManager.ProfileCreateEventListener {
     }
 
     private static void buildBarcodeStringSey() {
+        custom_barcodes = new HashSet<>();
         for(Map.Entry entry : registeredBarcodeMap.entrySet() ) {
             custom_barcodes.add(entry.getKey()+":"+entry.getValue());
             Log.d("Adding: ", entry.getKey()+":"+entry.getValue());

@@ -168,10 +168,12 @@ public class RegisterBarcodeActivity extends AppCompatActivity {
                                 if(LocalUser.getBarcodeMapping(barcodeData) == null) {
                                     returnData = barcodeData;
                                     registerBarcodeButton.setVisibility(View.VISIBLE);
+                                    registerBarcodeButton.setText("Register Barcode");
                                     overwrite = 0;
                                 } else {
                                     returnData = barcodeData;
                                     registerBarcodeButton.setVisibility(View.VISIBLE);
+                                    registerBarcodeButton.setText("Overwrite existing barcode");
                                     overwrite = 1;
                                 }
                             }

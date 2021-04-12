@@ -1,15 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserInterfaceTrials.TrialHeatmapActivity" >
 
-    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+    <fragment
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment"
-        map:uiZoomControls="true"
-        map:uiCompass="false"/>
+        android:layout_width="267dp"
+        android:layout_height="442dp"
+        map:uiCompass="false"
+        map:uiZoomControls="true" />
 
 </RelativeLayout>
