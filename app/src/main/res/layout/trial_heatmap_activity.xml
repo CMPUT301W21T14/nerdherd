@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="267dp"
-        android:layout_height="442dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         map:uiCompass="false"
         map:uiZoomControls="true" />
 
