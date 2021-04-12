@@ -99,7 +99,5 @@ public class SplashScreen extends AppCompatActivity implements ProfileManager.Pr
         lu.setContext(getApplicationContext());
         lu.loadLocalData();
         lu.externalPath = this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        Log.d("PATH:", lu.externalPath.getAbsolutePath());
-        Toast.makeText(getApplicationContext(), lu.externalPath.getAbsolutePath(), Toast.LENGTH_LONG).show();
     }
 }
